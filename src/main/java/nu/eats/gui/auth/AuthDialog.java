@@ -6,7 +6,6 @@ import nu.eats.domain.auth.Credentials;
 import nu.eats.gui.auth.components.ContinueAsCard;
 import nu.eats.gui.components.Section;
 import nu.eats.gui.plaf.Theme;
-import nu.eats.gui.plaf.WindowResizeHandler;
 import nu.eats.gui.plaf.box.BoxDecoration;
 import nu.eats.ui.auth.AuthState;
 import nu.eats.ui.auth.AuthViewModel;

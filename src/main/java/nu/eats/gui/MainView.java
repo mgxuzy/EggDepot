@@ -39,15 +39,17 @@ public class MainView extends JPanel {
         setMinimumSize(new Dimension(600, 400));
 
         this.vendorList = new VendorList();
-
         this.mainContent = new JPanel(new CardLayout());
         this.mainContent.setOpaque(false);
+
         this.cartViewModel = new CartViewModel(new Cart());
 
         CartView cartView = new CartView(cartViewModel);
 
         var leftPanel = new Section();
+
         leftPanel.setLayout(new BorderLayout());
+
         var logoDisplay = new JLabel(Images.loadIcon("NU-Logo.png", 96));
 
         logoDisplay.setBorder(new EmptyBorder(Theme.SPACING_LG, Theme.SPACING_LG, Theme.SPACING_MD, Theme.SPACING_LG));

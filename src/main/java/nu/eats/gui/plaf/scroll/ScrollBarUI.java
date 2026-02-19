@@ -93,13 +93,13 @@ public class ScrollBarUI extends BasicScrollBarUI {
     @Override
     protected void paintTrack(Graphics graphics, JComponent component, Rectangle trackBounds) {
         // no paint track
-    }    private static final int THUMB_WIDTH = 4,
+    }
+
+    private static final int THUMB_WIDTH = 4,
             THUMB_PADDING = 2,
             OVERLAY_OFFSET = 2, // Distance from the edge
             SCROLLBAR_WIDTH = THUMB_WIDTH + (OVERLAY_OFFSET * 2), // Total width needed
             MIN_THUMB_SIZE = 5;
-
-
 
 
 }

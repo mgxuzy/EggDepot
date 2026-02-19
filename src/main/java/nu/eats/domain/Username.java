@@ -5,7 +5,6 @@ import nu.eats.core.monads.Result;
 import nu.eats.core.monads.Success;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -24,6 +23,18 @@ public final class Username {
         return violations == null ? new Success<>(new Username(value)) : new Failure<>(violations);
     }
 
+    private static List<String> findViolations(String value) {
+        List<String> violations = null;
+
+        if (!USERNAME_PATTERN.matcher(value).find()) {
+            violations = new ArrayList<>();
+
+            violations.add("Invalid username");
+        }
+
+        return violations;
+    }
+
     public String value() {
         return value;
     }
@@ -38,17 +49,5 @@ public final class Username {
         } else {
             return new Failure<>(violations);
         }
-    }
-
-    private static List<String> findViolations(String value) {
-        List<String> violations = null;
-
-        if (!USERNAME_PATTERN.matcher(value).find()) {
-            violations = new ArrayList<>();
-
-            violations.add("Invalid username");
-        }
-
-        return violations;
     }
 }
