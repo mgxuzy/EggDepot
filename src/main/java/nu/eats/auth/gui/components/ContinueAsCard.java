@@ -1,11 +1,11 @@
-package nu.eats.authentication.gui.components;
+package nu.eats.auth.gui.components;
 
-import nu.eats.domain.Customer;
+import nu.eats.model.Cashier;
 import nu.eats.gui.components.ToolBar;
 import nu.eats.gui.plaf.Theme;
 import nu.eats.gui.plaf.button.ButtonPreset;
 import nu.eats.gui.plaf.button.ButtonVariant;
-import nu.eats.ui.auth.AuthViewModel;
+import nu.eats.auth.state.AuthViewModel;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -24,7 +24,7 @@ public class ContinueAsCard extends AuthCard {
 
         ButtonPreset.XL.apply(customerButton);
         customerButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        customerButton.addActionListener(_ -> model.signIn(new Customer("c-1", "Guest Customer")));
+        customerButton.addActionListener(_ -> model.signIn(new Cashier("c-1", "Guest Customer")));
 
         var vendorButton = new JButton("Vendor");
 
@@ -42,12 +42,12 @@ public class ContinueAsCard extends AuthCard {
 
         toolBar().setTitle("Welcome");
 
-        mainContent.setLayout(new BoxLayout(mainContent, BoxLayout.Y_AXIS));
-        mainContent.add(subtitle);
-        mainContent.add(Box.createVerticalGlue());
-        mainContent.add(Box.createVerticalStrut(Theme.SPACING_SM));
-        mainContent.add(optionList);
-        mainContent.add(Box.createVerticalGlue());
+        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+        contentPanel.add(subtitle);
+        contentPanel.add(Box.createVerticalGlue());
+        contentPanel.add(Box.createVerticalStrut(Theme.SPACING_SM));
+        contentPanel.add(optionList);
+        contentPanel.add(Box.createVerticalGlue());
     }
 
     @Override

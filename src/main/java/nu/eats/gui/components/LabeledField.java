@@ -11,7 +11,7 @@ public class LabeledField extends JPanel {
     private static final int FIELD_WIDTH = 280;
 
     public LabeledField(String labelText, JComponent field) {
-        setLayout(new GridBagLayout());
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setOpaque(false);
         setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -41,7 +41,7 @@ public class LabeledField extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent event) {
-                field.requestFocus();
+                field.requestFocusInWindow();
             }
         });
     }

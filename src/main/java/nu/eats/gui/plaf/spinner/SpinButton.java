@@ -1,5 +1,6 @@
 package nu.eats.gui.plaf.spinner;
 
+import nu.eats.gui.plaf.button.ButtonState;
 import nu.eats.gui.plaf.button.ButtonVariant;
 
 import javax.swing.plaf.basic.BasicArrowButton;
@@ -7,7 +8,6 @@ import java.awt.*;
 import java.awt.geom.Line2D;
 
 import static nu.eats.gui.plaf.Constants.DEFAULT_RENDERING_HINTS;
-import static nu.eats.gui.plaf.Constants.KEY_VARIANT;
 
 public class SpinButton extends BasicArrowButton {
     private static final int SIZE = 24;
@@ -21,7 +21,7 @@ public class SpinButton extends BasicArrowButton {
 
         setFocusable(false);
 
-        putClientProperty(KEY_VARIANT, ButtonVariant.TERTIARY);
+        ButtonVariant.TERTIARY.install(this, ButtonState.NEUTRAL);
 
         String name = (direction == NORTH) ? "Increase Quantity" : "Decrease Quantity";
         getAccessibleContext().setAccessibleName(name);

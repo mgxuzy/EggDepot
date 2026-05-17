@@ -245,12 +245,12 @@ public class WindowResizeHandler implements MouseInputListener {
         var leftInset = insets.left;
         var topInset = insets.top;
 
-        int xPos = calculatePosition(x - leftInset, window.getWidth() - leftInset - insets.right);
-        int yPos = calculatePosition(y - topInset, window.getHeight() - topInset - insets.bottom);
+        int positionX = calculatePosition(x - leftInset, window.getWidth() - leftInset - insets.right);
+        int positionY = calculatePosition(y - topInset, window.getHeight() - topInset - insets.bottom);
 
-        if (xPos == POS_OUT_OF_BOUNDS || yPos == POS_OUT_OF_BOUNDS) return POS_OUT_OF_BOUNDS;
+        if (positionX == POS_OUT_OF_BOUNDS || positionY == POS_OUT_OF_BOUNDS) return POS_OUT_OF_BOUNDS;
 
-        return yPos * GRID_COLS + xPos;
+        return positionY * GRID_COLS + positionX;
     }
 
     private boolean isOverTitlePane(Window window, Point windowPoint) {

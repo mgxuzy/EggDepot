@@ -1,4 +1,4 @@
-package nu.eats.gui.store.components;
+package nu.eats.inventory.gui.components;
 
 import nu.eats.gui.components.WrapLayout;
 import nu.eats.gui.plaf.Theme;

@@ -1,11 +1,11 @@
-package nu.eats.ui.store;
+package nu.eats.inventory.state;
 
 import nu.eats.common.messaging.Topic;
-import nu.eats.inventory.domain.StoreItem;
+import nu.eats.inventory.model.InventoryItem;
 
 public final class StoreState {
-    public static final Topic<StoreItem> ITEM_ADDED = new Topic<>();
-    public static final Topic<StoreItem> ITEM_SELECTED = new Topic<>();
+    public static final Topic<InventoryItem> ITEM_ADDED = new Topic<>();
+    public static final Topic<InventoryItem> ITEM_SELECTED = new Topic<>();
 
     private StoreState() {
     }

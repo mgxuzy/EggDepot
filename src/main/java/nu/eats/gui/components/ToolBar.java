@@ -2,6 +2,7 @@ package nu.eats.gui.components;
 
 import nu.eats.gui.plaf.Theme;
 import nu.eats.gui.plaf.button.ButtonPreset;
+import nu.eats.gui.plaf.button.ButtonState;
 import nu.eats.gui.plaf.button.ButtonVariant;
 import nu.eats.gui.plaf.icons.ChevronLeftIcon;
 
@@ -11,7 +12,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static nu.eats.gui.plaf.Constants.KEY_VARIANT;
+import static nu.eats.gui.plaf.Constants.KEY_COMPONENT_VARIANT;
 
 public class ToolBar extends JPanel {
 
@@ -42,7 +43,7 @@ public class ToolBar extends JPanel {
         var backButton = new JButton(new ChevronLeftIcon(12));
 
         ButtonPreset.XS.apply(backButton);
-        backButton.putClientProperty(KEY_VARIANT, ButtonVariant.SECONDARY);
+        ButtonVariant.SECONDARY.install(backButton, ButtonState.NEUTRAL);
         backButton.addActionListener(event -> handler.run());
 
         add(backButton, LEFT);
@@ -89,6 +90,7 @@ public class ToolBar extends JPanel {
         public Dimension preferredLayoutSize(Container parent) {
             var leftDim = measureGroup(leftComponents);
             var rightDim = measureGroup(rightComponents);
+
             var centerDim = centerComponent != null
                     ? centerComponent.getPreferredSize()
                     : new Dimension(0, 0);
@@ -118,6 +120,7 @@ public class ToolBar extends JPanel {
 
             // 1. Layout Left Components
             var currentX = insets.left;
+
             currentX = layoutGroup(leftComponents, currentX, top, availableHeight);
 
             var leftEdgeLimit = currentX;
@@ -125,6 +128,7 @@ public class ToolBar extends JPanel {
             // 2. Layout Right Components
             var rightGroupWidth = measureGroup(rightComponents).width;
             var rightStartX = width - insets.right - rightGroupWidth;
+
             layoutGroup(rightComponents, rightStartX, top, availableHeight);
 
             // 3. Layout Center Component
@@ -148,6 +152,7 @@ public class ToolBar extends JPanel {
                     totalWidth += size.width;
                     maxHeight = Math.max(maxHeight, size.height);
                 }
+
                 totalWidth += (components.size() - 1) * gap;
             }
 

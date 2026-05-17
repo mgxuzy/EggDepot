@@ -1,4 +1,6 @@
 package nu.eats.gui.components.tab;
 
-public class TabButton {
+import javax.swing.*;
+
+public class TabButton extends JToggleButton {
 }

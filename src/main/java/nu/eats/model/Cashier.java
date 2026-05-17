@@ -1,8 +1,8 @@
-package nu.eats.domain;
+package nu.eats.model;
 
-import nu.eats.authentication.domain.UserType;
+import nu.eats.auth.model.UserType;
 
-public record Customer(String id, String username) implements User {
+public record Cashier(String id, String username) implements User {
     @Override
     public String id() {
         return id;

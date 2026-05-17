@@ -1,8 +1,8 @@
 package nu.eats.gui.plaf.field;
 
 import nu.eats.gui.plaf.Theme;
-import nu.eats.gui.plaf.box.BoxDecoration;
-import nu.eats.gui.plaf.box.BoxMeasure;
+import nu.eats.gui.plaf.border.FramedBorder;
+import nu.eats.gui.plaf.component.ComponentState;
 
 import javax.swing.*;
 import javax.swing.plaf.ComponentUI;
@@ -12,15 +12,12 @@ import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 import static nu.eats.gui.plaf.Constants.*;
 
 public class TextFieldUI extends BasicTextFieldUI {
 
     private FocusListener focusListener;
-    private PropertyChangeListener variantListener;
 
     @SuppressWarnings("UnusedDeclaration")
     public static ComponentUI createUI(JComponent component) {
@@ -36,13 +33,7 @@ public class TextFieldUI extends BasicTextFieldUI {
         editor.setOpaque(false);
         editor.setFont(Theme.FONT_MEDIUM_14);
 
-        var variant = TextFieldVariant.SECONDARY;
-
-        editor.putClientProperty(KEY_VARIANT, variant);
-
-        BoxDecoration.ensure(editor).borderRadius(BoxMeasure.pixels(Theme.RADIUS_MD));
-
-        variant.apply(editor, TextFieldState.DEFAULT);
+        TextFieldVariant.SECONDARY.install(editor, TextFieldState.NEUTRAL);
     }
 
     @Override
@@ -53,32 +44,21 @@ public class TextFieldUI extends BasicTextFieldUI {
 
         focusListener = new FocusAdapter() {
             @Override
-            public void focusGained(FocusEvent e) {
-                updateState(component);
+            public void focusGained(FocusEvent event) {
+                var component = (JTextComponent) event.getComponent();
 
-                component.repaint();
+                ComponentState.set(component, TextFieldState.FOCUSED);
             }
 
             @Override
-            public void focusLost(FocusEvent e) {
-                updateState(component);
+            public void focusLost(FocusEvent event) {
+                var component = (JTextComponent) event.getComponent();
 
-                component.repaint();
+                ComponentState.set(component, TextFieldState.NEUTRAL);
             }
         };
 
         component.addFocusListener(focusListener);
-
-        variantListener = (PropertyChangeEvent event) -> {
-            if (KEY_VARIANT.equals(event.getPropertyName())) {
-                updateState(component);
-
-                component.revalidate();
-                component.repaint();
-            }
-        };
-
-        component.addPropertyChangeListener(variantListener);
     }
 
     @Override
@@ -86,31 +66,26 @@ public class TextFieldUI extends BasicTextFieldUI {
         JTextComponent component = getComponent();
 
         component.removeFocusListener(focusListener);
-        component.removePropertyChangeListener(variantListener);
 
         super.uninstallListeners();
-    }
-
-    private void updateState(JTextComponent component) {
-        if (component.getClientProperty(KEY_VARIANT) instanceof TextFieldVariant variant) {
-            variant.apply(component, TextFieldState.of(component));
-        }
     }
 
     @Override
     protected void paintSafely(Graphics graphics) {
         JTextComponent component = getComponent();
 
-        if (component.getClientProperty(KEY_BOX_DECORATION) instanceof BoxDecoration boxDecoration) {
-            Graphics2D graphics2D = (Graphics2D) graphics.create();
+        var graphics2D = (Graphics2D) graphics.create();
 
-            graphics2D.setRenderingHints(DEFAULT_RENDERING_HINTS);
+        graphics2D.setRenderingHints(DEFAULT_RENDERING_HINTS);
 
-            boxDecoration.paint(graphics2D, component, component.getWidth(), component.getHeight());
+        try {
+            if (component.getBorder() instanceof FramedBorder border) {
+                border.paintClientRegion(graphics2D, component);
+            }
 
+            super.paintSafely(graphics2D);
+        } finally {
             graphics2D.dispose();
         }
-
-        super.paintSafely(graphics);
     }
 }

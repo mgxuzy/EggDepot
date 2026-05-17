@@ -10,6 +10,7 @@ public final class Constants {
             RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY));
 
     public static final String KEY_BOX_DECORATION = "backgroundShape";
-    public static final String KEY_VARIANT = "variant";
+    public static final String KEY_COMPONENT_VARIANT = "component.variant";
+    public static final String KEY_COMPONENT_STATE = "component.state";
     public static final String KEY_PLACEHOLDER = "placeholder";
 }

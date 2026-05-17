@@ -1,9 +1,12 @@
-package nu.eats.cart;
+package nu.eats.cart.gui;
 
+import nu.eats.cart.model.CartItem;
+import nu.eats.cart.state.CartState;
+import nu.eats.cart.state.CartViewModel;
 import nu.eats.common.messaging.EventBus;
-import nu.eats.cart.components.ui.CartItemList;
-import nu.eats.cart.components.ui.CartItemRow;
-import nu.eats.cart.components.ui.CartSummary;
+import nu.eats.cart.gui.components.CartItemList;
+import nu.eats.cart.gui.components.CartItemRow;
+import nu.eats.cart.gui.components.CartSummary;
 import nu.eats.gui.components.H1;
 import nu.eats.gui.components.Section;
 import nu.eats.gui.plaf.Theme;

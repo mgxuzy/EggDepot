@@ -3,7 +3,9 @@ package nu.eats.gui.plaf.root;
 import nu.eats.gui.plaf.Constants;
 import nu.eats.gui.plaf.Theme;
 import nu.eats.gui.plaf.WindowResizeHandler;
-import nu.eats.gui.plaf.box.BoxDecoration;
+import nu.eats.gui.plaf.border.BoxDecoration;
+import nu.eats.gui.plaf.border.FramedBorder;
+import nu.eats.gui.plaf.focus.FocusOutline;
 import nu.eats.gui.plaf.root.components.TitlePane;
 import nu.eats.gui.plaf.root.components.WindowBorder;
 
@@ -16,6 +18,8 @@ import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.util.function.Function;
 
+import static nu.eats.gui.plaf.Constants.DEFAULT_RENDERING_HINTS;
+
 public class RootPaneUI extends BasicRootPaneUI {
 
     private static final boolean SHOW_WINDOW_BORDER = false;
@@ -25,7 +29,7 @@ public class RootPaneUI extends BasicRootPaneUI {
     private LayoutManager oldLayoutManager;
     private JRootPane rootPane;
 
-    public static ComponentUI createUI(JComponent c) {
+    public static ComponentUI createUI(JComponent component) {
         return new RootPaneUI();
     }
 
@@ -34,7 +38,8 @@ public class RootPaneUI extends BasicRootPaneUI {
         super.installUI(component);
 
         rootPane = (JRootPane) component;
-        rootPane.setOpaque(true);
+        // rootPane.setOpaque(true);
+
         rootPane.setDoubleBuffered(true);
         rootPane.setBackground(Theme.COLOR_BG);
 
@@ -45,8 +50,10 @@ public class RootPaneUI extends BasicRootPaneUI {
         Container contentPane = rootPane.getContentPane();
 
         if (contentPane != null) {
-            contentPane.setBackground(Theme.COLOR_BG);
+            // contentPane.setBackground(Theme.COLOR_BG);
         }
+
+        FocusOutline.install(rootPane);
     }
 
     @Override
@@ -60,19 +67,22 @@ public class RootPaneUI extends BasicRootPaneUI {
 
     @Override
     public void paint(Graphics graphics, JComponent component) {
-        if (component.getClientProperty(Constants.KEY_BOX_DECORATION) instanceof BoxDecoration decoration) {
-            Graphics2D g2 = (Graphics2D) graphics.create();
-            g2.setRenderingHints(Constants.DEFAULT_RENDERING_HINTS);
+        var graphics2D = (Graphics2D) graphics.create();
 
-            decoration.paint(g2, component, component.getWidth(), component.getHeight());
+        graphics2D.setRenderingHints(DEFAULT_RENDERING_HINTS);
 
-            g2.dispose();
-        } else if (component.isOpaque()) {
-            graphics.setColor(component.getBackground());
-            graphics.fillRect(0, 0, component.getWidth(), component.getHeight());
+        try {
+            if (component.getBorder() instanceof FramedBorder border) {
+                border.paintClientRegion(graphics2D, component);
+            } else if (component.isOpaque()) {
+                graphics.setColor(component.getBackground());
+                graphics.fillRect(0, 0, component.getWidth(), component.getHeight());
+            }
+
+            super.paint(graphics2D, component);
+        } finally {
+            graphics2D.dispose();
         }
-
-        super.paint(graphics, component);
     }
 
     private void installClientDecorations(JRootPane root) {
@@ -143,12 +153,14 @@ public class RootPaneUI extends BasicRootPaneUI {
     }
 
     @Override
-    public void propertyChange(PropertyChangeEvent e) {
-        super.propertyChange(e);
+    public void propertyChange(PropertyChangeEvent event) {
+        super.propertyChange(event);
 
-        if ("windowDecorationStyle".equals(e.getPropertyName())) {
-            JRootPane root = (JRootPane) e.getSource();
+        if ("windowDecorationStyle".equals(event.getPropertyName())) {
+            JRootPane root = (JRootPane) event.getSource();
+
             uninstallClientDecorations(root);
+
             if (root.getWindowDecorationStyle() != JRootPane.NONE) {
                 installClientDecorations(root);
             }

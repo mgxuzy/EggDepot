@@ -1,27 +1,25 @@
 package nu.eats.gui.plaf.button;
 
+import nu.eats.gui.plaf.component.ComponentState;
+
 import javax.swing.*;
 
-public enum ButtonState {
-    SELECTING,
-    ACTIVE,
-    HOVERING,
-    DEFAULT,
-    DISABLED;
+public enum ButtonState implements ComponentState<AbstractButton> {
+    NEUTRAL, HOVERED, ACTIVATED, SELECTED, DISABLED;
 
     public static ButtonState of(ButtonModel model) {
         if (!model.isEnabled()) {
-            return ButtonState.DISABLED;
+            return DISABLED;
         }
 
         if (model.isSelected()) {
-            return ButtonState.SELECTING;
+            return SELECTED;
         } else if (model.isArmed() && model.isPressed()) {
-            return ButtonState.ACTIVE;
+            return ACTIVATED;
         } else if (model.isRollover()) {
-            return ButtonState.HOVERING;
+            return HOVERED;
         } else {
-            return ButtonState.DEFAULT;
+            return NEUTRAL;
         }
     }
 }

@@ -1,4 +1,4 @@
-package nu.eats.authentication.domain;
+package nu.eats.auth.model;
 
 public class Credentials {
 }

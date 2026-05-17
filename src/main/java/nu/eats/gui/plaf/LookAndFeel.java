@@ -79,6 +79,9 @@ public class LookAndFeel extends BasicLookAndFeel {
                 defaults.put(keyText, value);
             }
         }
+
+        JFrame.setDefaultLookAndFeelDecorated(true);
+        JDialog.setDefaultLookAndFeelDecorated(true);
     }
 
     @Override

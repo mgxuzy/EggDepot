@@ -1,6 +1,6 @@
-package nu.eats.gui.store.components;
+package nu.eats.inventory.gui.components;
 
-import nu.eats.domain.store.Product;
+import nu.eats.inventory.model.Product;
 import nu.eats.gui.plaf.Theme;
 import nu.eats.gui.plaf.button.ButtonState;
 import nu.eats.gui.plaf.button.ButtonVariant;

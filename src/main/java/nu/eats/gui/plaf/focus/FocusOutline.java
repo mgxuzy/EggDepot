@@ -1,123 +1,171 @@
-package nu.eats.gui.plaf.root;
+package nu.eats.gui.plaf.focus;
+
+import nu.eats.gui.plaf.border.FramedBorder;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.geom.RoundRectangle2D;
+import java.awt.event.*;
+import java.beans.PropertyChangeListener;
 
 public class FocusOutline extends JComponent {
-    private Rectangle focusRect;   // In overlay's coordinate space
 
-    // Configurable drawing properties
-    private float arc = 8f;        // Corner rounding
-    private float strokeWidth = 2f;// Thickness of the outline
-    private float fw = 4f;         // Distance to expand outside the component
+    private Rectangle focusRect;       // The full, unclipped dimensions of the component
+    private Rectangle paintedBounds;   // The visible intersection (used efficiently for clearing old outlines)
+    private Insets paintedInsets = new Insets(0, 0, 0, 0);
+
+    private FramedBorder focusBorder;
+
+    private JComponent trackedComponent;
+    private final BoundsTracker boundsTracker = new BoundsTracker();
+
+    private final PropertyChangeListener focusListener = evt ->
+            setTrackedComponent(evt.getNewValue() instanceof JComponent next ? next : null);
 
     public FocusOutline() {
         setOpaque(false);
-        setFocusable(false); // Overlay itself must not consume focus
+        setFocusable(false);
     }
 
-    void focusChanged(Component prev, Component next) {
-        // 1. Dirty the old location to erase the previous outline
-        if (focusRect != null) {
-            repaintRect(focusRect);
+    @Override
+    public void addNotify() {
+        super.addNotify();
+        KeyboardFocusManager.getCurrentKeyboardFocusManager()
+                .addPropertyChangeListener("permanentFocusOwner", focusListener);
+    }
+
+    @Override
+    public void removeNotify() {
+        KeyboardFocusManager.getCurrentKeyboardFocusManager()
+                .removePropertyChangeListener("permanentFocusOwner", focusListener);
+        setTrackedComponent(null);
+        super.removeNotify();
+    }
+
+    private void setTrackedComponent(JComponent next) {
+        if (trackedComponent != null) {
+            trackedComponent.removeComponentListener(boundsTracker);
+            trackedComponent.removeHierarchyBoundsListener(boundsTracker);
+            trackedComponent.removeHierarchyListener(boundsTracker);
         }
 
-        if (next == null || !isAncestorWindow(next)) {
-            focusRect = null;
+        trackedComponent = next;
+
+        if (trackedComponent != null) {
+            trackedComponent.addComponentListener(boundsTracker);
+            trackedComponent.addHierarchyBoundsListener(boundsTracker);
+            trackedComponent.addHierarchyListener(boundsTracker);
+        }
+
+        updateFocusBounds();
+    }
+
+    private void updateFocusBounds() {
+        // 1. Erase previously drawn visible bounds using the exact insets it was drawn with
+        if (paintedBounds != null) {
+            repaintRect(paintedBounds, paintedInsets);
+        }
+
+        // 2. Clear if no component or invalid state
+        if (trackedComponent == null || !trackedComponent.isShowing()
+                || SwingUtilities.getRootPane(trackedComponent) != getRootPane()
+                || !(trackedComponent.getBorder() instanceof FramedBorder framedBorder)) {
+            clearFocusState();
             return;
         }
 
-        // 2. Translate focused component bounds into overlay space
-        Rectangle r = new Rectangle(next.getWidth(), next.getHeight());
-        Rectangle newFocusRect = SwingUtilities.convertRectangle(next, r, this);
-
-        // 3. Find if any ancestor is a JViewport and clip accordingly
-        Container ancestor = next.getParent();
-        while (ancestor != null) {
-            if (ancestor instanceof JViewport vp) {
-                Rectangle vpRect = SwingUtilities.convertRectangle(
-                        vp, new Rectangle(vp.getSize()), this);
-                newFocusRect = newFocusRect.intersection(vpRect);
-                // Intentionally NOT breaking here to support nested scroll panes
-            }
-            ancestor = ancestor.getParent();
+        // 3. Determine actual visible bounds accurately tracking any ancestor viewports
+        Rectangle visibleRect = trackedComponent.getVisibleRect();
+        if (visibleRect.isEmpty()) {
+            clearFocusState(); // Completely scrolled out of view
+            return;
         }
 
-        // 4. Update and repaint the new location (if visible)
-        if (newFocusRect.width <= 0 || newFocusRect.height <= 0) {
-            focusRect = null;
-        } else {
-            focusRect = newFocusRect;
-            repaintRect(focusRect);
-        }
+        // 4. Apply State
+        this.focusBorder = framedBorder.toBuilder()
+                .edges(edge -> {
+                    if (edge.build().isVisible) {
+                        edge.thickness(2).color(Color.RED);
+                    }
+                })
+                .build();
+
+        this.focusRect = SwingUtilities.convertRectangle(trackedComponent,
+                new Rectangle(0, 0, trackedComponent.getWidth(), trackedComponent.getHeight()), this);
+        this.paintedBounds = SwingUtilities.convertRectangle(trackedComponent, visibleRect, this);
+        this.paintedInsets = focusBorder.getBorderInsets(trackedComponent);
+
+        // 5. Request paint for the new visible area
+        repaintRect(paintedBounds, paintedInsets);
     }
 
-    /**
-     * Repaints a padded region to fully encompass the stroke width and expansion
-     */
-    private void repaintRect(Rectangle r) {
-        int pad = (int) Math.ceil(fw + strokeWidth) + 2;
-        repaint(r.x - pad, r.y - pad, r.width + pad * 2, r.height + pad * 2);
+    private void clearFocusState() {
+        this.focusRect = null;
+        this.paintedBounds = null;
+        this.focusBorder = null;
+        this.paintedInsets = new Insets(0, 0, 0, 0);
     }
 
-    boolean isAncestorWindow(Component c) {
-        return SwingUtilities.getRootPane(c) == this.getRootPane();
+    private void repaintRect(Rectangle rectangle, Insets insets) {
+        // Dynamically applies padding using the border's true required clearance
+        repaint(rectangle.x - insets.left, rectangle.y - insets.top,
+                rectangle.width + insets.left + insets.right, rectangle.height + insets.top + insets.bottom);
     }
 
     @Override
     public boolean contains(int x, int y) {
-        // Return false so all mouse events fall right through the overlay layer
         return false;
     }
 
+    @Override
+    protected void paintComponent(Graphics graphics) {
+        super.paintComponent(graphics);
+
+        if (focusRect == null || focusBorder == null || paintedBounds == null) {
+            return;
+        }
+
+        Graphics2D graphics2D = (Graphics2D) graphics.create();
+
+        try {
+            graphics2D.clip(paintedBounds);
+
+            focusBorder.resize(focusRect.width, focusRect.height);
+            focusBorder.paintBorder(this, graphics2D, focusRect.x, focusRect.y, focusRect.width, focusRect.height);
+        } finally {
+            graphics2D.dispose();
+        }
+    }
+
     public static void install(JRootPane rootPane) {
-        FocusOutline overlay = new FocusOutline();
+        var focusOutline = new FocusOutline();
 
-        // Must fill the entire root pane initially
-        overlay.setBounds(0, 0, rootPane.getWidth(), rootPane.getHeight());
+        focusOutline.setBounds(0, 0, rootPane.getWidth(), rootPane.getHeight());
 
-        // Keep it sized correctly on frame resize
         rootPane.addComponentListener(new ComponentAdapter() {
             @Override
-            public void componentResized(ComponentEvent e) {
-                // Ignore the x/y of getBounds(), strict lock to 0,0
-                overlay.setBounds(0, 0, rootPane.getWidth(), rootPane.getHeight());
+            public void componentResized(ComponentEvent event) {
+                focusOutline.setBounds(0, 0, rootPane.getWidth(), rootPane.getHeight());
             }
         });
 
-        // DRAG_LAYER is above popups and the default content pane
-        rootPane.getLayeredPane().add(overlay, JLayeredPane.DRAG_LAYER);
-
-        // Listen for global focus changes
-        KeyboardFocusManager.getCurrentKeyboardFocusManager()
-                .addPropertyChangeListener("permanentFocusOwner", evt -> {
-                    Component prev = (Component) evt.getOldValue();
-                    Component next = (Component) evt.getNewValue();
-                    overlay.focusChanged(prev, next);
-                });
+        rootPane.getLayeredPane().add(focusOutline, JLayeredPane.DRAG_LAYER);
     }
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        if (focusRect == null) return;
+    // Coalesced layout watcher delegating to one simple flat update
+    private class BoundsTracker extends ComponentAdapter implements HierarchyBoundsListener, HierarchyListener {
+        private void update() { updateFocusBounds(); }
 
-        Graphics2D g2 = (Graphics2D) g.create();
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setColor(Color.RED);
-        g2.setStroke(new BasicStroke(strokeWidth));
+        @Override public void componentResized(ComponentEvent e) { update(); }
+        @Override public void componentMoved(ComponentEvent e) { update(); }
+        @Override public void componentHidden(ComponentEvent e) { update(); }
+        @Override public void componentShown(ComponentEvent e) { update(); }
+        @Override public void ancestorMoved(HierarchyEvent e) { update(); }
+        @Override public void ancestorResized(HierarchyEvent e) { update(); }
 
-        // Paint OUTSIDE the component rect by expanding by the given thickness (fw)
-        g2.draw(new RoundRectangle2D.Float(
-                focusRect.x - fw,
-                focusRect.y - fw,
-                focusRect.width  + fw * 2,
-                focusRect.height + fw * 2,
-                arc, arc
-        ));
-
-        g2.dispose();
+        @Override public void hierarchyChanged(HierarchyEvent e) {
+            if ((e.getChangeFlags() & (HierarchyEvent.SHOWING_CHANGED | HierarchyEvent.DISPLAYABILITY_CHANGED)) != 0) {
+                update();
+            }
+        }
     }
 }

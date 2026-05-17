@@ -1,4 +1,4 @@
-package nu.eats.inventory.domain;
+package nu.eats.inventory.model;
 
-public record StoreItemCategory(String name, boolean isDefault) {
+public record InventoryItemCategory(String name, boolean isDefault) {
 }

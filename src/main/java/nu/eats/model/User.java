@@ -1,6 +1,6 @@
-package nu.eats.domain;
+package nu.eats.model;
 
-import nu.eats.authentication.domain.UserType;
+import nu.eats.auth.model.UserType;
 
 public interface User {
     String id();

@@ -4,21 +4,22 @@ import nu.eats.gui.plaf.border.FramedBorder;
 
 import javax.swing.*;
 
-public enum ButtonSizePreset {
+import static java.lang.Double.POSITIVE_INFINITY;
+
+public enum ButtonPreset {
     XS {
         @Override
         public void apply(AbstractButton button) {
             button.setBorder(new FramedBorder.Builder()
                     .sides.horizontal(side -> side.padding(12))
                     .sides.vertical(side -> side.padding(8))
+                    .corners(corner -> corner.radius(POSITIVE_INFINITY))
                     .build()
             );
 
             button.setIconTextGap(4);
             button.setFont(button.getFont().deriveFont(12f));
         }
-
-        // borderRadius(Theme.PILL_SHAPE_RADIUS)
     },
 
     SM {
@@ -26,6 +27,7 @@ public enum ButtonSizePreset {
         public void apply(AbstractButton button) {
             button.setBorder(new FramedBorder.Builder()
                     .sides.horizontal(side -> side.padding(16))
+                    .corners(corner -> corner.radius(POSITIVE_INFINITY))
                     .sides.vertical(side -> side.padding(10))
                     .build()
             );
@@ -41,6 +43,7 @@ public enum ButtonSizePreset {
             button.setBorder(new FramedBorder.Builder()
                     .sides.horizontal(side -> side.padding(24))
                     .sides.vertical(side -> side.padding(16))
+                    .corners(corner -> corner.radius(POSITIVE_INFINITY))
                     .build()
             );
 
@@ -55,6 +58,7 @@ public enum ButtonSizePreset {
             button.setBorder(new FramedBorder.Builder()
                     .sides.horizontal(side -> side.padding(48))
                     .sides.vertical(side -> side.padding(32))
+                    .corners(corner -> corner.radius(POSITIVE_INFINITY))
                     .build()
             );
 
@@ -69,6 +73,7 @@ public enum ButtonSizePreset {
             button.setBorder(new FramedBorder.Builder()
                     .sides.horizontal(side -> side.padding(64))
                     .sides.vertical(side -> side.padding(48))
+                    .corners(corner -> corner.radius(POSITIVE_INFINITY))
                     .build()
             );
 

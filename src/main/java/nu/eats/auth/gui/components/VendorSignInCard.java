@@ -1,12 +1,12 @@
-package nu.eats.authentication.gui.components;
+package nu.eats.auth.gui.components;
 
-import nu.eats.domain.Username;
-import nu.eats.authentication.domain.Vendor;
+import nu.eats.model.UserHandle;
+import nu.eats.auth.model.Vendor;
 import nu.eats.gui.components.LabeledField;
 import nu.eats.gui.plaf.Theme;
 import nu.eats.gui.plaf.button.ButtonPreset;
 import nu.eats.gui.plaf.button.ButtonVariant;
-import nu.eats.ui.auth.AuthViewModel;
+import nu.eats.auth.state.AuthViewModel;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -69,11 +69,11 @@ public class VendorSignInCard extends AuthCard {
         mainContent.add(signUpRow);
         mainContent.add(Box.createVerticalGlue());
 
-        this.mainContent.setLayout(new BorderLayout());
-        this.mainContent.add(mainContent, BorderLayout.CENTER);
+        this.contentPanel.setLayout(new BorderLayout());
+        this.contentPanel.add(mainContent, BorderLayout.CENTER);
     }
 
     private void handleSignIn(AuthViewModel model) {
-        model.signIn(new Vendor("v-1", Username.create("Hello").value(), "My Store"));
+        model.signIn(new Vendor("v-1", UserHandle.create("Hello").value(), "My Store"));
     }
 }

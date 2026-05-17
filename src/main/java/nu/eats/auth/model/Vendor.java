@@ -1,14 +1,14 @@
-package nu.eats.authentication.domain;
+package nu.eats.auth.model;
 
-import nu.eats.domain.User;
-import nu.eats.domain.Username;
+import nu.eats.model.User;
+import nu.eats.model.UserHandle;
 
 public final class Vendor implements User {
     private String id;
-    private Username username;
+    private UserHandle userHandle;
     private String storeName;
 
-    public Vendor(String id, Username username, String storeName) {
+    public Vendor(String id, UserHandle userHandle, String storeName) {
 
     }
 
@@ -19,7 +19,7 @@ public final class Vendor implements User {
 
     @Override
     public String username() {
-        return username.value();
+        return userHandle.value();
     }
 
 

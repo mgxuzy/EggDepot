@@ -2,20 +2,20 @@ package nu.eats.gui;
 
 import nu.eats.common.messaging.EventBus;
 import nu.eats.common.resources.Images;
-import nu.eats.domain.Vendor;
-import nu.eats.domain.cart.Cart;
-import nu.eats.domain.cart.CartItem;
-import nu.eats.domain.store.Store;
-import nu.eats.domain.store.StoreItem;
-import nu.eats.gui.cart.CartView;
+import nu.eats.model.Vendor;
+import nu.eats.cart.model.Cart;
+import nu.eats.cart.model.CartItem;
+import nu.eats.inventory.model.Inventory;
+import nu.eats.inventory.model.InventoryItem;
+import nu.eats.cart.gui.CartView;
 import nu.eats.gui.components.Section;
 import nu.eats.gui.plaf.Theme;
-import nu.eats.gui.store.StoreView;
-import nu.eats.gui.vendor.VendorList;
-import nu.eats.gui.vendor.VendorRow;
-import nu.eats.ui.cart.CartViewModel;
-import nu.eats.ui.store.StoreState;
-import nu.eats.ui.store.StoreViewModel;
+import nu.eats.inventory.gui.StoreView;
+import nu.eats.gui.panel.side.VendorList;
+import nu.eats.gui.panel.side.VendorRow;
+import nu.eats.cart.state.CartViewModel;
+import nu.eats.inventory.state.StoreState;
+import nu.eats.inventory.state.StoreViewModel;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -66,8 +66,8 @@ public class MainView extends JPanel {
         var eventBus = EventBus.mainBus();
 
         eventBus.subscribe(StoreState.ITEM_SELECTED, item -> {
-            if (item instanceof StoreItem storeItem) {
-                cartViewModel.addToCart(new CartItem(storeItem));
+            if (item instanceof InventoryItem inventoryItem) {
+                cartViewModel.addToCart(new CartItem(inventoryItem));
             }
         });
     }
@@ -94,8 +94,8 @@ public class MainView extends JPanel {
     }
 
     private StoreView createStoreViewForVendor(Vendor vendor) {
-        Store store = new Store();
-        List<StoreItem> items = switch (vendor.id()) {
+        Inventory inventory = new Inventory();
+        List<InventoryItem> items = switch (vendor.id()) {
             case "hustlers" -> TestData.getCoffeeShopMenu(vendor);
             case "quickbites" -> TestData.getQuickBitesMenu(vendor);
             case "cians" -> TestData.getCiansDinerMenu(vendor);
@@ -103,11 +103,11 @@ public class MainView extends JPanel {
             default -> Collections.emptyList();
         };
 
-        for (StoreItem item : items) {
-            store.add(item);
+        for (InventoryItem item : items) {
+            inventory.add(item);
         }
 
-        return new StoreView(new StoreViewModel(store));
+        return new StoreView(new StoreViewModel(inventory));
     }
 
     public void setVendor(Vendor vendor) {

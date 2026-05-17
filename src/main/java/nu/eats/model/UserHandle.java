@@ -1,4 +1,4 @@
-package nu.eats.domain;
+package nu.eats.model;
 
 import nu.eats.core.monads.Failure;
 import nu.eats.core.monads.Result;
@@ -8,25 +8,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public final class Username {
-    private static final Pattern USERNAME_PATTERN = Pattern.compile("^[a-zA-Z0-9_-]{3,20}$");
+public final class UserHandle {
+    private static final Pattern HANDLE_PATTERN = Pattern.compile("^[a-zA-Z0-9_-]{3,20}$");
 
     private String value;
 
-    private Username(String value) {
+    private UserHandle(String value) {
         this.value = value;
     }
 
-    public static Result<Username, List<String>> create(String value) {
+    public static Result<UserHandle, List<String>> create(String value) {
         var violations = findViolations(value);
 
-        return violations == null ? new Success<>(new Username(value)) : new Failure<>(violations);
+        return violations == null ? new Success<>(new UserHandle(value)) : new Failure<>(violations);
     }
 
     private static List<String> findViolations(String value) {
         List<String> violations = null;
 
-        if (!USERNAME_PATTERN.matcher(value).find()) {
+        if (!HANDLE_PATTERN.matcher(value).find()) {
             violations = new ArrayList<>();
 
             violations.add("Invalid username");
@@ -39,7 +39,7 @@ public final class Username {
         return value;
     }
 
-    public Result<Username, List<String>> setValue(String value) {
+    public Result<UserHandle, List<String>> setValue(String value) {
         var violations = findViolations(value);
 
         if (violations == null) {

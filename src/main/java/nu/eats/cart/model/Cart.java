@@ -1,13 +1,13 @@
-package nu.eats.cart;
+package nu.eats.cart.model;
 
-import nu.eats.inventory.domain.StoreItem;
+import nu.eats.inventory.model.InventoryItem;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Cart {
-    private final Map<StoreItem, CartItem> items = new HashMap<>();
+    private final Map<InventoryItem, CartItem> items = new HashMap<>();
 
     public CartItem add(CartItem item) {
         if (item == null) {
@@ -38,7 +38,7 @@ public class Cart {
         return item;
     }
 
-    public int quantity(StoreItem item) {
+    public int quantity(InventoryItem item) {
         var cartItem = items.get(item);
 
         if (cartItem != null) {

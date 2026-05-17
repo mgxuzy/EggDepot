@@ -1,7 +1,7 @@
-package nu.eats.cart.components.ui;
+package nu.eats.cart.gui.components;
 
 import nu.eats.common.messaging.Subscription;
-import nu.eats.cart.CartItem;
+import nu.eats.cart.model.CartItem;
 import nu.eats.gui.plaf.Theme;
 
 import javax.swing.*;

@@ -1,15 +1,15 @@
-package nu.eats.inventory.domain;
+package nu.eats.inventory.model;
 
-import nu.eats.domain.Vendor;
+import nu.eats.model.Vendor;
 
-public class StoreItem {
+public class InventoryItem {
     private final Product product;
     private final Vendor vendor;
-    private final StoreItemCategory category;
+    private final InventoryItemCategory category;
 
     private int availableStock;
 
-    public StoreItem(Product product, Vendor vendor, StoreItemCategory category, int availableStock) {
+    public InventoryItem(Product product, Vendor vendor, InventoryItemCategory category, int availableStock) {
         this.product = product;
         this.vendor = vendor;
         this.category = category;
@@ -29,7 +29,7 @@ public class StoreItem {
         return availableStock;
     }
 
-    public StoreItemCategory category() {
+    public InventoryItemCategory category() {
         return category;
     }
 

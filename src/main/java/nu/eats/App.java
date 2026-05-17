@@ -1,7 +1,7 @@
 package nu.eats;
 
 import nu.eats.gui.MainView;
-import nu.eats.gui.auth.AuthDialog;
+import nu.eats.auth.gui.AuthDialog;
 import nu.eats.gui.plaf.LookAndFeel;
 
 import javax.swing.*;
@@ -20,9 +20,6 @@ public class App {
                 // no-op
             }
 
-            JFrame.setDefaultLookAndFeelDecorated(true);
-            JDialog.setDefaultLookAndFeelDecorated(true);
-
             // --- Auth ---
             var authDialog = new AuthDialog(null);
 
@@ -34,6 +31,8 @@ public class App {
 
             // --- Store ---
             var frame = new JFrame(NAME);
+
+            // BoxDecoration.ensure(frame.getRootPane()).borderRadius(BoxMeasure.pixels(16));
 
             frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
             frame.setContentPane(new MainView());

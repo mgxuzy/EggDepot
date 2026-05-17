@@ -12,7 +12,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.function.Consumer;
 
-import static nu.eats.gui.plaf.Constants.KEY_VARIANT;
+import static nu.eats.gui.plaf.Constants.KEY_COMPONENT_VARIANT;
 
 /**
  * A horizontal chip navigation bar with an expand/collapse toggle.
@@ -65,7 +65,7 @@ public class ChipBar extends JPanel {
 
         // Expand Button
         expandButton = new JButton(new ChevronDownIcon(12));
-        expandButton.putClientProperty(KEY_VARIANT, ButtonVariant.FLAT);
+        expandButton.putClientProperty(KEY_COMPONENT_VARIANT, ButtonVariant.FLAT);
         expandButton.setVisible(false);
         expandButton.addActionListener(_ -> toggleExpansion());
 

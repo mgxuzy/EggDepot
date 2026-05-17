@@ -4,7 +4,6 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -27,7 +26,7 @@ public final class Images {
     public static BufferedImage load(String fileName) {
         if (CACHE.isEmpty()) init();
 
-        BufferedImage image = CACHE.get(fileName);
+        var image = CACHE.get(fileName);
 
         if (image == null) throw new IllegalArgumentException("Image not found: " + fileName);
 
@@ -58,7 +57,7 @@ public final class Images {
     }
 
     private static void register(Path path) {
-        try (InputStream input = Files.newInputStream(path)) {
+        try (var input = Files.newInputStream(path)) {
             BufferedImage image = ImageIO.read(input);
 
             if (image == null) return;

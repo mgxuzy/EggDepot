@@ -1,9 +1,10 @@
-package nu.eats.authentication.gui.components;
+package nu.eats.auth.gui.components;
 
 import nu.eats.gui.components.Card;
 import nu.eats.gui.components.ToolBar;
 import nu.eats.gui.plaf.Theme;
 import nu.eats.gui.plaf.button.ButtonPreset;
+import nu.eats.gui.plaf.button.ButtonState;
 import nu.eats.gui.plaf.button.ButtonVariant;
 import nu.eats.gui.plaf.icons.CloseIcon;
 
@@ -13,7 +14,7 @@ import java.awt.*;
 import static nu.eats.gui.plaf.Constants.KEY_COMPONENT_VARIANT;
 
 public class AuthCard extends Card {
-    protected final JPanel mainContent;
+    protected final JPanel contentPanel;
 
     private final ToolBar toolBar;
 
@@ -24,10 +25,10 @@ public class AuthCard extends Card {
 
         add(toolBar, BorderLayout.NORTH);
 
-        this.mainContent = new JPanel();
-        this.mainContent.setOpaque(false);
+        this.contentPanel = new JPanel();
+        this.contentPanel.setOpaque(false);
 
-        add(mainContent, BorderLayout.CENTER);
+        add(this.contentPanel, BorderLayout.CENTER);
 
         setOpaque(false);
         setBackground(Theme.COLOR_BG);
@@ -50,7 +51,7 @@ public class AuthCard extends Card {
         setBorder(null);
 
         closeButton.setFont(Theme.FONT_MONO_14);
-        closeButton.putClientProperty(KEY_COMPONENT_VARIANT, ButtonVariant.SECONDARY);
+        ButtonVariant.SECONDARY.install(closeButton);
         closeButton.addActionListener(_ -> showExitDialog());
 
         return closeButton;

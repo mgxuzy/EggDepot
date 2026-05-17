@@ -7,12 +7,12 @@ import javax.swing.plaf.UIResource;
 import java.awt.*;
 
 public class WindowBorder implements Border, UIResource {
-    private static final int THICKNESS = 1;
+    private static final int THICKNESS = 0;
 
     @Override
-    public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
-        g.setColor(Theme.COLOR_BORDER);
-        g.drawRect(x, y, width - 1, height - 1);
+    public void paintBorder(Component c, Graphics graphics, int x, int y, int width, int height) {
+        graphics.setColor(Theme.COLOR_BORDER);
+        graphics.drawRect(x, y, width - 1, height - 1);
     }
 
     @Override

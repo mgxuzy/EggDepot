@@ -1,9 +1,9 @@
-package nu.eats.cart.components.ui;
+package nu.eats.cart.gui.components;
 
 import nu.eats.common.messaging.EventBus;
-import nu.eats.cart.CartItem;
+import nu.eats.cart.model.CartItem;
 import nu.eats.gui.plaf.Theme;
-import nu.eats.cart.CartState;
+import nu.eats.cart.state.CartState;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

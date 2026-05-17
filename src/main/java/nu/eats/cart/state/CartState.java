@@ -1,5 +1,6 @@
-package nu.eats.cart;
+package nu.eats.cart.state;
 
+import nu.eats.cart.model.CartItem;
 import nu.eats.common.messaging.Topic;
 
 import java.math.BigDecimal;

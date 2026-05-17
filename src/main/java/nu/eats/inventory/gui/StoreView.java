@@ -1,17 +1,17 @@
-package nu.eats.gui.store;
+package nu.eats.inventory.gui;
 
 import nu.eats.common.messaging.EventBus;
-import nu.eats.domain.store.StoreItem;
-import nu.eats.domain.store.StoreItemCategory;
+import nu.eats.inventory.model.InventoryItem;
+import nu.eats.inventory.model.InventoryItemCategory;
 import nu.eats.gui.components.Section;
 import nu.eats.gui.components.chip.ChipBar;
 import nu.eats.gui.plaf.Theme;
-import nu.eats.gui.store.components.StoreCategorySection;
-import nu.eats.gui.store.components.StoreItemList;
-import nu.eats.gui.store.components.StoreItemRow;
-import nu.eats.cart.CartState;
-import nu.eats.ui.store.StoreState;
-import nu.eats.ui.store.StoreViewModel;
+import nu.eats.inventory.gui.components.StoreCategorySection;
+import nu.eats.inventory.gui.components.StoreItemList;
+import nu.eats.inventory.gui.components.StoreItemRow;
+import nu.eats.cart.state.CartState;
+import nu.eats.inventory.state.StoreState;
+import nu.eats.inventory.state.StoreViewModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,8 +26,8 @@ public class StoreView extends Section {
     private final ChipBar chipBar;
     private final StoreViewModel model;
 
-    private final Map<StoreItemCategory, StoreItemList> categoryLists = new LinkedHashMap<>();
-    private final Map<StoreItemCategory, StoreCategorySection> categorySections = new LinkedHashMap<>();
+    private final Map<InventoryItemCategory, StoreItemList> categoryLists = new LinkedHashMap<>();
+    private final Map<InventoryItemCategory, StoreCategorySection> categorySections = new LinkedHashMap<>();
 
     public StoreView(StoreViewModel model) {
         this.model = model;
@@ -70,10 +70,10 @@ public class StoreView extends Section {
         add(mainContainer, BorderLayout.CENTER);
 
         // Populate
-        Map<StoreItemCategory, List<StoreItem>> groupedItems = model.getItemsByCategory();
+        Map<InventoryItemCategory, List<InventoryItem>> groupedItems = model.getItemsByCategory();
 
         for (var entry : groupedItems.entrySet()) {
-            for (StoreItem item : entry.getValue()) {
+            for (InventoryItem item : entry.getValue()) {
                 addItem(item);
             }
         }
@@ -95,8 +95,8 @@ public class StoreView extends Section {
         SwingUtilities.invokeLater(() -> scrollPane.getViewport().setViewPosition(new Point(0, 0)));
     }
 
-    public void addItem(StoreItem item) {
-        StoreItemCategory category = item.category();
+    public void addItem(InventoryItem item) {
+        InventoryItemCategory category = item.category();
 
         StoreItemList list = categoryLists.computeIfAbsent(category, itemCategory -> {
             StoreItemList newList = new StoreItemList();

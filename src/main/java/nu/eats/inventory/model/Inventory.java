@@ -1,14 +1,14 @@
-package nu.eats.inventory.domain;
+package nu.eats.inventory.model;
 
-import nu.eats.domain.Vendor;
+import nu.eats.model.Vendor;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-public class Store {
-    private final Set<StoreItem> items = new LinkedHashSet<>();
+public class Inventory {
+    private final Set<InventoryItem> items = new LinkedHashSet<>();
 
-    public boolean add(StoreItem item) {
+    public boolean add(InventoryItem item) {
         if (item == null) {
             throw new IllegalArgumentException("Item cannot be null");
         }
@@ -16,7 +16,7 @@ public class Store {
         return items.add(item);
     }
 
-    public boolean remove(StoreItem item) {
+    public boolean remove(InventoryItem item) {
         if (item == null) {
             throw new IllegalArgumentException("Item cannot be null");
         }
@@ -24,28 +24,28 @@ public class Store {
         return items.remove(item);
     }
 
-    public StoreItem[] items() {
-        return items.toArray(StoreItem[]::new);
+    public InventoryItem[] items() {
+        return items.toArray(InventoryItem[]::new);
     }
 
-    public StoreItem[] itemsBy(Vendor vendor) {
+    public InventoryItem[] itemsBy(Vendor vendor) {
         if (vendor == null) {
             throw new IllegalArgumentException("Vendor cannot be null");
         }
 
         int count = 0;
 
-        for (StoreItem item : items) {
+        for (InventoryItem item : items) {
             if (item.vendor().equals(vendor)) {
                 count++;
             }
         }
 
-        StoreItem[] result = new StoreItem[count];
+        InventoryItem[] result = new InventoryItem[count];
 
         int index = 0;
 
-        for (StoreItem item : items) {
+        for (InventoryItem item : items) {
             if (item.vendor().equals(vendor)) {
                 result[index++] = item;
             }

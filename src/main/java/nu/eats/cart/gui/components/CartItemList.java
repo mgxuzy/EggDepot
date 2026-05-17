@@ -1,4 +1,4 @@
-package nu.eats.cart.components.ui;
+package nu.eats.cart.gui.components;
 
 import nu.eats.gui.components.FitPanel;
 import nu.eats.gui.plaf.Theme;

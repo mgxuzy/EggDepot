@@ -1,6 +1,6 @@
 package nu.eats.gui.plaf.spinner;
 
-import nu.eats.gui.plaf.Constants;
+import nu.eats.gui.plaf.field.TextFieldState;
 import nu.eats.gui.plaf.field.TextFieldUI;
 import nu.eats.gui.plaf.field.TextFieldVariant;
 
@@ -42,7 +42,7 @@ public class SpinnerUI extends BasicSpinnerUI {
             defaultEditor.add(textField, BorderLayout.CENTER);
 
             textField.setUI(new TextFieldUI());
-            textField.putClientProperty(Constants.KEY_VARIANT, TextFieldVariant.TERTIARY);
+            TextFieldVariant.TERTIARY.install(textField, TextFieldState.NEUTRAL);
             textField.setColumns(2);
 
             textField.addFocusListener(new FocusAdapter() {

@@ -1,7 +1,6 @@
 package nu.eats.gui.plaf;
 
 import nu.eats.common.resources.Fonts;
-import nu.eats.gui.plaf.box.BoxMeasure;
 
 import javax.swing.plaf.ColorUIResource;
 import java.awt.*;
@@ -20,6 +19,7 @@ public final class Theme {
     public static final Color ZINC_900 = new Color(15, 23, 42); // Almost black navy
     public static final Color ZINC_950 = new Color(2, 6, 23);
 
+    public static final Color COLOR_TRANSPARENT = new Color(0, 0, 0, 0);
     public static final Color COLOR_PRIMARY = ZINC_900;
     public static final Color COLOR_BG_PRIMARY_HOVER = ZINC_800;
     public static final Color COLOR_BG_PRIMARY_PRESSED = ZINC_600;
@@ -46,7 +46,6 @@ public final class Theme {
     public static final Color COLOR_PLACEHOLDER_FG_INVERSE = ZINC_500;
 
     public static final Color COLOR_GREEN = new Color(0, 128, 0);
-    public static final Color COLOR_TRANSPARENT = new Color(0, 0, 0, 0);
 
     public static final float RADIUS_SM = 8f;
     public static final float RADIUS_MD = 12f;
@@ -65,12 +64,6 @@ public final class Theme {
     public static final int TITLE_BAR_HEIGHT = 32;
     public static final int TITLE_BAR_BUTTON_WIDTH = 46;
     public static final int TITLE_BAR_BUTTON_GAP = 0;
-
-    public static final BoxMeasure BORDER_WIDTH_NONE = BoxMeasure.pixels(0);
-    public static final BoxMeasure BORDER_WIDTH_THIN = BoxMeasure.pixels(1);
-    public static final BoxMeasure BORDER_WIDTH_THICK = BoxMeasure.pixels(2);
-
-    public static final BoxMeasure PILL_SHAPE_RADIUS = BoxMeasure.normalizedPercent(1);
 
     public static final int FONT_SIZE_XS = 12;
     public static final int FONT_SIZE_SM = 14;

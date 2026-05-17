@@ -1,7 +1,9 @@
-package nu.eats.cart;
+package nu.eats.cart.state;
 
+import nu.eats.cart.model.Cart;
+import nu.eats.cart.model.CartItem;
 import nu.eats.common.messaging.EventBus;
-import nu.eats.inventory.domain.StoreItem;
+import nu.eats.inventory.model.InventoryItem;
 
 import java.math.BigDecimal;
 
@@ -17,7 +19,7 @@ public class CartViewModel {
         return cart.items();
     }
 
-    public int quantityOf(StoreItem item) {
+    public int quantityOf(InventoryItem item) {
         return cart.quantity(item);
     }
 

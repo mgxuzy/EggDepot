@@ -1,13 +1,14 @@
 package nu.eats.gui.plaf.button;
 
-import nu.eats.gui.plaf.box.BoxDecoration;
+import nu.eats.gui.plaf.border.FramedBorder;
+import nu.eats.gui.plaf.component.ComponentState;
 
 import javax.swing.*;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicButtonUI;
 import java.awt.*;
 
-import static nu.eats.gui.plaf.Constants.*;
+import static nu.eats.gui.plaf.Constants.DEFAULT_RENDERING_HINTS;
 
 public class ButtonUI extends BasicButtonUI {
     @SuppressWarnings("UnusedDeclaration")
@@ -21,19 +22,12 @@ public class ButtonUI extends BasicButtonUI {
 
         super.installDefaults(button);
 
-        button.setBorder(null);
-        button.setBorderPainted(false);
         button.setRolloverEnabled(true);
         button.setFocusPainted(false);
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         ButtonPreset.SM.apply(button);
-
-        var variant = ButtonVariant.PRIMARY;
-
-        variant.apply(button, ButtonState.DEFAULT);
-
-        button.putClientProperty(KEY_VARIANT, variant);
+        ButtonVariant.PRIMARY.install(button);
     }
 
     @Override
@@ -42,37 +36,23 @@ public class ButtonUI extends BasicButtonUI {
 
         var buttonModel = button.getModel();
 
-        button.addPropertyChangeListener(KEY_VARIANT, event -> {
-            if (event.getNewValue() instanceof ButtonVariant variant) {
-                variant.apply(button, ButtonState.of(buttonModel));
-            }
-        });
-
         buttonModel.addChangeListener(ignored -> {
-            if (!(button.getClientProperty(KEY_VARIANT) instanceof ButtonVariant variant)) {
-                return;
-            }
-
-            variant.apply(button, ButtonState.of(buttonModel));
+            ComponentState.set(button, ButtonState.of(buttonModel));
         });
     }
 
     @Override
     public void paint(Graphics graphics, JComponent component) {
-        if (!(component instanceof AbstractButton button)) {
-            return;
-        }
-
         var graphics2D = (Graphics2D) graphics.create();
 
         graphics2D.setRenderingHints(DEFAULT_RENDERING_HINTS);
 
         try {
-            if (button.getClientProperty(KEY_BOX_DECORATION) instanceof BoxDecoration boxDecoration) {
-                boxDecoration.paint(graphics2D, button, button.getWidth(), button.getHeight());
+            if (component.getBorder() instanceof FramedBorder border) {
+                border.paintClientRegion(graphics2D, component);
             }
 
-            super.paint(graphics2D, button);
+            super.paint(graphics2D, component);
         } finally {
             graphics2D.dispose();
         }

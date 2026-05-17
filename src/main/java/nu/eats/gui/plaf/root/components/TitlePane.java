@@ -77,12 +77,9 @@ public class TitlePane extends JComponent {
 
     private JButton createButton(Icon icon) {
         JButton button = new JButton(icon);
-        button.setFocusable(false);
-        button.setContentAreaFilled(false);
-        button.setBorderPainted(false);
-        button.setBorder(null);
-        button.setRolloverEnabled(true);
-        button.putClientProperty(Constants.KEY_VARIANT, ButtonVariant.FLAT);
+
+        button.putClientProperty(Constants.KEY_COMPONENT_VARIANT, ButtonVariant.FLAT);
+
         return button;
     }
 
@@ -96,6 +93,7 @@ public class TitlePane extends JComponent {
         if (window instanceof Frame frame) {
             int state = frame.getExtendedState();
             boolean isMaximized = (state & Frame.MAXIMIZED_BOTH) != 0;
+
             frame.setExtendedState(isMaximized ? state & ~Frame.MAXIMIZED_BOTH : state | Frame.MAXIMIZED_BOTH);
         }
     }
@@ -109,12 +107,14 @@ public class TitlePane extends JComponent {
     private void updateMaximizeIcon() {
         if (window instanceof Frame frame) {
             boolean maximized = (frame.getExtendedState() & Frame.MAXIMIZED_BOTH) != 0;
+
             maximizeButton.setIcon(maximized ? new RestoreIcon(ICON_SIZE) : new MaximizeIcon(ICON_SIZE));
         }
     }
 
     public void setBackVisible(boolean visible) {
         backButton.setVisible(visible);
+
         repaint();
         revalidate();
     }
@@ -132,7 +132,7 @@ public class TitlePane extends JComponent {
 
         for (JButton button : windowButtons) {
             button.setForeground(fg);
-            button.putClientProperty(Constants.KEY_VARIANT, variant);
+            button.putClientProperty(Constants.KEY_COMPONENT_VARIANT, variant);
         }
 
         repaint();
@@ -141,15 +141,20 @@ public class TitlePane extends JComponent {
     @Override
     public void addNotify() {
         super.addNotify();
+
         uninstallWindowListeners();
+
         window = SwingUtilities.getWindowAncestor(this);
 
         if (window != null) {
             window.addWindowListener(windowListener);
             window.addWindowStateListener(windowListener);
             window.addPropertyChangeListener(propertyChangeListener);
+
             updateMaximizeIcon();
+
             title = resolveWindowTitle();
+
             repaint();
         }
     }
@@ -167,15 +172,16 @@ public class TitlePane extends JComponent {
         } else if (window instanceof Dialog dialog) {
             return dialog.getTitle() != null ? dialog.getTitle() : "";
         }
+
         return "";
     }
 
     private void uninstallWindowListeners() {
-        if (window != null) {
-            window.removeWindowListener(windowListener);
-            window.removeWindowStateListener(windowListener);
-            window.removePropertyChangeListener(propertyChangeListener);
-        }
+        if (window == null) return;
+
+        window.removeWindowListener(windowListener);
+        window.removeWindowStateListener(windowListener);
+        window.removePropertyChangeListener(propertyChangeListener);
     }
 
     @Override
@@ -191,6 +197,7 @@ public class TitlePane extends JComponent {
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g.create();
+
         g2.setRenderingHints(Constants.DEFAULT_RENDERING_HINTS);
 
         if (titleBarColor != null) {
@@ -203,6 +210,7 @@ public class TitlePane extends JComponent {
             g2.setColor(resolveTitleForeground());
 
             FontMetrics fm = g2.getFontMetrics();
+
             float y = (getHeight() - fm.getHeight()) / 2f + fm.getAscent();
             int x = Theme.SPACING_MD;
 
@@ -240,6 +248,7 @@ public class TitlePane extends JComponent {
         if (showMinMax) {
             x = layoutButtonBefore(maximizeButton, x, h);
             layoutButtonBefore(minimizeButton, x, h);
+
             maximizeButton.setVisible(true);
             minimizeButton.setVisible(true);
         } else {

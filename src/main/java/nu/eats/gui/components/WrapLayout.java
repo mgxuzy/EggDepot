@@ -43,18 +43,18 @@ public class WrapLayout extends FlowLayout {
     private Dimension layoutSize(Container target, boolean preferred) {
         synchronized (target.getTreeLock()) {
             int targetWidth = resolveTargetWidth(target);
-            int hGap = getHgap();
-            int vGap = getVgap();
+            int horizontalGap = getHgap();
+            int verticalGap = getVgap();
 
             Insets insets = target.getInsets();
 
-            int horizontalInsetsAndGap = insets.left + insets.right + (hGap * 2);
+            int horizontalInsetsAndGap = insets.left + insets.right + (horizontalGap * 2);
             int maxWidth = targetWidth - horizontalInsetsAndGap;
 
-            Dimension dimension = measureRows(target, maxWidth, hGap, preferred);
+            Dimension dimension = measureRows(target, maxWidth, horizontalGap, preferred);
 
             dimension.width += horizontalInsetsAndGap;
-            dimension.height += insets.top + insets.bottom + vGap * 2;
+            dimension.height += insets.top + insets.bottom + verticalGap * 2;
 
             // Match the container's width so the layout doesn't force horizontal expansion
             if (preferred && targetWidth != Integer.MAX_VALUE) {
@@ -63,7 +63,7 @@ public class WrapLayout extends FlowLayout {
 
             // Shrink slightly inside a scroll pane so the container can still shrink
             if (SwingUtilities.getAncestorOfClass(JScrollPane.class, target) != null) {
-                dimension.width -= (hGap + 1);
+                dimension.width -= (horizontalGap + 1);
             }
 
             return dimension;

@@ -1,9 +1,9 @@
-package nu.eats.domain;
+package nu.eats.model;
 
-public class Quantity {
+public class NonNegativeInt {
     private int value;
 
-    public Quantity(int value) {
+    public NonNegativeInt(int value) {
         setValue(value);
     }
 

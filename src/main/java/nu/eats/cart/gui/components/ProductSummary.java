@@ -1,6 +1,6 @@
-package nu.eats.cart.components.ui;
+package nu.eats.cart.gui.components;
 
-import nu.eats.domain.store.Product;
+import nu.eats.inventory.model.Product;
 import nu.eats.gui.plaf.Theme;
 
 import javax.swing.*;

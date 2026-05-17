@@ -1,26 +1,26 @@
-package nu.eats.cart;
+package nu.eats.cart.model;
 
-import nu.eats.domain.Quantity;
-import nu.eats.inventory.domain.StoreItem;
+import nu.eats.model.NonNegativeInt;
+import nu.eats.inventory.model.InventoryItem;
 
 public final class CartItem {
-    private final StoreItem catalogItem;
-    private final Quantity quantity;
+    private final InventoryItem catalogItem;
+    private final NonNegativeInt quantity;
 
-    public CartItem(StoreItem catalogItem, int quantity) {
+    public CartItem(InventoryItem catalogItem, int quantity) {
         if (catalogItem == null) {
             throw new IllegalArgumentException("Catalog item cannot be null");
         }
 
         this.catalogItem = catalogItem;
-        this.quantity = new Quantity(quantity);
+        this.quantity = new NonNegativeInt(quantity);
     }
 
-    public CartItem(StoreItem storeItem) {
-        this(storeItem, 1);
+    public CartItem(InventoryItem inventoryItem) {
+        this(inventoryItem, 1);
     }
 
-    public StoreItem catalogItem() {
+    public InventoryItem catalogItem() {
         return catalogItem;
     }
 

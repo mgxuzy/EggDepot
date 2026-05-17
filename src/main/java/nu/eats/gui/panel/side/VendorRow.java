@@ -1,4 +1,4 @@
-package nu.eats.gui.vendor;
+package nu.eats.gui.panel.side;
 
 import nu.eats.gui.plaf.Theme;
 import nu.eats.gui.plaf.button.ButtonPreset;

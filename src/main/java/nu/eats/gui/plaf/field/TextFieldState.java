@@ -1,9 +1,11 @@
 package nu.eats.gui.plaf.field;
 
+import nu.eats.gui.plaf.component.ComponentState;
+
 import javax.swing.text.JTextComponent;
 
-public enum TextFieldState {
-    DEFAULT,
+public enum TextFieldState implements ComponentState<JTextComponent> {
+    NEUTRAL,
     FOCUSED,
     DISABLED;
 
@@ -16,6 +18,6 @@ public enum TextFieldState {
             return FOCUSED;
         }
 
-        return DEFAULT;
+        return NEUTRAL;
     }
 }

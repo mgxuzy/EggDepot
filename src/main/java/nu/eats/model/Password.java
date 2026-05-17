@@ -1,4 +1,4 @@
-package nu.eats.domain;
+package nu.eats.model;
 
 import nu.eats.core.monads.Failure;
 import nu.eats.core.monads.Result;

@@ -1,4 +1,4 @@
-package nu.eats.inventory.domain;
+package nu.eats.inventory.model;
 
 import java.math.BigDecimal;
 

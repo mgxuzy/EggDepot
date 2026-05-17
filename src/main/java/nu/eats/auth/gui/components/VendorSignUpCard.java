@@ -1,9 +1,9 @@
-package nu.eats.authentication.gui.components;
+package nu.eats.auth.gui.components;
 
-import nu.eats.domain.Password;
-import nu.eats.domain.User;
-import nu.eats.domain.Username;
-import nu.eats.authentication.domain.Vendor;
+import nu.eats.model.Password;
+import nu.eats.model.User;
+import nu.eats.model.UserHandle;
+import nu.eats.auth.model.Vendor;
 import nu.eats.gui.components.LabeledField;
 import nu.eats.gui.components.Section;
 import nu.eats.gui.plaf.Theme;
@@ -80,8 +80,8 @@ public class VendorSignUpCard extends AuthCard {
         mainContent.add(signInRow);
         mainContent.add(Box.createVerticalGlue());
 
-        this.mainContent.setLayout(new BorderLayout());
-        this.mainContent.add(mainContent, BorderLayout.CENTER);
+        this.contentPanel.setLayout(new BorderLayout());
+        this.contentPanel.add(mainContent, BorderLayout.CENTER);
     }
 
     private void handleSignUp(Consumer<User> signedUpHandler) {
@@ -109,7 +109,7 @@ public class VendorSignUpCard extends AuthCard {
             return;
         }
 
-        var usernameResult = Username.create(usernameField.getText());
+        var usernameResult = UserHandle.create(usernameField.getText());
 
         if (usernameResult.isFailure()) {
             JOptionPane.showMessageDialog(this, String.join("\n", usernameResult.error()), "Error", JOptionPane.ERROR_MESSAGE);
