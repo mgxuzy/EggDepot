@@ -1,74 +1,81 @@
 package nu.eats.gui.plaf.button;
 
-import nu.eats.gui.plaf.Theme;
-import nu.eats.gui.plaf.box.BoxDecoration;
-import nu.eats.gui.plaf.box.BoxMeasure;
+import nu.eats.gui.plaf.border.FramedBorder;
 
 import javax.swing.*;
 
-public enum ButtonPreset {
-    XS(definer().padding(8, 12).iconGap(4).fontSize(12f).borderRadius(Theme.PILL_SHAPE_RADIUS)),
-    SM(definer().padding(10, 16).iconGap(8).fontSize(14f).borderRadius(Theme.PILL_SHAPE_RADIUS)),
-    MD(definer().padding(16, 24).iconGap(12).fontSize(16f).borderRadius(Theme.PILL_SHAPE_RADIUS)),
-    LG(definer().padding(32, 48).iconGap(16).fontSize(20f).borderRadius(Theme.PILL_SHAPE_RADIUS)),
-    XL(definer().padding(48, 64).iconGap(24).fontSize(24f).borderRadius(Theme.PILL_SHAPE_RADIUS));
+public enum ButtonSizePreset {
+    XS {
+        @Override
+        public void apply(AbstractButton button) {
+            button.setBorder(new FramedBorder.Builder()
+                    .sides.horizontal(side -> side.padding(12))
+                    .sides.vertical(side -> side.padding(8))
+                    .build()
+            );
 
-    public final int verticalPadding, horizontalPadding, iconGap;
-    public final float fontSize;
-    public final BoxMeasure borderRadius;
-
-    ButtonPreset(Definer definer) {
-        this.verticalPadding = definer.verticalPadding;
-        this.horizontalPadding = definer.horizontalPadding;
-        this.iconGap = definer.iconGap;
-        this.fontSize = definer.fontSize;
-        this.borderRadius = definer.borderRadius;
-    }
-
-    private static Definer definer() {
-        return new Definer();
-    }
-
-    public void apply(AbstractButton button) {
-        button.setBorder(BorderFactory.createEmptyBorder(verticalPadding, horizontalPadding, verticalPadding,
-                horizontalPadding));
-        button.setFont(button.getFont().deriveFont(fontSize));
-        button.setIconTextGap(iconGap);
-
-        BoxDecoration.ensure(button).borderRadius(borderRadius);
-    }
-
-    private static class Definer {
-        int verticalPadding;
-        int horizontalPadding;
-        int iconGap;
-
-        float fontSize;
-        BoxMeasure borderRadius;
-
-        Definer padding(int vertical, int horizontal) {
-            this.verticalPadding = vertical;
-            this.horizontalPadding = horizontal;
-
-            return this;
+            button.setIconTextGap(4);
+            button.setFont(button.getFont().deriveFont(12f));
         }
 
-        Definer iconGap(int gap) {
-            this.iconGap = gap;
+        // borderRadius(Theme.PILL_SHAPE_RADIUS)
+    },
 
-            return this;
+    SM {
+        @Override
+        public void apply(AbstractButton button) {
+            button.setBorder(new FramedBorder.Builder()
+                    .sides.horizontal(side -> side.padding(16))
+                    .sides.vertical(side -> side.padding(10))
+                    .build()
+            );
+
+            button.setIconTextGap(8);
+            button.setFont(button.getFont().deriveFont(14f));
         }
+    },
 
-        Definer fontSize(float size) {
-            this.fontSize = size;
+    MD {
+        @Override
+        public void apply(AbstractButton button) {
+            button.setBorder(new FramedBorder.Builder()
+                    .sides.horizontal(side -> side.padding(24))
+                    .sides.vertical(side -> side.padding(16))
+                    .build()
+            );
 
-            return this;
+            button.setIconTextGap(12);
+            button.setFont(button.getFont().deriveFont(16f));
         }
+    },
 
-        Definer borderRadius(BoxMeasure radius) {
-            this.borderRadius = radius;
+    LG {
+        @Override
+        public void apply(AbstractButton button) {
+            button.setBorder(new FramedBorder.Builder()
+                    .sides.horizontal(side -> side.padding(48))
+                    .sides.vertical(side -> side.padding(32))
+                    .build()
+            );
 
-            return this;
+            button.setIconTextGap(16);
+            button.setFont(button.getFont().deriveFont(20f));
         }
-    }
+    },
+
+    XL {
+        @Override
+        public void apply(AbstractButton button) {
+            button.setBorder(new FramedBorder.Builder()
+                    .sides.horizontal(side -> side.padding(64))
+                    .sides.vertical(side -> side.padding(48))
+                    .build()
+            );
+
+            button.setIconTextGap(20);
+            button.setFont(button.getFont().deriveFont(24f));
+        }
+    };
+
+    public abstract void apply(AbstractButton button);
 }

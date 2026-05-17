@@ -1,6 +1,7 @@
 package nu.eats.gui.plaf.button;
 
-import nu.eats.gui.plaf.box.BoxDecoration;
+import nu.eats.gui.plaf.border.BoxDecoration;
+import nu.eats.gui.plaf.border.FramedBorder;
 
 import javax.swing.*;
 import java.awt.font.TextAttribute;
@@ -16,8 +17,6 @@ public enum ButtonVariant {
                 case DEFAULT -> {
                     button.setBackground(COLOR_PRIMARY);
                     button.setForeground(COLOR_FG_INVERSE);
-                    var targetFont = FONT_MEDIUM_BASE.deriveFont(button.getFont().getSize2D());
-                    button.setFont(targetFont);
                 }
 
                 case HOVERING -> {
@@ -39,39 +38,32 @@ public enum ButtonVariant {
     SECONDARY {
         @Override
         void apply(AbstractButton button, ButtonState state) {
-            //if (true) return;
             switch (state) {
                 case DEFAULT -> {
                     button.setBackground(COLOR_BG);
                     button.setForeground(COLOR_FG);
-                    // button.revalidate();
-                    // button.setFont(FONT_MEDIUM_BASE.deriveFont(button.getFont().getSize2D()));
-
-                    BoxDecoration.ensure(button)
-                            .borderColor(COLOR_BORDER)
-                            .borderWidth(BORDER_WIDTH_THIN);
                 }
 
                 case HOVERING -> {
                     button.setBackground(COLOR_BG_HOVER);
                     button.setForeground(COLOR_FG);
 
-                    BoxDecoration.ensure(button)
-                            .borderColor(COLOR_BORDER)
-                            .borderWidth(BORDER_WIDTH_THIN);
+                    // BoxDecoration.ensure(button)
+                    //        .borderColor(COLOR_BORDER)
+                    //        .borderWidth(BORDER_WIDTH_THIN);
                 }
 
                 case ACTIVE -> {
                     button.setBackground(COLOR_BG_PRESSED);
                     button.setForeground(COLOR_FG);
 
-                    BoxDecoration.ensure(button)
-                            .borderColor(COLOR_BORDER)
-                            .borderWidth(BORDER_WIDTH_THIN);
+                    // BoxDecoration.ensure(button)
+                    //    .borderColor(COLOR_BORDER)
+                    //    .borderWidth(BORDER_WIDTH_THIN);
                 }
 
                 case SELECTING -> {
-                    BoxDecoration.ensure(button).borderWidth(BORDER_WIDTH_NONE);
+                    // BoxDecoration.ensure(button).borderWidth(BORDER_WIDTH_NONE);
 
                     PRIMARY.apply(button, ButtonState.DEFAULT);
                 }
@@ -79,9 +71,10 @@ public enum ButtonVariant {
                 case DISABLED -> {
                     button.setBackground(COLOR_BG);
                     button.setForeground(ZINC_300);
-                    BoxDecoration.ensure(button)
-                            .borderColor(COLOR_BORDER)
-                            .borderWidth(BORDER_WIDTH_THIN);
+
+                    // BoxDecoration.ensure(button)
+                    //     .borderColor(COLOR_BORDER)
+                    //   .borderWidth(BORDER_WIDTH_THIN);
                 }
             }
         }
@@ -122,15 +115,17 @@ public enum ButtonVariant {
      * Borderless, zero-radius button with subtle hover/active feedback.
      */
     FLAT {
+
+
         @Override
         void apply(AbstractButton button, ButtonState state) {
-            BoxDecoration.ensure(button).borderWidth(BORDER_WIDTH_NONE).borderRadius(0);
+            button.setBorder(null);
+            // BoxDecoration.ensure(button).borderWidth(BORDER_WIDTH_NONE).borderRadius(0);
 
             switch (state) {
                 case DEFAULT -> {
                     button.setBackground(COLOR_TRANSPARENT);
                     button.setForeground(COLOR_FG);
-                    button.setFont(FONT_MEDIUM_BASE.deriveFont(button.getFont().getSize2D()));
                 }
 
                 case HOVERING -> {
@@ -158,8 +153,6 @@ public enum ButtonVariant {
     GHOST {
         @Override
         void apply(AbstractButton button, ButtonState state) {
-            BoxDecoration.ensure(button).borderWidth(BORDER_WIDTH_NONE).borderRadius(0);
-
             switch (state) {
                 case DEFAULT -> {
                     button.setBackground(COLOR_TRANSPARENT);
