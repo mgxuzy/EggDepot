@@ -1,22 +1,50 @@
 package nu.eats.gui.plaf.table;
 
-import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
-
-import javax.swing.BorderFactory;
-import javax.swing.JComponent;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicTableUI;
-
+import javax.swing.table.DefaultTableCellRenderer;
 import nu.eats.gui.plaf.Theme;
 
 /**
- * A minimal, high-contrast, overhead-free TableUI implementation.
- * Focuses on readability, keyboard accessibility, and a flat modern aesthetic.
+ * A flat, modern TableUI implementation.
+ * Uses core Swing inheritance mapping safely with zero runtime allocations.
  */
 public class TableUI extends BasicTableUI {
+
+    private static final DefaultTableCellRenderer SYSTEM_RENDERER = new DefaultTableCellRenderer() {
+        private final Border normalPadding = BorderFactory.createEmptyBorder(0, Theme.SPACING_LG, 0, Theme.SPACING_LG);
+        private final Border selectedPadding = BorderFactory.createCompoundBorder(
+                BorderFactory.createMatteBorder(0, 4, 0, 0, Theme.COLOR_PRIMARY),
+                BorderFactory.createEmptyBorder(0, Theme.SPACING_LG - 4, 0, Theme.SPACING_LG)
+        );
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                                                       boolean isSelected, boolean hasFocus, int row, int column) {
+
+            super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+            // Zebra striping and selection mapping
+            if (!isSelected) {
+                setBackground(row % 2 == 1 ? Theme.COLOR_SURFACE_ELEVATION_LOWEST : Theme.COLOR_BG);
+                setForeground(Theme.COLOR_FG_PRIMARY);
+                setBorder(normalPadding);
+            } else {
+                setBackground(Theme.COLOR_BG_PRIMARY_HOVER);
+                setForeground(Theme.COLOR_FG_PRIMARY);
+                setBorder(selectedPadding);
+            }
+
+            // Numeric content right alignment tracking
+            setHorizontalAlignment(value instanceof Number ? SwingConstants.RIGHT : SwingConstants.LEFT);
+
+            return this;
+        }
+    };
 
     public static ComponentUI createUI(JComponent component) {
         return new TableUI();
@@ -26,61 +54,36 @@ public class TableUI extends BasicTableUI {
     protected void installDefaults() {
         super.installDefaults();
 
-        // 1. Structural Adjustments
+        // 1. Structure Config
         table.setOpaque(true);
         table.setFillsViewportHeight(true);
-        table.setShowHorizontalLines(true);
-        table.setShowVerticalLines(false); // Modern tables typically drop vertical separators
-
-        // Ensure standard modern row spacing (breathing room for accessibility)
-        int minRowHeight = 28;
-
-        if (table.getRowHeight() < minRowHeight) {
-            table.setRowHeight(minRowHeight);
-        }
-
-        table.setIntercellSpacing(new Dimension(0, Theme.SPACING_SM));
-
+        table.setShowHorizontalLines(false);
+        table.setShowVerticalLines(false);
+        table.setRowHeight(44);
+        table.setIntercellSpacing(new Dimension(0, 0));
         table.setFont(Theme.FONT_REGULAR_MD);
 
-        // 2. Standard Flat Colors
-        Color bg = Theme.COLOR_BG;
-        Color fg = Theme.COLOR_FG_PRIMARY;
-        Color gridColor = Theme.COLOR_BORDER;
-        Color selBg = Theme.COLOR_BG_PRIMARY_HOVER;
-        Color selFg = Theme.COLOR_FG_PRIMARY;
+        // 2. Color Application
+        table.setBackground(Theme.COLOR_BG);
+        table.setForeground(Theme.COLOR_FG_PRIMARY);
 
-        table.setBackground(bg);
-        table.setForeground(fg);
-        table.setGridColor(gridColor);
-        table.setSelectionBackground(selBg);
-        table.setSelectionForeground(selFg);
-
-        // Set custom header renderer and ensure header is visible
-        table.getTableHeader().setDefaultRenderer(new TableHeaderRenderer());
-        table.getTableHeader().setOpaque(true);
-        table.getTableHeader().setBackground(Theme.COLOR_PRIMARY);
-        table.getTableHeader().setForeground(Theme.COLOR_FG_INVERSE);
-        table.getTableHeader().setReorderingAllowed(true);
-        table.getTableHeader().setResizingAllowed(true);
-        table.getTableHeader().setPreferredSize(new java.awt.Dimension(
-                table.getTableHeader().getPreferredSize().width,
-                Theme.SPACING_6XL
-        ));
-
-        // 3. Clear focus indicator setup
-        // Uses a high-contrast focus indicator border rather than legacy dotted lines
-        Border focusBorder = UIManager.getBorder("Table.focusCellHighlightBorder");
-        if (focusBorder == null) {
-            UIManager.put("Table.focusCellHighlightBorder",
-                    BorderFactory.createLineBorder(Color.RED, 2));
+        // 3. Header Hook Setup
+        var header = table.getTableHeader();
+        if (header != null) {
+            header.setDefaultRenderer(new TableHeaderRenderer());
+            header.setOpaque(true);
+            header.setBackground(Theme.COLOR_SURFACE_ELEVATION_HIGHEST);
+            header.setForeground(Theme.COLOR_FG_SECONDARY);
+            header.setReorderingAllowed(false);
+            header.setResizingAllowed(true);
+            header.setPreferredSize(new Dimension(header.getWidth(), 46));
         }
-    }
 
-    @Override
-    protected void installListeners() {
-        super.installListeners();
-        // Uses standard keyboard navigation and accessibility listeners
-        // inherited from BasicTableUI to ensure screen reader support.
+        // 4. Fallback Default Mapping
+        table.setDefaultRenderer(Object.class, SYSTEM_RENDERER);
+        table.setDefaultRenderer(Number.class, SYSTEM_RENDERER);
+        table.setDefaultRenderer(Integer.class, SYSTEM_RENDERER);
+        table.setDefaultRenderer(Double.class, SYSTEM_RENDERER);
+        table.setDefaultRenderer(String.class, SYSTEM_RENDERER);
     }
 }

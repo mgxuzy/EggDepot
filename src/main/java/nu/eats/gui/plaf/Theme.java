@@ -25,6 +25,8 @@ public final class Theme {
     public static final Color COLOR_BG_PRIMARY_HOVER = new Color(0xFFC9EEA7);
 
     public static final Color COLOR_SURFACE_ELEVATION_HIGHEST = new Color(0xFFFFFFFF);
+    public static final Color COLOR_SURFACE_ELEVATION_LOWEST = new Color(0xFFE2E3D9);
+
 
     public static final Color COLOR_BG = new Color(0xFFF9FAEF);
     public static final Color COLOR_BG_HOVER = ZINC_100;
