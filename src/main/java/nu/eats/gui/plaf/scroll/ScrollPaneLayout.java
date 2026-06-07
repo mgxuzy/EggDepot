@@ -6,35 +6,26 @@ import java.awt.*;
 public class ScrollPaneLayout extends javax.swing.ScrollPaneLayout {
     @Override
     public void layoutContainer(Container parent) {
-        var scrollPane = (JScrollPane) parent;
-        var bounds = scrollPane.getBounds();
-        var insets = parent.getInsets();
+        // 1. Let the original Swing layout handle the header and basic structure
+        super.layoutContainer(parent);
 
-        var left = insets.left;
-        var top = insets.top;
-        var availWidth = bounds.width - left - insets.right;
-        var availHeight = bounds.height - top - insets.bottom;
-
-        // Viewport takes the full available area
+        // 2. Dead-simple overlay adjustment: Expand the viewport to cover the
+        // scrollbar areas while leaving room for the table header at the top.
         if (viewport != null) {
-            viewport.setBounds(left, top, availWidth, availHeight);
+            var insets = parent.getInsets();
+            int headerHeight = (colHead != null && colHead.isVisible()) ? colHead.getHeight() : 0;
+
+            // Force viewport to stretch all the way across and down
+            viewport.setBounds(
+                    insets.left,
+                    insets.top + headerHeight,
+                    parent.getWidth() - insets.left - insets.right,
+                    parent.getHeight() - insets.top - insets.bottom - headerHeight
+            );
         }
 
-        // Overlay scrollbars on top of the viewport
-        if (vsb != null && vsb.isVisible()) {
-            var vsbWidth = vsb.getPreferredSize().width;
-
-            vsb.setBounds(left + availWidth - vsbWidth, top, vsbWidth, availHeight);
-
-            parent.setComponentZOrder(vsb, 0);
-        }
-
-        if (hsb != null && hsb.isVisible()) {
-            var hsbHeight = hsb.getPreferredSize().height;
-
-            hsb.setBounds(left, top + availHeight - hsbHeight, availWidth, hsbHeight);
-
-            parent.setComponentZOrder(hsb, 0);
-        }
+        // 3. Ensure scrollbars sit comfortably on top of the viewport canvas
+        if (vsb != null && vsb.isVisible()) parent.setComponentZOrder(vsb, 0);
+        if (hsb != null && hsb.isVisible()) parent.setComponentZOrder(hsb, 0);
     }
 }
