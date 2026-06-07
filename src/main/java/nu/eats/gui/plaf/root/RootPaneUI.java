@@ -1,11 +1,8 @@
 package nu.eats.gui.plaf.root;
 
-import nu.eats.gui.plaf.Constants;
-import nu.eats.gui.plaf.Theme;
 import nu.eats.gui.plaf.WindowResizeHandler;
-import nu.eats.gui.plaf.border.BoxDecoration;
 import nu.eats.gui.plaf.border.FramedBorder;
-import nu.eats.gui.plaf.focus.FocusOutline;
+import nu.eats.gui.plaf.outline.FocusOutline;
 import nu.eats.gui.plaf.root.components.TitlePane;
 import nu.eats.gui.plaf.root.components.WindowBorder;
 
@@ -17,8 +14,6 @@ import javax.swing.plaf.basic.BasicRootPaneUI;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.util.function.Function;
-
-import static nu.eats.gui.plaf.Constants.DEFAULT_RENDERING_HINTS;
 
 public class RootPaneUI extends BasicRootPaneUI {
 
@@ -38,10 +33,12 @@ public class RootPaneUI extends BasicRootPaneUI {
         super.installUI(component);
 
         rootPane = (JRootPane) component;
-        // rootPane.setOpaque(true);
 
-        rootPane.setDoubleBuffered(true);
-        rootPane.setBackground(Theme.COLOR_BG);
+        rootPane.setOpaque(false);
+
+        // rootPane.setDoubleBuffered(true);
+        rootPane.setBorder(FramedBorder.NONE);
+        // rootPane.setBackground(Theme.COLOR_BG);
 
         if (rootPane.getWindowDecorationStyle() != JRootPane.NONE) {
             installClientDecorations(rootPane);
@@ -67,22 +64,13 @@ public class RootPaneUI extends BasicRootPaneUI {
 
     @Override
     public void paint(Graphics graphics, JComponent component) {
-        var graphics2D = (Graphics2D) graphics.create();
+        if (component.getBorder() instanceof FramedBorder border) {
+            border.paintClientRegionWith(super::paint, graphics, component);
 
-        graphics2D.setRenderingHints(DEFAULT_RENDERING_HINTS);
-
-        try {
-            if (component.getBorder() instanceof FramedBorder border) {
-                border.paintClientRegion(graphics2D, component);
-            } else if (component.isOpaque()) {
-                graphics.setColor(component.getBackground());
-                graphics.fillRect(0, 0, component.getWidth(), component.getHeight());
-            }
-
-            super.paint(graphics2D, component);
-        } finally {
-            graphics2D.dispose();
+            return;
         }
+
+        super.paint(graphics, component);
     }
 
     private void installClientDecorations(JRootPane root) {

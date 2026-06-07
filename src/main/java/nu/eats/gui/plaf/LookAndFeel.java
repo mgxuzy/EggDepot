@@ -4,10 +4,13 @@ import nu.eats.common.resources.Fonts;
 import nu.eats.gui.plaf.button.ButtonUI;
 import nu.eats.gui.plaf.field.PasswordFieldUI;
 import nu.eats.gui.plaf.field.TextFieldUI;
+import nu.eats.gui.plaf.panel.PanelUI;
 import nu.eats.gui.plaf.root.RootPaneUI;
 import nu.eats.gui.plaf.scroll.ScrollBarUI;
 import nu.eats.gui.plaf.scroll.ScrollPaneUI;
 import nu.eats.gui.plaf.spinner.SpinnerUI;
+import nu.eats.gui.plaf.tab.TabbedPaneUI;
+import nu.eats.gui.plaf.table.TableUI;
 
 import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
@@ -99,7 +102,12 @@ public class LookAndFeel extends BasicLookAndFeel {
 
         defaults.put("SpinnerUI", SpinnerUI.class.getName());
 
+        defaults.put("TabbedPaneUI", TabbedPaneUI.class.getName());
+
         defaults.put("RootPaneUI", RootPaneUI.class.getName());
+        defaults.put("PanelUI", PanelUI.class.getName());
+
+        defaults.put("TableUI", TableUI.class.getName());
     }
 
     @Override

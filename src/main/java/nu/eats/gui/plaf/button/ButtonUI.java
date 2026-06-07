@@ -1,5 +1,6 @@
 package nu.eats.gui.plaf.button;
 
+import nu.eats.gui.plaf.Theme;
 import nu.eats.gui.plaf.border.FramedBorder;
 import nu.eats.gui.plaf.component.ComponentState;
 
@@ -7,8 +8,6 @@ import javax.swing.*;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicButtonUI;
 import java.awt.*;
-
-import static nu.eats.gui.plaf.Constants.DEFAULT_RENDERING_HINTS;
 
 public class ButtonUI extends BasicButtonUI {
     @SuppressWarnings("UnusedDeclaration")
@@ -18,15 +17,17 @@ public class ButtonUI extends BasicButtonUI {
 
     @Override
     protected void installDefaults(AbstractButton button) {
-        button.setContentAreaFilled(false); // also calls setOpaque(false);
+        button.setContentAreaFilled(true); // also calls setOpaque(false);
+        button.setOpaque(false);
 
         super.installDefaults(button);
 
         button.setRolloverEnabled(true);
         button.setFocusPainted(false);
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        button.setFont(Theme.FONT_MEDIUM_MD);
 
-        ButtonPreset.SM.apply(button);
+        ButtonPreset.MD.apply(button);
         ButtonVariant.PRIMARY.install(button);
     }
 
@@ -43,19 +44,13 @@ public class ButtonUI extends BasicButtonUI {
 
     @Override
     public void paint(Graphics graphics, JComponent component) {
-        var graphics2D = (Graphics2D) graphics.create();
+        if (component.getBorder() instanceof FramedBorder border) {
+            border.paintClientRegionWith(super::paint, graphics, component);
 
-        graphics2D.setRenderingHints(DEFAULT_RENDERING_HINTS);
-
-        try {
-            if (component.getBorder() instanceof FramedBorder border) {
-                border.paintClientRegion(graphics2D, component);
-            }
-
-            super.paint(graphics2D, component);
-        } finally {
-            graphics2D.dispose();
+            return;
         }
+
+        super.paint(graphics, component);
     }
 
     private static final class InstanceHolder {

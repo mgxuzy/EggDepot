@@ -1,54 +1,43 @@
 package nu.eats.gui.plaf.button;
 
 import nu.eats.gui.plaf.border.FramedBorder;
+import nu.eats.gui.plaf.component.ComponentPreset;
 
 import javax.swing.*;
 
 import static java.lang.Double.POSITIVE_INFINITY;
+import static nu.eats.gui.plaf.Theme.*;
 
-public enum ButtonPreset {
-    XS {
-        @Override
-        public void apply(AbstractButton button) {
-            button.setBorder(new FramedBorder.Builder()
-                    .sides.horizontal(side -> side.padding(12))
-                    .sides.vertical(side -> side.padding(8))
-                    .corners(corner -> corner.radius(POSITIVE_INFINITY))
-                    .build()
-            );
-
-            button.setIconTextGap(4);
-            button.setFont(button.getFont().deriveFont(12f));
-        }
-    },
-
+public enum ButtonPreset implements ComponentPreset<AbstractButton> {
     SM {
         @Override
         public void apply(AbstractButton button) {
             button.setBorder(new FramedBorder.Builder()
-                    .sides.horizontal(side -> side.padding(16))
+                    .sides.horizontal(side -> side.padding(SPACING_LG))
+                    .sides.vertical(side -> side.padding(SPACING_MD))
                     .corners(corner -> corner.radius(POSITIVE_INFINITY))
-                    .sides.vertical(side -> side.padding(10))
                     .build()
             );
 
-            button.setIconTextGap(8);
-            button.setFont(button.getFont().deriveFont(14f));
+            button.setIconTextGap(SPACING_SM);
+            button.setFont(button.getFont().deriveFont(FONT_SIZE_SM));
         }
     },
 
     MD {
         @Override
         public void apply(AbstractButton button) {
+            // NOTE: 4:1 Spacing Ratio
+
             button.setBorder(new FramedBorder.Builder()
-                    .sides.horizontal(side -> side.padding(24))
-                    .sides.vertical(side -> side.padding(16))
+                    .sides.horizontal(side -> side.padding(SPACING_4XL))
+                    .sides.vertical(side -> side.padding(SPACING_2XL))
                     .corners(corner -> corner.radius(POSITIVE_INFINITY))
                     .build()
             );
 
-            button.setIconTextGap(12);
-            button.setFont(button.getFont().deriveFont(16f));
+            button.setIconTextGap(SPACING_MD);
+            button.setFont(button.getFont().deriveFont(FONT_SIZE_MD));
         }
     },
 
@@ -56,31 +45,14 @@ public enum ButtonPreset {
         @Override
         public void apply(AbstractButton button) {
             button.setBorder(new FramedBorder.Builder()
-                    .sides.horizontal(side -> side.padding(48))
-                    .sides.vertical(side -> side.padding(32))
+                    .sides.horizontal(side -> side.padding(SPACING_5XL))
+                    .sides.vertical(side -> side.padding(SPACING_3XL))
                     .corners(corner -> corner.radius(POSITIVE_INFINITY))
                     .build()
             );
 
-            button.setIconTextGap(16);
-            button.setFont(button.getFont().deriveFont(20f));
-        }
-    },
-
-    XL {
-        @Override
-        public void apply(AbstractButton button) {
-            button.setBorder(new FramedBorder.Builder()
-                    .sides.horizontal(side -> side.padding(64))
-                    .sides.vertical(side -> side.padding(48))
-                    .corners(corner -> corner.radius(POSITIVE_INFINITY))
-                    .build()
-            );
-
-            button.setIconTextGap(20);
-            button.setFont(button.getFont().deriveFont(24f));
+            button.setIconTextGap(SPACING_LG);
+            button.setFont(button.getFont().deriveFont(FONT_SIZE_LG));
         }
     };
-
-    public abstract void apply(AbstractButton button);
 }

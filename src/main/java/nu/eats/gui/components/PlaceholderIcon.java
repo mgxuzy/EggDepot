@@ -65,7 +65,7 @@ public class PlaceholderIcon implements Icon {
         var avatarBodyHeight = avatarSize / 2;
 
         graphics2D.fill(new RoundRectangle2D.Float(centerX - avatarSize / 2f, centerY, avatarSize, avatarBodyHeight,
-                Theme.RADIUS_SM / 2, Theme.RADIUS_SM / 2));
+                Theme.RADIUS_SM / 2f, Theme.RADIUS_SM / 2f));
 
         graphics2D.dispose();
     }

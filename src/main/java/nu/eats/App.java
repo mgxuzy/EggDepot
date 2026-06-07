@@ -1,13 +1,13 @@
 package nu.eats;
 
 import nu.eats.gui.MainView;
-import nu.eats.auth.gui.AuthDialog;
+import nu.eats.feature.auth.gui.AuthDialog;
 import nu.eats.gui.plaf.LookAndFeel;
 
 import javax.swing.*;
 
 public class App {
-    private static final String NAME = "NUEats";
+    private static final String NAME = "Mang Boy";
 
     private static final int WINDOW_WIDTH = 1200;
     private static final int WINDOW_HEIGHT = 800;
@@ -16,8 +16,8 @@ public class App {
         SwingUtilities.invokeLater(() -> {
             try {
                 UIManager.setLookAndFeel(new LookAndFeel());
-            } catch (UnsupportedLookAndFeelException _) {
-                // no-op
+            } catch (UnsupportedLookAndFeelException cause) {
+                throw new RuntimeException(cause);
             }
 
             // --- Auth ---

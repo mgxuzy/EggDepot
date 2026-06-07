@@ -1,19 +1,18 @@
 package nu.eats.gui.plaf.border;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Insets;
-import java.awt.Shape;
+import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
+import java.awt.geom.Area;
 import java.awt.geom.Path2D;
 import java.util.function.Consumer;
 
-import javax.swing.JComponent;
+import javax.swing.*;
 import javax.swing.border.AbstractBorder;
 
 import static nu.eats.gui.plaf.Constants.DEFAULT_RENDERING_HINTS;
+
+import nu.eats.gui.plaf.UIPainter;
 import nu.eats.gui.plaf.measure.Measure;
 
 /**
@@ -21,6 +20,7 @@ import nu.eats.gui.plaf.measure.Measure;
  * Supports per-side colors, thickness, margin, and padding with diagonal miters.
  */
 public class FramedBorder extends AbstractBorder {
+    public static final FramedBorder NONE = new Builder().build();
 
     public final double topSideMargin, rightSideMargin, bottomSideMargin, leftSideMargin;
     public final double topSidePadding, rightSidePadding, bottomSidePadding, leftSidePadding;
@@ -121,7 +121,7 @@ public class FramedBorder extends AbstractBorder {
         return new Builder(this);
     }
 
-    private static void setCornerRegion(
+    private static void updateCornerRegion(
             Arc2D.Double arc,
             double x, double y,
             double w, double h,
@@ -179,11 +179,105 @@ public class FramedBorder extends AbstractBorder {
         }
     }
 
+    // Add this alongside your other transient region declarations
+    private final transient Path2D.Double borderAndContentRegion = new Path2D.Double();
+
     private void paintEdgeRegion(Graphics2D graphics2D, Color color, Path2D.Double region, Shape clip) {
         graphics2D.clip(region);
         graphics2D.setColor(color);
         graphics2D.fill(this.frameRegion);
         graphics2D.setClip(clip);
+    }
+
+    public void paintClientRegionWith(UIPainter painter, Graphics graphics, JComponent component) {
+        int width = component.getWidth(),
+                height = component.getHeight();
+
+        if (this.width != width || this.height != height) {
+            this.resize(width, height);
+        }
+
+        var graphics2D = (Graphics2D) graphics.create();
+
+        try {
+            graphics2D.setRenderingHints(DEFAULT_RENDERING_HINTS);
+            graphics2D.setColor(component.getBackground());
+
+            Shape safeShape = getCutoutShape(component);
+
+            // 2. Safely apply the clip boundaries if an ancestor was found
+            graphics2D.fill(safeShape);
+            graphics2D.clip(safeShape);
+
+            painter.paint(graphics2D, component);
+        } finally {
+            graphics2D.dispose();
+        }
+    }
+
+    public static Shape getCutoutShape(JComponent component) {
+        if (component == null) return null;
+
+        Shape accumulatedClip = null;
+        Component current = component;
+        int w = component.getWidth();
+        int h = component.getHeight();
+        int dx = 0, dy = 0;
+
+        // 1. Walk up parent hierarchy accumulating translations and clipping paths
+        while (current != null) {
+            if (current instanceof JComponent jc && jc.getBorder() instanceof FramedBorder fb) {
+                int parentW = current.getWidth();
+                int parentH = current.getHeight();
+
+                // Sync border dimensions only when size actually changes
+                if (fb.width != parentW || fb.height != parentH) {
+                    fb.resize(parentW, parentH);
+                }
+
+                // Resolve maximum corner radii for this ancestor
+                double maxRx = Math.max(
+                        Math.max(fb.topLeftCornerRadiusX.resolve(parentW), fb.topRightCornerRadiusX.resolve(parentW)),
+                        Math.max(fb.bottomLeftCornerRadiusX.resolve(parentW), fb.bottomRightCornerRadiusX.resolve(parentW))
+                );
+                double maxRy = Math.max(
+                        Math.max(fb.topLeftCornerRadiusY.resolve(parentH), fb.topRightCornerRadiusY.resolve(parentH)),
+                        Math.max(fb.bottomLeftCornerRadiusY.resolve(parentH), fb.bottomRightCornerRadiusY.resolve(parentH))
+                );
+
+                // Calculate safe flat rectangular area bounds
+                double safeMinX = fb.leftEdgeThickness + maxRx;
+                double safeMinY = fb.topEdgeThickness + maxRy;
+                double safeMaxX = parentW - (fb.rightEdgeThickness + maxRx);
+                double safeMaxY = parentH - (fb.bottomEdgeThickness + maxRy);
+
+                // If overlapping the rounded border or margin, accumulate clip
+                if (!(dx >= safeMinX && dx + w <= safeMaxX && dy >= safeMinY && dy + h <= safeMaxY)) {
+                    Path2D.Double localizedParent = new Path2D.Double(fb.clientRegion);
+                    localizedParent.transform(AffineTransform.getTranslateInstance(-dx, -dy));
+
+                    if (accumulatedClip == null) {
+                        accumulatedClip = localizedParent; // Keep it as a lightweight Path2D
+                    } else {
+                        // Fallback to heavy Area intersection only if nested outer borders also overlap
+                        Area baseArea = (accumulatedClip instanceof Area a) ? a : new Area(accumulatedClip);
+                        baseArea.intersect(new Area(localizedParent));
+                        accumulatedClip = baseArea;
+                    }
+                }
+            }
+
+            // Accumulate position coordinate offsets relative to the next parent
+            dx += current.getX();
+            dy += current.getY();
+            current = current.getParent();
+        }
+
+        if (accumulatedClip == null && component.getBorder() instanceof FramedBorder border) {
+            accumulatedClip = border.clientRegion;
+        }
+
+        return accumulatedClip;
     }
 
     public void paintClientRegion(Graphics graphics, JComponent component) {
@@ -200,22 +294,18 @@ public class FramedBorder extends AbstractBorder {
             graphics2D.setRenderingHints(DEFAULT_RENDERING_HINTS);
             graphics2D.setColor(component.getBackground());
             graphics2D.fill(this.clientRegion);
+            graphics2D.setClip(this.clientRegion);
         } finally {
             graphics2D.dispose();
         }
     }
 
     private double scaleFactor(double currentScale, double r1, double r2, double limit) {
-        // If neither side has a radius, or they already fit, do nothing.
-        if (r1 + r2 <= limit) return currentScale;
+        double sum = r1 + r2;
 
-        double a = Math.max(r1, r2);
-        double b = Math.min(r1, r2);
+        if (sum <= 0.0) return currentScale;
 
-        double ratio = b / a;
-        double newScale = (limit / a) / (1.0 + ratio);
-
-        return Math.min(currentScale, newScale);
+        return Math.min(currentScale, limit / sum);
     }
 
     public void resize(int width, int height) {
@@ -232,18 +322,21 @@ public class FramedBorder extends AbstractBorder {
         double borderWidth = borderMaxX - borderMinX;
         double borderHeight = borderMaxY - borderMinY;
 
-        double topLeftCornerRadiusX = this.topLeftCornerRadiusX.resolve(width),
-                topLeftCornerRadiusY = this.topLeftCornerRadiusY.resolve(height),
-                topRightCornerRadiusX = this.topRightCornerRadiusX.resolve(width),
-                topRightCornerRadiusY = this.topRightCornerRadiusY.resolve(height),
-                bottomRightCornerRadiusX = this.bottomRightCornerRadiusX.resolve(width),
-                bottomRightCornerRadiusY = this.bottomRightCornerRadiusY.resolve(height),
-                bottomLeftCornerRadiusX = this.bottomLeftCornerRadiusX.resolve(width),
-                bottomLeftCornerRadiusY = this.bottomLeftCornerRadiusY.resolve(height);
+        double borderMax = Math.max(borderWidth, borderHeight);
+
+        double topLeftCornerRadiusX = Math.min(this.topLeftCornerRadiusX.resolve(width), borderMax),
+                topLeftCornerRadiusY = Math.min(this.topLeftCornerRadiusY.resolve(height), borderMax),
+                topRightCornerRadiusX = Math.min(this.topRightCornerRadiusX.resolve(width), borderMax),
+                topRightCornerRadiusY = Math.min(this.topRightCornerRadiusY.resolve(height), borderMax);
+
+        double bottomRightCornerRadiusX = Math.min(this.bottomRightCornerRadiusX.resolve(width), borderMax),
+                bottomRightCornerRadiusY = Math.min(this.bottomRightCornerRadiusY.resolve(height), borderMax),
+                bottomLeftCornerRadiusX = Math.min(this.bottomLeftCornerRadiusX.resolve(width), borderMax),
+                bottomLeftCornerRadiusY = Math.min(this.bottomLeftCornerRadiusY.resolve(height), borderMax);
 
         // Overlapping Curves (Proportional Reduction)
         // Causes 1.0 fraction units to become ellipses and px to become pilled shapes
-        double scale = 1.0;
+        var scale = 1.0;
 
         scale = scaleFactor(scale, topLeftCornerRadiusX, topRightCornerRadiusX, borderWidth);
         scale = scaleFactor(scale, bottomLeftCornerRadiusX, bottomRightCornerRadiusX, borderWidth);
@@ -266,6 +359,9 @@ public class FramedBorder extends AbstractBorder {
         appendRoundedRectangleUnsafe(this.frameRegion, borderMinX, borderMinY, borderWidth, borderHeight,
                 topLeftCornerRadiusX, topLeftCornerRadiusY, topRightCornerRadiusX, topRightCornerRadiusY, bottomRightCornerRadiusX, bottomRightCornerRadiusY, bottomLeftCornerRadiusX, bottomLeftCornerRadiusY);
 
+        this.borderAndContentRegion.reset();
+        this.borderAndContentRegion.append(this.frameRegion, false);
+
         // 2. Draw Client Shape
         double clientMinX = borderMinX + this.leftEdgeThickness,
                 clientMaxX = Math.max(borderMaxX - this.rightEdgeThickness, clientMinX);
@@ -276,12 +372,12 @@ public class FramedBorder extends AbstractBorder {
         double clientWidth = clientMaxX - clientMinX,
                 clientHeight = clientMaxY - clientMinY;
 
-        // CSS SPEC: Inner radii are outer radii subtracted by border thickness, clamped to zero (dead-simple)
         double clientTopLeftCornerRadiusX = Math.max(topLeftCornerRadiusX - this.leftEdgeThickness, 0),
                 clientTopLeftCornerRadiusY = Math.max(topLeftCornerRadiusY - this.topEdgeThickness, 0),
                 clientTopRightCornerRadiusX = Math.max(topRightCornerRadiusX - this.rightEdgeThickness, 0),
-                clientTopRightCornerRadiusY = Math.max(topRightCornerRadiusY - this.topEdgeThickness, 0),
-                clientBottomRightCornerRadiusX = Math.max(bottomRightCornerRadiusX - this.rightEdgeThickness, 0),
+                clientTopRightCornerRadiusY = Math.max(topRightCornerRadiusY - this.topEdgeThickness, 0);
+
+        double clientBottomRightCornerRadiusX = Math.max(bottomRightCornerRadiusX - this.rightEdgeThickness, 0),
                 clientBottomRightCornerRadiusY = Math.max(bottomRightCornerRadiusY - this.bottomEdgeThickness, 0),
                 clientBottomLeftCornerRadiusX = Math.max(bottomLeftCornerRadiusX - this.leftEdgeThickness, 0),
                 clientBottomLeftCornerRadiusY = Math.max(bottomLeftCornerRadiusY - this.bottomEdgeThickness, 0);
@@ -356,7 +452,7 @@ public class FramedBorder extends AbstractBorder {
         // Top edge
         path.lineTo(maxX - topRightCornerRadiusX, positionY);
 
-        setCornerRegion(
+        updateCornerRegion(
                 topRightRegion,
                 maxX - 2 * topRightCornerRadiusX,
                 positionY,
@@ -370,7 +466,7 @@ public class FramedBorder extends AbstractBorder {
         // Right edge
         path.lineTo(maxX, maxY - bottomRightCornerRadiusY);
 
-        setCornerRegion(
+        updateCornerRegion(
                 bottomRightRegion,
                 maxX - 2 * bottomRightCornerRadiusX,
                 maxY - 2 * bottomRightCornerRadiusY,
@@ -384,7 +480,7 @@ public class FramedBorder extends AbstractBorder {
         // Bottom edge
         path.lineTo(positionX + bottomLeftCornerRadiusX, maxY);
 
-        setCornerRegion(
+        updateCornerRegion(
                 bottomLeftRegion,
                 positionX,
                 maxY - 2 * bottomLeftCornerRadiusY,
@@ -398,7 +494,7 @@ public class FramedBorder extends AbstractBorder {
         // Left edge
         path.lineTo(positionX, positionY + topLeftCornerRadiusY);
 
-        setCornerRegion(
+        updateCornerRegion(
                 topLeftRegion,
                 positionX,
                 positionY,

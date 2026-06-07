@@ -78,7 +78,7 @@ public class TitlePane extends JComponent {
     private JButton createButton(Icon icon) {
         JButton button = new JButton(icon);
 
-        button.putClientProperty(Constants.KEY_COMPONENT_VARIANT, ButtonVariant.FLAT);
+        ButtonVariant.FLAT.install(button);
 
         return button;
     }
@@ -114,9 +114,6 @@ public class TitlePane extends JComponent {
 
     public void setBackVisible(boolean visible) {
         backButton.setVisible(visible);
-
-        repaint();
-        revalidate();
     }
 
     public JButton getBackButton() {
@@ -127,12 +124,12 @@ public class TitlePane extends JComponent {
         this.titleBarColor = color;
         this.isPrimaryStyle = Theme.COLOR_PRIMARY.equals(color);
 
-        Color fg = isPrimaryStyle ? Theme.COLOR_FG_INVERSE : Theme.COLOR_FG;
+        Color fg = isPrimaryStyle ? Theme.COLOR_FG_INVERSE : Theme.COLOR_FG_PRIMARY;
         ButtonVariant variant = isPrimaryStyle ? ButtonVariant.GHOST : ButtonVariant.FLAT;
 
         for (JButton button : windowButtons) {
             button.setForeground(fg);
-            button.putClientProperty(Constants.KEY_COMPONENT_VARIANT, variant);
+            variant.install(button);
         }
 
         repaint();
@@ -162,6 +159,7 @@ public class TitlePane extends JComponent {
     @Override
     public void removeNotify() {
         super.removeNotify();
+
         uninstallWindowListeners();
         window = null;
     }
@@ -186,7 +184,7 @@ public class TitlePane extends JComponent {
 
     @Override
     public Dimension getPreferredSize() {
-        return new Dimension(super.getPreferredSize().width, Theme.TITLE_BAR_HEIGHT);
+        return new Dimension(0, Theme.TITLE_BAR_HEIGHT);
     }
 
     @Override
@@ -206,13 +204,14 @@ public class TitlePane extends JComponent {
         }
 
         if (title != null && !title.isEmpty()) {
-            g2.setFont(Theme.FONT_MEDIUM_14);
+            g2.setFont(Theme.FONT_MEDIUM_SM);
             g2.setColor(resolveTitleForeground());
 
             FontMetrics fm = g2.getFontMetrics();
 
             float y = (getHeight() - fm.getHeight()) / 2f + fm.getAscent();
-            int x = Theme.SPACING_MD;
+            // TODO: Globalize spacing calculations based on Theme constants and button visibility
+            int x = Theme.SPACING_4XL;
 
             if (backButton.isVisible()) {
                 x += Theme.TITLE_BAR_BUTTON_WIDTH;
@@ -222,6 +221,7 @@ public class TitlePane extends JComponent {
         }
 
         g2.dispose();
+        super.paintComponent(g);
     }
 
     private Color resolveTitleForeground() {
@@ -231,7 +231,7 @@ public class TitlePane extends JComponent {
             return active ? Theme.COLOR_FG_INVERSE : Theme.ZINC_400;
         }
 
-        return active ? Theme.COLOR_FG : Theme.COLOR_FG_MUTED;
+        return active ? Theme.COLOR_FG_PRIMARY : Theme.COLOR_FG_SECONDARY;
     }
 
     @Override
@@ -241,6 +241,7 @@ public class TitlePane extends JComponent {
         int x = w;
 
         x -= Theme.TITLE_BAR_BUTTON_WIDTH;
+
         closeButton.setBounds(x, 0, Theme.TITLE_BAR_BUTTON_WIDTH, h);
 
         boolean showMinMax = isResizable() && !(window instanceof Dialog);

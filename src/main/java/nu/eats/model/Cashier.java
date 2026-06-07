@@ -1,6 +1,6 @@
 package nu.eats.model;
 
-import nu.eats.auth.model.UserType;
+import nu.eats.feature.auth.model.UserType;
 
 public record Cashier(String id, String username) implements User {
     @Override

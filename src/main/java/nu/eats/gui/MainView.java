@@ -2,137 +2,136 @@ package nu.eats.gui;
 
 import nu.eats.common.messaging.EventBus;
 import nu.eats.common.resources.Images;
-import nu.eats.model.Vendor;
-import nu.eats.cart.model.Cart;
-import nu.eats.cart.model.CartItem;
-import nu.eats.inventory.model.Inventory;
-import nu.eats.inventory.model.InventoryItem;
-import nu.eats.cart.gui.CartView;
+import nu.eats.gui.plaf.border.FramedBorder;
+import nu.eats.feature.cart.model.ShoppingCart;
+import nu.eats.feature.cart.model.ShoppingCartItem;
+import nu.eats.feature.inventory.model.Inventory;
+import nu.eats.feature.inventory.model.InventoryItem;
+import nu.eats.feature.cart.gui.ShoppingCartView;
 import nu.eats.gui.components.Section;
 import nu.eats.gui.plaf.Theme;
-import nu.eats.inventory.gui.StoreView;
-import nu.eats.gui.panel.side.VendorList;
-import nu.eats.gui.panel.side.VendorRow;
-import nu.eats.cart.state.CartViewModel;
-import nu.eats.inventory.state.StoreState;
-import nu.eats.inventory.state.StoreViewModel;
+import nu.eats.feature.inventory.gui.InventoryView;
+import nu.eats.gui.components.panel.SidePanel;
+import nu.eats.gui.components.panel.SidePanelRow;
+import nu.eats.feature.cart.state.CartViewModel;
+import nu.eats.feature.inventory.state.StoreState;
+import nu.eats.feature.inventory.state.InventoryViewModel;
+import nu.eats.feature.transaction.gui.TransactionView;
+import nu.eats.feature.transaction.gui.SalesReportView;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ItemEvent;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class MainView extends JPanel {
-    private final Map<Vendor, StoreView> storeViewByVendor = new HashMap<>();
     private final JPanel mainContent;
     private final CartViewModel cartViewModel;
-    private final VendorList vendorList;
+    private final SidePanel leftSidePanel;
+    private final CardLayout mainCardLayout;
 
     public MainView() {
-        setLayout(new BorderLayout(Theme.SPACING_XS, 0));
+        setLayout(new BorderLayout(Theme.SPACING_SM, 0));
         setBackground(Theme.COLOR_PRIMARY);
-        setBorder(new EmptyBorder(0, Theme.SPACING_XS, Theme.SPACING_XS, Theme.SPACING_XS));
         setMinimumSize(new Dimension(600, 400));
 
-        this.vendorList = new VendorList();
-        this.mainContent = new JPanel(new CardLayout());
-        this.mainContent.setOpaque(false);
+        this.mainCardLayout = new CardLayout();
+        this.leftSidePanel = new SidePanel();
+        this.mainContent = new JPanel(this.mainCardLayout);
 
-        this.cartViewModel = new CartViewModel(new Cart());
+        this.cartViewModel = new CartViewModel(new ShoppingCart());
 
-        CartView cartView = new CartView(cartViewModel);
+        ShoppingCartView shoppingCartView = new ShoppingCartView(this.cartViewModel);
 
-        var leftPanel = new Section();
+        var leftSidePane = new Section();
 
-        leftPanel.setLayout(new BorderLayout());
+        leftSidePanel.setBorder(new FramedBorder.Builder()
+                .sides.top(side -> side.padding(Theme.SPACING_4XL))
+                .sides.left(side -> side.margin(Theme.SPACING_2XL))
+                .build()
+        );
 
-        var logoDisplay = new JLabel(Images.loadIcon("NU-Logo.png", 96));
+        leftSidePane.setLayout(new BorderLayout());
 
-        logoDisplay.setBorder(new EmptyBorder(Theme.SPACING_LG, Theme.SPACING_LG, Theme.SPACING_MD, Theme.SPACING_LG));
+        var logoDisplay = new JLabel(Images.loadIcon("icon.png", 96));
 
-        leftPanel.add(logoDisplay, BorderLayout.NORTH);
-        leftPanel.add(vendorList, BorderLayout.CENTER);
+        logoDisplay.setBorder(new EmptyBorder(Theme.SPACING_4XL, Theme.SPACING_4XL, Theme.SPACING_4XL, Theme.SPACING_4XL));
 
-        add(leftPanel, BorderLayout.WEST);
-        add(mainContent, BorderLayout.CENTER);
-        add(cartView, BorderLayout.EAST);
+        leftSidePane.add(logoDisplay, BorderLayout.NORTH);
+        leftSidePane.add(this.leftSidePanel, BorderLayout.CENTER);
 
-        initTestData();
+        this.add(leftSidePane, BorderLayout.WEST);
+        this.add(this.mainContent, BorderLayout.CENTER);
+        this.add(shoppingCartView, BorderLayout.EAST);
+        this.initPages();
 
         var eventBus = EventBus.mainBus();
 
         eventBus.subscribe(StoreState.ITEM_SELECTED, item -> {
             if (item instanceof InventoryItem inventoryItem) {
-                cartViewModel.addToCart(new CartItem(inventoryItem));
+                this.cartViewModel.addToCart(new ShoppingCartItem(inventoryItem));
             }
         });
     }
 
-    private void initTestData() {
-        Vendor[] vendors = {
-                new Vendor("hustlers", null, "Hustler's Cup"),
-                new Vendor("quickbites", null, "Quick Bites Corner"),
-                new Vendor("cians", null, "Cian's Diner"),
-                new Vendor("nubaliwag", null, "NU Baliwag Combo")
-        };
+    private void initPages() {
+        // 1. Point of Sale page (displays egg and tray inventory)
+        var posView = createPointOfSaleView();
+        addPage("pointOfSale", "Point of Sale", posView);
 
-        for (int index = 0; index < vendors.length; index++) {
-            Vendor vendor = vendors[index];
-            StoreView storeView = createStoreViewForVendor(vendor);
+        // 2. Transactions page (displays transaction history table)
+        var transactionsView = new TransactionView();
+        addPage("transactions", "Transactions", transactionsView);
 
-            addVendor(vendor, storeView);
-            mainContent.add(storeView, vendor.id());
+        // 3. Sales Report page (displays revenue, volume metrics and product breakdown)
+        var salesReportView = new SalesReportView();
+        addPage("salesReports", "Sales Report", salesReportView);
 
-            if (index == 0) {
-                setVendor(vendor);
-            }
-        }
+        // 4. Assistant page (placeholder section)
+        var assistantView = createAssistantView();
+        addPage("assistant", "Assistant", assistantView);
     }
 
-    private StoreView createStoreViewForVendor(Vendor vendor) {
+    private InventoryView createPointOfSaleView() {
         Inventory inventory = new Inventory();
-        List<InventoryItem> items = switch (vendor.id()) {
-            case "hustlers" -> TestData.getCoffeeShopMenu(vendor);
-            case "quickbites" -> TestData.getQuickBitesMenu(vendor);
-            case "cians" -> TestData.getCiansDinerMenu(vendor);
-            case "nubaliwag" -> TestData.getNUBaliwagComboMenu(vendor);
-            default -> Collections.emptyList();
-        };
+        List<InventoryItem> items = TestData.getCoffeeShopMenu(null);
 
         for (InventoryItem item : items) {
             inventory.add(item);
         }
 
-        return new StoreView(new StoreViewModel(inventory));
+        return new InventoryView(new InventoryViewModel(inventory));
     }
 
-    public void setVendor(Vendor vendor) {
-        CardLayout layout = (CardLayout) mainContent.getLayout();
-
-        layout.show(mainContent, vendor.id());
+    private JComponent createAssistantView() {
+        var assistantPlaceholder = new Section();
+        assistantPlaceholder.setLayout(new GridBagLayout());
+        
+        var assistantLabel = new JLabel("Assistant AI is currently unavailable.");
+        assistantLabel.setFont(Theme.FONT_MEDIUM_MD);
+        assistantLabel.setForeground(Theme.COLOR_FG_SECONDARY);
+        
+        assistantPlaceholder.add(assistantLabel);
+        return assistantPlaceholder;
     }
 
-    private void addVendor(Vendor vendor, StoreView storeView) {
-        storeViewByVendor.put(vendor, storeView);
+    private void addPage(String id, String name, JComponent view) {
+        this.mainContent.add(view, id);
 
-        VendorRow row = new VendorRow(vendor.name());
-
-        row.setActionCommand(vendor.name());
+        SidePanelRow row = new SidePanelRow(name);
+        row.setActionCommand(name);
 
         row.addItemListener(event -> {
             if (event.getStateChange() == ItemEvent.SELECTED) {
-                setVendor(vendor);
+                this.mainCardLayout.show(this.mainContent, id);
             }
         });
 
-        if (storeViewByVendor.size() == 1) {
+        if (this.mainContent.getComponentCount() == 1) {
             row.setSelected(true);
         }
 
-        vendorList.addRow(row);
+        this.leftSidePanel.addRow(row);
     }
 }

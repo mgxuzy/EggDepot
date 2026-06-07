@@ -49,7 +49,7 @@ public final class Password {
     }
 
     public String value() {
-        return value;
+        return this.value;
     }
 
     public Result<Void, List<String>> setValue(String value) {

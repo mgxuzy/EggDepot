@@ -16,18 +16,15 @@ public final class Fonts {
     private Fonts() {
     }
 
-    public static void init() {
-        if (!CACHE.isEmpty()) return;
-
+    static {
         ResourceScanner.scan(DIR, Fonts::register);
     }
 
     public static Font load(String name, float size) {
-        if (CACHE.isEmpty()) init();
+        var font = new Font(name, Font.PLAIN, (int) size);
 
-        var font = CACHE.get(name);
-
-        if (font == null) throw new IllegalArgumentException("Font not found: " + name);
+        if (font == null)
+            throw new IllegalArgumentException("Font not found: " + name);
 
         return font.deriveFont(size);
     }
@@ -37,7 +34,8 @@ public final class Fonts {
             var font = Font.createFont(Font.TRUETYPE_FONT, input);
 
             ENV.registerFont(font);
-            CACHE.put(font.getFontName(), font);
+
+            IO.println("Registered font: " + font.getFamily());
         } catch (Exception cause) {
             System.err.println("Failed to register font: " + path + ": " + cause.getMessage());
         }

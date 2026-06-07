@@ -17,12 +17,10 @@ public class LabeledField extends JPanel {
 
         var label = new JLabel(labelText);
 
-        label.setFont(Theme.FONT_MEDIUM_14);
-        label.setForeground(Theme.COLOR_FG);
+        label.setFont(Theme.FONT_MEDIUM_MD);
+        label.setForeground(Theme.COLOR_FG_PRIMARY);
         label.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        field.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
-        field.setPreferredSize(new Dimension(FIELD_WIDTH, 50));
         field.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         var mainContent = new JPanel();
@@ -30,11 +28,8 @@ public class LabeledField extends JPanel {
         mainContent.setLayout(new BoxLayout(mainContent, BoxLayout.Y_AXIS));
         mainContent.setOpaque(false);
         mainContent.add(label);
-        mainContent.add(Box.createVerticalStrut(Theme.SPACING_XS));
+        mainContent.add(Box.createVerticalStrut(Theme.SPACING_LG));
         mainContent.add(field);
-
-        mainContent.setPreferredSize(new Dimension(FIELD_WIDTH,
-                label.getPreferredSize().height + Theme.SPACING_XS + field.getPreferredSize().height));
 
         add(mainContent);
 

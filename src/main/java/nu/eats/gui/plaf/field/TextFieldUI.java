@@ -31,8 +31,8 @@ public class TextFieldUI extends BasicTextFieldUI {
         JTextComponent editor = getComponent();
 
         editor.setOpaque(false);
-        editor.setFont(Theme.FONT_MEDIUM_14);
 
+        TextFieldPreset.MD.apply(editor);
         TextFieldVariant.SECONDARY.install(editor, TextFieldState.NEUTRAL);
     }
 

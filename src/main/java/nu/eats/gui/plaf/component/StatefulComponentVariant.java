@@ -57,7 +57,5 @@ public interface StatefulComponentVariant<T extends JComponent, S extends Compon
         component.removePropertyChangeListener(this);
         component.addPropertyChangeListener(KEY_COMPONENT_VARIANT, this);
         component.addPropertyChangeListener(KEY_COMPONENT_STATE, this);
-
-        component.repaint();
     }
 }

@@ -20,7 +20,7 @@ public class ScrollPaneUI extends BasicScrollPaneUI {
         scrollPane.setBorder(null);
         scrollPane.setLayout(new ScrollPaneLayout());
         scrollPane.getViewport().setOpaque(false);
-        scrollPane.getVerticalScrollBar().setUnitIncrement(FONT_SIZE_BASE);
-        scrollPane.getHorizontalScrollBar().setUnitIncrement(FONT_SIZE_BASE);
+        scrollPane.getVerticalScrollBar().setUnitIncrement((int) FONT_SIZE_BASE);
+        scrollPane.getHorizontalScrollBar().setUnitIncrement((int) FONT_SIZE_BASE);
     }
 }

@@ -61,6 +61,20 @@ public class FrameEdges {
             return this.parent;
         }
 
+        public FramedBorder.Builder horizontal(Consumer<FrameEdge.Builder> edge) {
+            edge.accept(this.top);
+            edge.accept(this.bottom);
+
+            return this.parent;
+        }
+
+            public FramedBorder.Builder vertical(Consumer<FrameEdge.Builder> edge) {
+                edge.accept(this.left);
+                edge.accept(this.right);
+
+                return this.parent;
+            }
+
         public FrameEdges build() {
             return new FrameEdges(this);
         }

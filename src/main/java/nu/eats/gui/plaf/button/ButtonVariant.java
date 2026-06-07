@@ -20,10 +20,12 @@ public enum ButtonVariant implements StatefulComponentVariant<AbstractButton, Bu
 
                 case HOVERED -> {
                     button.setBackground(COLOR_BG_PRIMARY_HOVER);
+                    button.setForeground(COLOR_FG_PRIMARY);
                 }
 
                 case ACTIVATED -> {
                     button.setBackground(COLOR_BG_PRIMARY_PRESSED);
+                    button.setForeground(COLOR_FG_INVERSE);
                 }
 
                 case DISABLED -> {
@@ -39,18 +41,18 @@ public enum ButtonVariant implements StatefulComponentVariant<AbstractButton, Bu
         public void apply(AbstractButton button, ButtonState state) {
             switch (state) {
                 case NEUTRAL -> {
-                    button.setBackground(COLOR_BG);
-                    button.setForeground(COLOR_FG);
+                    button.setBackground(COLOR_SURFACE_ELEVATION_HIGHEST);
+                    button.setForeground(COLOR_FG_PRIMARY);
                 }
 
                 case HOVERED -> {
-                    button.setBackground(COLOR_BG_HOVER);
-                    button.setForeground(COLOR_FG);
+                    button.setBackground(COLOR_BG_PRIMARY_HOVER);
+                    button.setForeground(COLOR_FG_SECONDARY);
                 }
 
                 case ACTIVATED -> {
-                    button.setBackground(COLOR_BG_PRESSED);
-                    button.setForeground(COLOR_FG);
+                    button.setBackground(COLOR_BG_PRIMARY_PRESSED);
+                    button.setForeground(COLOR_FG_INVERSE);
                 }
 
                 case SELECTED -> {
@@ -58,8 +60,8 @@ public enum ButtonVariant implements StatefulComponentVariant<AbstractButton, Bu
                 }
 
                 case DISABLED -> {
-                    button.setBackground(COLOR_BG);
-                    button.setForeground(ZINC_300);
+                    button.setBackground(COLOR_SURFACE_ELEVATION_HIGHEST);
+                    button.setForeground(COLOR_FG_SECONDARY);
                 }
             }
         }
@@ -102,17 +104,15 @@ public enum ButtonVariant implements StatefulComponentVariant<AbstractButton, Bu
     FLAT {
         @Override
         public void apply(AbstractButton button, ButtonState state) {
-            button.setBorder(null);
-            // BoxDecoration.ensure(button).borderWidth(BORDER_WIDTH_NONE).borderRadius(0);
-
             switch (state) {
                 case NEUTRAL -> {
                     button.setBackground(COLOR_TRANSPARENT);
-                    button.setForeground(COLOR_FG);
+                    button.setForeground(COLOR_FG_PRIMARY);
                 }
 
                 case HOVERED -> {
-                    button.setBackground(COLOR_BG_HOVER);
+                    button.setBackground(COLOR_BG_PRIMARY_HOVER);
+                    button.setForeground(COLOR_FG_PRIMARY);
                 }
 
                 case ACTIVATED -> {

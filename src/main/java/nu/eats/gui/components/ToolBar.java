@@ -1,18 +1,16 @@
 package nu.eats.gui.components;
 
 import nu.eats.gui.plaf.Theme;
+import nu.eats.gui.plaf.border.FramedBorder;
 import nu.eats.gui.plaf.button.ButtonPreset;
 import nu.eats.gui.plaf.button.ButtonState;
 import nu.eats.gui.plaf.button.ButtonVariant;
 import nu.eats.gui.plaf.icons.ChevronLeftIcon;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import static nu.eats.gui.plaf.Constants.KEY_COMPONENT_VARIANT;
 
 public class ToolBar extends JPanel {
 
@@ -20,33 +18,33 @@ public class ToolBar extends JPanel {
     public static final String CENTER = "Center";
     public static final String RIGHT = "Right";
 
-    private static final float FONT_SIZE_TITLE = 20f;
-
     public ToolBar() {
         super(new ActionBarLayout(Theme.SPACING_SM));
 
-        setOpaque(false);
-        setBorder(new EmptyBorder(Theme.SPACING_MD, Theme.SPACING_MD, Theme.SPACING_MD, Theme.SPACING_MD));
+        this.setBorder(new FramedBorder.Builder()
+                .sides(side -> side.padding(Theme.SPACING_SM))
+                .build()
+        );
     }
 
     public void setTitle(String title) {
         if (title != null) {
             var label = new JLabel(title);
 
-            label.setFont(Theme.FONT_BOLD_24.deriveFont(FONT_SIZE_TITLE));
-            label.setForeground(Theme.COLOR_FG);
+            label.setFont(Theme.FONT_BOLD_LG);
+            label.setForeground(Theme.COLOR_FG_PRIMARY);
             add(label, CENTER);
         }
     }
 
-    public void addBackAction(Runnable handler) {
-        var backButton = new JButton(new ChevronLeftIcon(12));
+    public void addAction(Runnable handler) {
+        var button = new JButton(new ChevronLeftIcon(12));
 
-        ButtonPreset.XS.apply(backButton);
-        ButtonVariant.SECONDARY.install(backButton, ButtonState.NEUTRAL);
-        backButton.addActionListener(event -> handler.run());
+        ButtonPreset.SM.apply(button);
+        ButtonVariant.SECONDARY.install(button, ButtonState.NEUTRAL);
+        button.addActionListener(event -> handler.run());
 
-        add(backButton, LEFT);
+        add(button, LEFT);
     }
 
     public static class ActionBarLayout implements LayoutManager {
@@ -54,12 +52,12 @@ public class ToolBar extends JPanel {
         public static final String CENTER = ToolBar.CENTER;
         public static final String RIGHT = ToolBar.RIGHT;
 
-        private final int gap;
+        private final double gap;
         private final List<Component> leftComponents = new ArrayList<>();
         private final List<Component> rightComponents = new ArrayList<>();
         private Component centerComponent;
 
-        public ActionBarLayout(int gap) {
+        public ActionBarLayout(double gap) {
             this.gap = gap;
         }
 

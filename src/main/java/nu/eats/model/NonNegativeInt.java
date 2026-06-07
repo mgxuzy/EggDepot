@@ -4,16 +4,16 @@ public class NonNegativeInt {
     private int value;
 
     public NonNegativeInt(int value) {
-        setValue(value);
+        this.setValue(value);
     }
 
     public int value() {
-        return value;
+        return this.value;
     }
 
     public void setValue(int value) {
         if (value < 0) {
-            throw new IllegalArgumentException("Quantity cannot be negative");
+            throw new IllegalArgumentException("Value cannot be negative");
         }
 
         this.value = value;
