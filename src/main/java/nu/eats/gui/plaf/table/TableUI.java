@@ -34,6 +34,7 @@ public class TableUI extends BasicTableUI {
 
         // Ensure standard modern row spacing (breathing room for accessibility)
         int minRowHeight = 28;
+
         if (table.getRowHeight() < minRowHeight) {
             table.setRowHeight(minRowHeight);
         }
@@ -54,7 +55,7 @@ public class TableUI extends BasicTableUI {
         table.setGridColor(gridColor);
         table.setSelectionBackground(selBg);
         table.setSelectionForeground(selFg);
-        
+
         // Set custom header renderer and ensure header is visible
         table.getTableHeader().setDefaultRenderer(new TableHeaderRenderer());
         table.getTableHeader().setOpaque(true);
