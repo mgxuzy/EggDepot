@@ -15,7 +15,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.util.Map;
 
-import static nu.eats.gui.plaf.Theme.SPACING_4XL;
+import static nu.eats.gui.plaf.Theme.*;
 
 public class InventoryItemRow extends JButton {
     private static final int CARD_WIDTH = 180;
@@ -26,7 +26,6 @@ public class InventoryItemRow extends JButton {
         setLayout(new BorderLayout(0, 0));
 
         ButtonVariant.SECONDARY.install(this, ButtonState.NEUTRAL);
-
 
         setBorder(new FramedBorder.Builder()
                 .corners(corner -> corner.radius(Theme.RADIUS_LG))
@@ -57,7 +56,8 @@ public class InventoryItemRow extends JButton {
         itemSummary.setBackground(getBackground());
 
         itemSummary.setBorder(new FramedBorder.Builder()
-                .sides(side -> side.padding(SPACING_4XL))
+                .sides.vertical(side -> side.padding(SPACING_XL))
+                .sides.horizontal(side -> side.padding(SPACING_4XL))
                 .build()
         );
 
@@ -70,7 +70,7 @@ public class InventoryItemRow extends JButton {
 
         itemPriceLabel.setForeground(Theme.COLOR_FG_SECONDARY);
         itemPriceLabel.setFont(Theme.FONT_REGULAR_MD);
-        itemPriceLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+       // itemPriceLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 
         itemSummary.add(itemNameLabel);
         itemSummary.add(itemPriceLabel);
