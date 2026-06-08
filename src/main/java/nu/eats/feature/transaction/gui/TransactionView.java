@@ -33,6 +33,7 @@ public class TransactionView extends Section {
 
         // Clean & standard ScrollPane wrapper layout handle
         JScrollPane scrollPane = new JScrollPane(table);
+
         add(scrollPane, BorderLayout.CENTER);
 
         // Subscribe to transactions update events

@@ -6,6 +6,8 @@ import javax.swing.*;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicScrollPaneUI;
 
+import java.awt.*;
+
 import static nu.eats.gui.plaf.Theme.FONT_SIZE_BASE;
 
 public class ScrollPaneUI extends BasicScrollPaneUI {

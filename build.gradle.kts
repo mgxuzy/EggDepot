@@ -21,6 +21,7 @@ application {
 
 dependencies {
     implementation("com.mysql:mysql-connector-j:9.3.0")
+    implementation("org.json:json:20260522")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.google.code.gson:gson:2.11.0")
     testImplementation(platform("org.junit:junit-bom:5.10.0"))

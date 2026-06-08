@@ -6,6 +6,8 @@ import nu.eats.feature.cart.gui.ShoppingCartView;
 import nu.eats.feature.cart.model.ShoppingCart;
 import nu.eats.feature.cart.model.ShoppingCartItem;
 import nu.eats.feature.cart.state.CartViewModel;
+import nu.eats.feature.chatbot.ChatView;
+import nu.eats.feature.chatbot.GroqChatClient;
 import nu.eats.feature.inventory.gui.InventoryView;
 import nu.eats.feature.inventory.model.Inventory;
 import nu.eats.feature.inventory.model.InventoryItem;
@@ -24,6 +26,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class MainView extends JPanel {
     private final JPanel mainContent;
@@ -89,7 +92,7 @@ public class MainView extends JPanel {
         addPage("reports", "Reports", salesReportView);
 
         // 4. Assistant page (placeholder section)
-        var assistantView = createAssistantView();
+        var assistantView = createChatView();
         addPage("chatbot", "Chatbot", assistantView);
     }
 
@@ -104,16 +107,25 @@ public class MainView extends JPanel {
         return new InventoryView(new InventoryViewModel(inventory));
     }
 
-    private JComponent createAssistantView() {
-        var assistantPlaceholder = new Section();
-        assistantPlaceholder.setLayout(new GridBagLayout());
+    private JComponent createChatView() {
+        var chatView = new ChatView();
 
-        var assistantLabel = new JLabel("Assistant AI is currently unavailable.");
-        assistantLabel.setFont(Theme.FONT_MEDIUM_MD);
-        assistantLabel.setForeground(Theme.COLOR_FG_SECONDARY);
+        GroqChatClient client = new GroqChatClient();
+        ChatView chatUI = new ChatView();
 
-        assistantPlaceholder.add(assistantLabel);
-        return assistantPlaceholder;
+        chatUI.setMessageSentListener(userMessage -> {
+            CompletableFuture.supplyAsync(() -> client.chat(userMessage))
+                    .thenAccept(response -> {
+                        SwingUtilities.invokeLater(() -> chatUI.addMessage(response, false));
+                    });
+        });
+
+        CompletableFuture.supplyAsync(() -> client.chat("Hi!"))
+                .thenAccept(assistantResponse -> {
+                    SwingUtilities.invokeLater(() -> chatUI.addMessage(assistantResponse, false));
+                });
+
+        return chatView;
     }
 
     private void addPage(String id, String name, JComponent view) {

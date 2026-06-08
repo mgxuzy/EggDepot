@@ -1,5 +1,6 @@
 package nu.eats.gui.plaf.root;
 
+import nu.eats.gui.plaf.Theme;
 import nu.eats.gui.plaf.WindowResizeHandler;
 import nu.eats.gui.plaf.border.framed.FramedBorder;
 import nu.eats.gui.plaf.outline.FocusOutline;
@@ -38,7 +39,7 @@ public class RootPaneUI extends BasicRootPaneUI {
 
         // rootPane.setDoubleBuffered(true);
         rootPane.setBorder(FramedBorder.NONE);
-        // rootPane.setBackground(Theme.COLOR_BG);
+        rootPane.setBackground(Theme.COLOR_BG);
 
         if (rootPane.getWindowDecorationStyle() != JRootPane.NONE) {
             installClientDecorations(rootPane);
@@ -47,7 +48,7 @@ public class RootPaneUI extends BasicRootPaneUI {
         Container contentPane = rootPane.getContentPane();
 
         if (contentPane != null) {
-            // contentPane.setBackground(Theme.COLOR_BG);
+            contentPane.setBackground(Theme.COLOR_BG);
         }
 
         FocusOutline.install(rootPane);

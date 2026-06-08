@@ -33,7 +33,6 @@ public class SalesReportView extends Section {
     private String currentType = "All";
 
     public SalesReportView() {
-        // 1. MAIN CONTAINER SETUP (Vertical BoxLayout)
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         setBorder(new FramedBorder.Builder()
