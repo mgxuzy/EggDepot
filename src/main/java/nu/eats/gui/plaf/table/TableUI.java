@@ -25,7 +25,7 @@ public class TableUI extends BasicTableUI {
             super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
             if (!isSelected) {
-                setBackground(row % 2 == 1 ? Theme.COLOR_SURFACE_ELEVATION_LOW : Theme.COLOR_SURFACE_ELEVATION_HIGHEST);
+                setBackground(row % 2 == 1 ? Theme.COLOR_SURFACE_ELEVATION_LOW : Theme.COLOR_SURFACE_ELEVATION_LOWEST);
                 setForeground(Theme.COLOR_FG_INVERSE);
             } else {
                 setBackground(Theme.COLOR_BG_HOVER);
@@ -63,7 +63,7 @@ public class TableUI extends BasicTableUI {
 
         if (header != null) {
             header.setDefaultRenderer(new TableHeaderRenderer());
-            header.setBackground(Theme.COLOR_SURFACE_ELEVATION_HIGHEST);
+            header.setBackground(Theme.COLOR_SURFACE_ELEVATION_LOWEST);
             header.setForeground(Theme.COLOR_FG_SECONDARY);
             header.setReorderingAllowed(false);
             header.setResizingAllowed(true);

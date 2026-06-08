@@ -53,7 +53,7 @@ public class InventoryItemRow extends JButton {
 
         var itemSummary = new JPanel(new GridLayout(2, 1, 0, Theme.SPACING_3XL));
 
-        itemSummary.setBackground(getBackground());
+        itemSummary.setBackground(COLOR_SURFACE_ELEVATION_LOW);
 
         itemSummary.setBorder(new FramedBorder.Builder()
                 .sides.vertical(side -> side.padding(SPACING_XL))

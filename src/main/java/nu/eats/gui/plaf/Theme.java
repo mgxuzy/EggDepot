@@ -22,7 +22,7 @@ public final class Theme {
     public static final Color COLOR_TRANSPARENT = new Color(0, 0, 0, 0);
     public static final Color COLOR_PRIMARY = new Color(0xFF48672E);
 
-    public static final Color COLOR_SURFACE_ELEVATION_HIGHEST = new Color(0xFFFFFFFF);
+    public static final Color COLOR_SURFACE_ELEVATION_LOWEST = new Color(0xFFFFFFFF);
     public static final Color COLOR_SURFACE_ELEVATION_LOW = new Color(0xFFF3F5EA);
 
     public static final Color COLOR_BG = new Color(0xFFF9FAEF);

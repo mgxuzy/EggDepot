@@ -42,7 +42,7 @@ public enum ButtonVariant implements StatefulComponentVariant<AbstractButton, Bu
         public void apply(AbstractButton button, ButtonState state) {
             switch (state) {
                 case NEUTRAL -> {
-                    button.setBackground(COLOR_SURFACE_ELEVATION_HIGHEST);
+                    button.setBackground(COLOR_SURFACE_ELEVATION_LOWEST);
                     button.setForeground(COLOR_FG_INVERSE);
                 }
 
@@ -61,7 +61,7 @@ public enum ButtonVariant implements StatefulComponentVariant<AbstractButton, Bu
                 }
 
                 case DISABLED -> {
-                    button.setBackground(COLOR_SURFACE_ELEVATION_HIGHEST);
+                    button.setBackground(COLOR_SURFACE_ELEVATION_LOWEST);
                     button.setForeground(COLOR_FG_SECONDARY);
                 }
             }

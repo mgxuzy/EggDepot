@@ -11,7 +11,7 @@ public class MetricCard extends JPanel {
 
     public MetricCard(String title, String value) {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        this.setBackground(Theme.COLOR_SURFACE_ELEVATION_HIGHEST);
+        this.setBackground(Theme.COLOR_SURFACE_ELEVATION_LOWEST);
 
         this.setBorder(new FramedBorder.Builder()
                 .corners(corner -> corner.radius(Theme.RADIUS_MD))

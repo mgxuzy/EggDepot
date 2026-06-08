@@ -77,7 +77,7 @@ public class SalesReportView extends Section {
 
         typeFilter = new JComboBox<>(new String[]{"All", "Piece", "Tray"});
         typeFilter.setFont(Theme.FONT_MEDIUM_MD);
-        typeFilter.setBackground(Theme.COLOR_SURFACE_ELEVATION_HIGHEST);
+        typeFilter.setBackground(Theme.COLOR_SURFACE_ELEVATION_LOWEST);
         typeFilter.setForeground(Theme.COLOR_FG_INVERSE);
 
         resetButton = new JButton("Reset");
