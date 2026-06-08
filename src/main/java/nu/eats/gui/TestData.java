@@ -1,9 +1,9 @@
 package nu.eats.gui;
 
-import nu.eats.model.Vendor;
-import nu.eats.feature.inventory.model.Product;
 import nu.eats.feature.inventory.model.InventoryItem;
 import nu.eats.feature.inventory.model.InventoryItemCategory;
+import nu.eats.feature.inventory.model.Product;
+import nu.eats.model.Vendor;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

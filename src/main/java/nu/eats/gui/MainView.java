@@ -2,22 +2,22 @@ package nu.eats.gui;
 
 import nu.eats.common.messaging.EventBus;
 import nu.eats.common.resources.Images;
-import nu.eats.gui.plaf.border.framed.FramedBorder;
+import nu.eats.feature.cart.gui.ShoppingCartView;
 import nu.eats.feature.cart.model.ShoppingCart;
 import nu.eats.feature.cart.model.ShoppingCartItem;
+import nu.eats.feature.cart.state.CartViewModel;
+import nu.eats.feature.inventory.gui.InventoryView;
 import nu.eats.feature.inventory.model.Inventory;
 import nu.eats.feature.inventory.model.InventoryItem;
-import nu.eats.feature.cart.gui.ShoppingCartView;
+import nu.eats.feature.inventory.state.InventoryViewModel;
+import nu.eats.feature.inventory.state.StoreState;
+import nu.eats.feature.transaction.gui.SalesReportView;
+import nu.eats.feature.transaction.gui.TransactionView;
 import nu.eats.gui.components.Section;
-import nu.eats.gui.plaf.Theme;
-import nu.eats.feature.inventory.gui.InventoryView;
 import nu.eats.gui.components.panel.SidePanel;
 import nu.eats.gui.components.panel.SidePanelRow;
-import nu.eats.feature.cart.state.CartViewModel;
-import nu.eats.feature.inventory.state.StoreState;
-import nu.eats.feature.inventory.state.InventoryViewModel;
-import nu.eats.feature.transaction.gui.TransactionView;
-import nu.eats.feature.transaction.gui.SalesReportView;
+import nu.eats.gui.plaf.Theme;
+import nu.eats.gui.plaf.border.framed.FramedBorder;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -33,7 +33,7 @@ public class MainView extends JPanel {
 
     public MainView() {
         setLayout(new BorderLayout(Theme.SPACING_SM, 0));
-        setBackground(Theme.COLOR_PRIMARY);
+        setBackground(Theme.COLOR_BG_PRESSED);
         setMinimumSize(new Dimension(600, 400));
 
         this.mainCardLayout = new CardLayout();
@@ -78,7 +78,7 @@ public class MainView extends JPanel {
     private void initPages() {
         // 1. Point of Sale page (displays egg and tray inventory)
         var posView = createPointOfSaleView();
-        addPage("pointOfSale", "Point of Sale", posView);
+        addPage("sales", "Sales", posView);
 
         // 2. Transactions page (displays transaction history table)
         var transactionsView = new TransactionView();
@@ -86,11 +86,11 @@ public class MainView extends JPanel {
 
         // 3. Sales Report page (displays revenue, volume metrics and product breakdown)
         var salesReportView = new SalesReportView();
-        addPage("salesReports", "Sales Report", salesReportView);
+        addPage("reports", "Reports", salesReportView);
 
         // 4. Assistant page (placeholder section)
         var assistantView = createAssistantView();
-        addPage("assistant", "Assistant", assistantView);
+        addPage("chatbot", "Chatbot", assistantView);
     }
 
     private InventoryView createPointOfSaleView() {
@@ -107,11 +107,11 @@ public class MainView extends JPanel {
     private JComponent createAssistantView() {
         var assistantPlaceholder = new Section();
         assistantPlaceholder.setLayout(new GridBagLayout());
-        
+
         var assistantLabel = new JLabel("Assistant AI is currently unavailable.");
         assistantLabel.setFont(Theme.FONT_MEDIUM_MD);
         assistantLabel.setForeground(Theme.COLOR_FG_SECONDARY);
-        
+
         assistantPlaceholder.add(assistantLabel);
         return assistantPlaceholder;
     }

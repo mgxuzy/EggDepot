@@ -3,7 +3,6 @@ package nu.eats.gui.components.panel;
 import nu.eats.gui.plaf.Theme;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class SidePanel extends JPanel {

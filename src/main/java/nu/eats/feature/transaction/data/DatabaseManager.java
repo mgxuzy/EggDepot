@@ -40,7 +40,7 @@ public final class DatabaseManager {
         // 1. Try to connect without DB first and create database if not exists
         try (Connection conn = DriverManager.getConnection(DB_URL_NO_DB, USER, PASSWORD);
              Statement stmt = conn.createStatement()) {
-            
+
             stmt.executeUpdate("CREATE DATABASE IF NOT EXISTS nueats");
             System.out.println("[DatabaseManager] Database 'nueats' checked/created successfully.");
             available = true;

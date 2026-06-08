@@ -1,17 +1,17 @@
 package nu.eats.feature.inventory.gui;
 
 import nu.eats.common.messaging.EventBus;
-import nu.eats.feature.inventory.model.InventoryItem;
-import nu.eats.feature.inventory.model.InventoryItemCategory;
-import nu.eats.gui.components.Section;
-import nu.eats.gui.components.chip.ChipBar;
-import nu.eats.gui.plaf.Theme;
+import nu.eats.feature.cart.state.CartState;
 import nu.eats.feature.inventory.gui.components.InventoryCategorySection;
 import nu.eats.feature.inventory.gui.components.InventoryItemList;
 import nu.eats.feature.inventory.gui.components.InventoryItemRow;
-import nu.eats.feature.cart.state.CartState;
-import nu.eats.feature.inventory.state.StoreState;
+import nu.eats.feature.inventory.model.InventoryItem;
+import nu.eats.feature.inventory.model.InventoryItemCategory;
 import nu.eats.feature.inventory.state.InventoryViewModel;
+import nu.eats.feature.inventory.state.StoreState;
+import nu.eats.gui.components.Section;
+import nu.eats.gui.components.chip.ChipBar;
+import nu.eats.gui.plaf.Theme;
 
 import javax.swing.*;
 import java.awt.*;

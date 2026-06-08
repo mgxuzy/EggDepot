@@ -1,6 +1,5 @@
 package nu.eats.gui.plaf.scroll;
 
-import javax.swing.*;
 import java.awt.*;
 
 public class ScrollPaneLayout extends javax.swing.ScrollPaneLayout {

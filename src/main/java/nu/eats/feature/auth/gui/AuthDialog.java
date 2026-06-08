@@ -1,14 +1,14 @@
 package nu.eats.feature.auth.gui;
 
-import nu.eats.feature.auth.gui.components.AuthCard;
 import nu.eats.common.messaging.EventBus;
-import nu.eats.model.User;
+import nu.eats.feature.auth.gui.components.AuthCard;
 import nu.eats.feature.auth.model.Credentials;
+import nu.eats.feature.auth.state.AuthState;
+import nu.eats.feature.auth.state.AuthViewModel;
 import nu.eats.gui.components.Section;
 import nu.eats.gui.plaf.Theme;
 import nu.eats.gui.plaf.border.framed.FramedBorder;
-import nu.eats.feature.auth.state.AuthState;
-import nu.eats.feature.auth.state.AuthViewModel;
+import nu.eats.model.User;
 
 import javax.swing.*;
 import java.awt.*;

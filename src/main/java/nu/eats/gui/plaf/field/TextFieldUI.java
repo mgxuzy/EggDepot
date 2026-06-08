@@ -12,7 +12,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
-import static nu.eats.gui.plaf.Constants.*;
+import static nu.eats.gui.plaf.Constants.DEFAULT_RENDERING_HINTS;
 
 public class TextFieldUI extends BasicTextFieldUI {
 

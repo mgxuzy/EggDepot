@@ -9,7 +9,10 @@ import nu.eats.feature.transaction.model.Transaction;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -146,7 +149,7 @@ public final class TransactionManager {
 
         for (Transaction tx : getTransactions(from, to, type)) {
             map.computeIfAbsent(tx.product(), name -> new ProductSalesSummaryBuilder(name, tx.price()))
-               .add(tx.quantity(), tx.total());
+                    .add(tx.quantity(), tx.total());
         }
 
         List<ProductSalesSummary> summaries = new ArrayList<>();
@@ -222,9 +225,10 @@ public final class TransactionManager {
     }
 
     public record ProductSalesSummary(
-        String productName,
-        int quantitySold,
-        double unitPrice,
-        double totalRevenue
-    ) {}
+            String productName,
+            int quantitySold,
+            double unitPrice,
+            double totalRevenue
+    ) {
+    }
 }

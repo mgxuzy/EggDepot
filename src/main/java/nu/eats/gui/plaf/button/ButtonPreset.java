@@ -54,5 +54,5 @@ public enum ButtonPreset implements ComponentPreset<AbstractButton> {
             button.setIconTextGap(SPACING_LG);
             button.setFont(button.getFont().deriveFont(FONT_SIZE_LG));
         }
-    };
+    }
 }

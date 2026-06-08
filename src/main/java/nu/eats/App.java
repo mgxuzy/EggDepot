@@ -1,7 +1,7 @@
 package nu.eats;
 
-import nu.eats.gui.MainView;
 import nu.eats.feature.auth.gui.AuthDialog;
+import nu.eats.gui.MainView;
 import nu.eats.gui.plaf.LookAndFeel;
 
 import javax.swing.*;

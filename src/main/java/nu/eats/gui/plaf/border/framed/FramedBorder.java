@@ -1,5 +1,10 @@
 package nu.eats.gui.plaf.border.framed;
 
+import nu.eats.gui.plaf.UIPainter;
+import nu.eats.gui.plaf.measure.Measure;
+
+import javax.swing.*;
+import javax.swing.border.AbstractBorder;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
@@ -7,13 +12,7 @@ import java.awt.geom.Area;
 import java.awt.geom.Path2D;
 import java.util.function.Consumer;
 
-import javax.swing.*;
-import javax.swing.border.AbstractBorder;
-
 import static nu.eats.gui.plaf.Constants.DEFAULT_RENDERING_HINTS;
-
-import nu.eats.gui.plaf.UIPainter;
-import nu.eats.gui.plaf.measure.Measure;
 
 /**
  * A CSS Border replica using double-precision geometry.
@@ -50,7 +49,8 @@ public class FramedBorder extends AbstractBorder {
             rightRegion = new Path2D.Double(),
             bottomRegion = new Path2D.Double(),
             leftRegion = new Path2D.Double();
-
+    // Add this alongside your other transient region declarations
+    private final transient Path2D.Double borderAndContentRegion = new Path2D.Double();
     private transient int width = -1;
     private transient int height = -1;
 
@@ -117,10 +117,6 @@ public class FramedBorder extends AbstractBorder {
         this.bottomLeftCornerRadiusY = bottomLeftCorner.radiusY;
     }
 
-    public Builder toBuilder() {
-        return new Builder(this);
-    }
-
     private static void updateCornerRegion(
             Arc2D.Double arc,
             double x, double y,
@@ -128,91 +124,6 @@ public class FramedBorder extends AbstractBorder {
             double start
     ) {
         arc.setArc(x, y, w, h, start, -90, Arc2D.OPEN);
-    }
-
-    @Override
-    public Insets getBorderInsets(Component component, Insets insets) {
-        insets.set(
-                (int) Math.ceil(this.topSideMargin + this.topEdgeThickness + this.topSidePadding),
-                (int) Math.ceil(this.leftSideMargin + this.leftEdgeThickness + this.leftSidePadding),
-                (int) Math.ceil(this.bottomSideMargin + this.bottomEdgeThickness + this.bottomSidePadding),
-                (int) Math.ceil(this.rightSideMargin + this.rightEdgeThickness + this.rightSidePadding)
-        );
-
-        return insets;
-    }
-
-    public boolean containsPosition(int x, int y) {
-        return x >= this.leftSideMargin
-                && y >= this.topSideMargin
-                && x < (width - this.rightSideMargin)
-                && y < (height - this.bottomSideMargin);
-    }
-
-    @Override
-    public void paintBorder(Component component, Graphics graphics, int positionX, int positionY, int width, int height) {
-        var graphics2D = (Graphics2D) graphics.create();
-
-        try {
-            graphics2D.setRenderingHints(DEFAULT_RENDERING_HINTS);
-            graphics2D.translate(positionX, positionY);
-
-            Shape clip = graphics2D.getClip();
-
-            if (this.topEdgeIsVisible) {
-                this.paintEdgeRegion(graphics2D, this.topEdgeColor, this.topRegion, clip);
-            }
-
-            if (this.rightEdgeIsVisible) {
-                this.paintEdgeRegion(graphics2D, this.rightEdgeColor, this.rightRegion, clip);
-            }
-
-            if (this.bottomEdgeIsVisible) {
-                this.paintEdgeRegion(graphics2D, this.bottomEdgeColor, this.bottomRegion, clip);
-            }
-
-            if (this.leftEdgeIsVisible) {
-                this.paintEdgeRegion(graphics2D, this.leftEdgeColor, this.leftRegion, clip);
-            }
-        } finally {
-            graphics2D.dispose();
-        }
-    }
-
-    // Add this alongside your other transient region declarations
-    private final transient Path2D.Double borderAndContentRegion = new Path2D.Double();
-
-    private void paintEdgeRegion(Graphics2D graphics2D, Color color, Path2D.Double region, Shape clip) {
-        graphics2D.clip(region);
-        graphics2D.setColor(color);
-        graphics2D.fill(this.frameRegion);
-        graphics2D.setClip(clip);
-    }
-
-    public void paintClientRegionWith(UIPainter painter, Graphics graphics, JComponent component) {
-        int width = component.getWidth(),
-                height = component.getHeight();
-
-        if (this.width != width || this.height != height) {
-            this.resize(width, height);
-        }
-
-        var graphics2D = (Graphics2D) graphics.create();
-
-        try {
-            graphics2D.setRenderingHints(DEFAULT_RENDERING_HINTS);
-            graphics2D.setColor(component.getBackground());
-
-            Shape safeShape = getCutoutShape(component);
-
-            // 2. Safely apply the clip boundaries if an ancestor was found
-            graphics2D.fill(safeShape);
-            graphics2D.clip(safeShape);
-
-            painter.paint(graphics2D, component);
-        } finally {
-            graphics2D.dispose();
-        }
     }
 
     public static Shape getCutoutShape(JComponent component) {
@@ -278,6 +189,92 @@ public class FramedBorder extends AbstractBorder {
         }
 
         return accumulatedClip;
+    }
+
+    public Builder toBuilder() {
+        return new Builder(this);
+    }
+
+    @Override
+    public Insets getBorderInsets(Component component, Insets insets) {
+        insets.set(
+                (int) Math.ceil(this.topSideMargin + this.topEdgeThickness + this.topSidePadding),
+                (int) Math.ceil(this.leftSideMargin + this.leftEdgeThickness + this.leftSidePadding),
+                (int) Math.ceil(this.bottomSideMargin + this.bottomEdgeThickness + this.bottomSidePadding),
+                (int) Math.ceil(this.rightSideMargin + this.rightEdgeThickness + this.rightSidePadding)
+        );
+
+        return insets;
+    }
+
+    public boolean containsPosition(int x, int y) {
+        return x >= this.leftSideMargin
+                && y >= this.topSideMargin
+                && x < (width - this.rightSideMargin)
+                && y < (height - this.bottomSideMargin);
+    }
+
+    @Override
+    public void paintBorder(Component component, Graphics graphics, int positionX, int positionY, int width, int height) {
+        var graphics2D = (Graphics2D) graphics.create();
+
+        try {
+            graphics2D.setRenderingHints(DEFAULT_RENDERING_HINTS);
+            graphics2D.translate(positionX, positionY);
+
+            Shape clip = graphics2D.getClip();
+
+            if (this.topEdgeIsVisible) {
+                this.paintEdgeRegion(graphics2D, this.topEdgeColor, this.topRegion, clip);
+            }
+
+            if (this.rightEdgeIsVisible) {
+                this.paintEdgeRegion(graphics2D, this.rightEdgeColor, this.rightRegion, clip);
+            }
+
+            if (this.bottomEdgeIsVisible) {
+                this.paintEdgeRegion(graphics2D, this.bottomEdgeColor, this.bottomRegion, clip);
+            }
+
+            if (this.leftEdgeIsVisible) {
+                this.paintEdgeRegion(graphics2D, this.leftEdgeColor, this.leftRegion, clip);
+            }
+        } finally {
+            graphics2D.dispose();
+        }
+    }
+
+    private void paintEdgeRegion(Graphics2D graphics2D, Color color, Path2D.Double region, Shape clip) {
+        graphics2D.clip(region);
+        graphics2D.setColor(color);
+        graphics2D.fill(this.frameRegion);
+        graphics2D.setClip(clip);
+    }
+
+    public void paintClientRegionWith(UIPainter painter, Graphics graphics, JComponent component) {
+        int width = component.getWidth(),
+                height = component.getHeight();
+
+        if (this.width != width || this.height != height) {
+            this.resize(width, height);
+        }
+
+        var graphics2D = (Graphics2D) graphics.create();
+
+        try {
+            graphics2D.setRenderingHints(DEFAULT_RENDERING_HINTS);
+            graphics2D.setColor(component.getBackground());
+
+            Shape safeShape = getCutoutShape(component);
+
+            // 2. Safely apply the clip boundaries if an ancestor was found
+            graphics2D.fill(safeShape);
+            graphics2D.clip(safeShape);
+
+            painter.paint(graphics2D, component);
+        } finally {
+            graphics2D.dispose();
+        }
     }
 
     public void paintClientRegion(Graphics graphics, JComponent component) {

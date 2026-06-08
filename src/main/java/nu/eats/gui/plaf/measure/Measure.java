@@ -1,14 +1,7 @@
 package nu.eats.gui.plaf.measure;
 
-public class Measure {
+public record Measure(double value, MeasurementUnit unit) {
     public static final Measure ZERO = Measure.px(0);
-    public final double value;
-    public final MeasurementUnit unit;
-
-    public Measure(double value, MeasurementUnit unit) {
-        this.value = value;
-        this.unit = unit;
-    }
 
     public static Measure px(double pixels) {
         return new Measure(pixels, MeasurementUnit.PIXELS);

@@ -1,12 +1,12 @@
 package nu.eats.feature.cart.gui;
 
-import nu.eats.feature.cart.model.ShoppingCartItem;
-import nu.eats.feature.cart.state.CartState;
-import nu.eats.feature.cart.state.CartViewModel;
 import nu.eats.common.messaging.EventBus;
 import nu.eats.feature.cart.gui.components.ShoppingCartItemList;
 import nu.eats.feature.cart.gui.components.ShoppingCartItemRow;
 import nu.eats.feature.cart.gui.components.ShoppingCartSummary;
+import nu.eats.feature.cart.model.ShoppingCartItem;
+import nu.eats.feature.cart.state.CartState;
+import nu.eats.feature.cart.state.CartViewModel;
 import nu.eats.gui.components.H2;
 import nu.eats.gui.components.Section;
 import nu.eats.gui.plaf.Theme;
@@ -18,7 +18,8 @@ import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static nu.eats.gui.plaf.Theme.*;
+import static nu.eats.gui.plaf.Theme.SPACING_4XL;
+import static nu.eats.gui.plaf.Theme.SPACING_XL;
 
 public class ShoppingCartView extends Section {
     private final CartViewModel model;
@@ -61,7 +62,7 @@ public class ShoppingCartView extends Section {
         var contentPanel = new JPanel(new BorderLayout());
 
         contentPanel.setOpaque(false);
-        contentPanel.add(new H2("Current Order"), BorderLayout.NORTH);
+        contentPanel.add(new H2("Order"), BorderLayout.NORTH);
         contentPanel.add(itemList, BorderLayout.CENTER);
         contentPanel.add(cartBottomBar, BorderLayout.SOUTH);
 
@@ -99,8 +100,6 @@ public class ShoppingCartView extends Section {
     }
 
     public void removeItem(ShoppingCartItem item) {
-        var row = itemRowByItem.get(item);
-
         itemList.removeRow(itemRowByItem.remove(item));
     }
 

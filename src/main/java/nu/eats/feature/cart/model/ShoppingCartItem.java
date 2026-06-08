@@ -1,7 +1,7 @@
 package nu.eats.feature.cart.model;
 
-import nu.eats.model.NonNegativeInt;
 import nu.eats.feature.inventory.model.InventoryItem;
+import nu.eats.model.NonNegativeInt;
 
 public final class ShoppingCartItem {
     private final InventoryItem catalogItem;

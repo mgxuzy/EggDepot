@@ -1,9 +1,10 @@
 package nu.eats.gui.plaf.table;
 
-import java.awt.Component;
+import nu.eats.gui.plaf.Theme;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
-import nu.eats.gui.plaf.Theme;
+import java.awt.*;
 
 /**
  * A highly modernized, zero-overhead TableHeaderRenderer implementation.

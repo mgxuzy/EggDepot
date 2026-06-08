@@ -24,16 +24,14 @@ public class SalesReportView extends Section {
     private final MetricCard itemsSoldCard = new MetricCard("Items Sold", "0");
 
     private final ProductSalesTableModel tableModel;
-
-    private LocalDate startDate = null;
-    private LocalDate endDate = null;
-    private String currentType = "All";
-
-    private final JButton startDateButton;
-    private final JButton endDateButton;
+    private final JButton dateEndedButton;
+    private final JButton dateStartedButton;
     private final JButton resetButton;
     private final JComboBox<String> typeFilter;
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private LocalDate startDate = null;
+    private LocalDate endDate = null;
+    private String currentType = "All";
 
     public SalesReportView() {
         setLayout(new BorderLayout(Theme.SPACING_MD, Theme.SPACING_XL));
@@ -54,23 +52,23 @@ public class SalesReportView extends Section {
 
         filterPanel.setOpaque(false);
 
-        var fromLabel = new JLabel("From:");
+        var fromLabel = new JLabel("Date:");
         fromLabel.setFont(Theme.FONT_MEDIUM_MD);
         fromLabel.setForeground(Theme.COLOR_FG_SECONDARY);
 
-        startDateButton = new JButton("All Time");
+        dateEndedButton = new JButton("0001-01-01");
 
-        startDateButton.setFont(Theme.FONT_MEDIUM_MD);
-        ButtonVariant.SECONDARY.install(startDateButton);
+        dateEndedButton.setFont(Theme.FONT_MEDIUM_MD);
+        ButtonVariant.SECONDARY.install(dateEndedButton);
 
-        var toLabel = new JLabel("To:");
+        var toLabel = new JLabel("–");
         toLabel.setFont(Theme.FONT_MEDIUM_MD);
         toLabel.setForeground(Theme.COLOR_FG_SECONDARY);
 
-        endDateButton = new JButton("All Time");
+        dateStartedButton = new JButton(LocalDate.now().format(dateFormatter));
 
-        endDateButton.setFont(Theme.FONT_MEDIUM_MD);
-        ButtonVariant.SECONDARY.install(endDateButton);
+        dateStartedButton.setFont(Theme.FONT_MEDIUM_MD);
+        ButtonVariant.SECONDARY.install(dateStartedButton);
 
         var typeLabel = new JLabel("Type:");
 
@@ -86,7 +84,7 @@ public class SalesReportView extends Section {
         resetButton.setFont(Theme.FONT_MEDIUM_MD);
 
         // Action Listeners
-        startDateButton.addActionListener(e -> {
+        dateEndedButton.addActionListener(e -> {
             Window owner = SwingUtilities.getWindowAncestor(this);
             DatePickerDialog picker = new DatePickerDialog(owner, startDate != null ? startDate : LocalDate.now());
             picker.setVisible(true);
@@ -97,7 +95,7 @@ public class SalesReportView extends Section {
             });
         });
 
-        endDateButton.addActionListener(e -> {
+        dateStartedButton.addActionListener(e -> {
             Window owner = SwingUtilities.getWindowAncestor(this);
             DatePickerDialog picker = new DatePickerDialog(owner, endDate != null ? endDate : LocalDate.now());
             picker.setVisible(true);
@@ -123,9 +121,9 @@ public class SalesReportView extends Section {
         });
 
         filterPanel.add(fromLabel);
-        filterPanel.add(startDateButton);
+        filterPanel.add(dateEndedButton);
         filterPanel.add(toLabel);
-        filterPanel.add(endDateButton);
+        filterPanel.add(dateStartedButton);
         filterPanel.add(typeLabel);
         filterPanel.add(typeFilter);
         filterPanel.add(resetButton);
@@ -168,8 +166,8 @@ public class SalesReportView extends Section {
     }
 
     private void updateFilterButtons() {
-        startDateButton.setText(startDate != null ? startDate.format(dateFormatter) : "All Time");
-        endDateButton.setText(endDate != null ? endDate.format(dateFormatter) : "All Time");
+        dateEndedButton.setText(startDate != null ? startDate.format(dateFormatter) : "All Time");
+        dateStartedButton.setText(endDate != null ? endDate.format(dateFormatter) : "All Time");
     }
 
     private void updateMetrics() {
@@ -180,17 +178,29 @@ public class SalesReportView extends Section {
     }
 
     private static class ProductSalesTableModel extends AbstractTableModel {
-        private final String[] columnNames = {"Product", "Quantity Sold", "Unit Price", "Total Revenue"};
+        private final String[] columnNames = {"Product", "Unit Sold", "Unit Price", "Revenue"};
         private List<TransactionManager.ProductSalesSummary> summaries = List.of();
 
         public void setSummaries(List<TransactionManager.ProductSalesSummary> summaries) {
             this.summaries = summaries;
+
             fireTableDataChanged();
         }
 
-        @Override public int getRowCount() { return summaries.size(); }
-        @Override public int getColumnCount() { return columnNames.length; }
-        @Override public String getColumnName(int col) { return columnNames[col]; }
+        @Override
+        public int getRowCount() {
+            return summaries.size();
+        }
+
+        @Override
+        public int getColumnCount() {
+            return columnNames.length;
+        }
+
+        @Override
+        public String getColumnName(int col) {
+            return columnNames[col];
+        }
 
         @Override
         public Class<?> getColumnClass(int columnIndex) {

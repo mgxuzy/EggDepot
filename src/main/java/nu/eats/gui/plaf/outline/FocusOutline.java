@@ -10,21 +10,33 @@ import java.beans.PropertyChangeListener;
 
 public class FocusOutline extends JComponent {
 
+    private final BoundsTracker boundsTracker = new BoundsTracker();
     private Rectangle focusRect;       // The full, unclipped dimensions of the component
     private Rectangle paintedBounds;   // The visible intersection (used efficiently for clearing old outlines)
     private Insets paintedInsets = new Insets(0, 0, 0, 0);
-
     private FramedBorder focusBorder;
-
     private JComponent trackedComponent;
-    private final BoundsTracker boundsTracker = new BoundsTracker();
-
     private final PropertyChangeListener focusListener = evt ->
             setTrackedComponent(evt.getNewValue() instanceof JComponent next ? next : null);
 
     public FocusOutline() {
         setOpaque(false);
         setFocusable(false);
+    }
+
+    public static void install(JRootPane rootPane) {
+        var focusOutline = new FocusOutline();
+
+        focusOutline.setBounds(0, 0, rootPane.getWidth(), rootPane.getHeight());
+
+        rootPane.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent event) {
+                focusOutline.setBounds(0, 0, rootPane.getWidth(), rootPane.getHeight());
+            }
+        });
+
+        rootPane.getLayeredPane().add(focusOutline, JLayeredPane.DRAG_LAYER);
     }
 
     @Override
@@ -137,33 +149,44 @@ public class FocusOutline extends JComponent {
         }
     }
 
-    public static void install(JRootPane rootPane) {
-        var focusOutline = new FocusOutline();
-
-        focusOutline.setBounds(0, 0, rootPane.getWidth(), rootPane.getHeight());
-
-        rootPane.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent event) {
-                focusOutline.setBounds(0, 0, rootPane.getWidth(), rootPane.getHeight());
-            }
-        });
-
-        rootPane.getLayeredPane().add(focusOutline, JLayeredPane.DRAG_LAYER);
-    }
-
     // Coalesced layout watcher delegating to one simple flat update
     private class BoundsTracker extends ComponentAdapter implements HierarchyBoundsListener, HierarchyListener {
-        private void update() { updateFocusBounds(); }
+        private void update() {
+            updateFocusBounds();
+        }
 
-        @Override public void componentResized(ComponentEvent e) { update(); }
-        @Override public void componentMoved(ComponentEvent e) { update(); }
-        @Override public void componentHidden(ComponentEvent e) { update(); }
-        @Override public void componentShown(ComponentEvent e) { update(); }
-        @Override public void ancestorMoved(HierarchyEvent e) { update(); }
-        @Override public void ancestorResized(HierarchyEvent e) { update(); }
+        @Override
+        public void componentResized(ComponentEvent e) {
+            update();
+        }
 
-        @Override public void hierarchyChanged(HierarchyEvent e) {
+        @Override
+        public void componentMoved(ComponentEvent e) {
+            update();
+        }
+
+        @Override
+        public void componentHidden(ComponentEvent e) {
+            update();
+        }
+
+        @Override
+        public void componentShown(ComponentEvent e) {
+            update();
+        }
+
+        @Override
+        public void ancestorMoved(HierarchyEvent e) {
+            update();
+        }
+
+        @Override
+        public void ancestorResized(HierarchyEvent e) {
+            update();
+        }
+
+        @Override
+        public void hierarchyChanged(HierarchyEvent e) {
             if ((e.getChangeFlags() & (HierarchyEvent.SHOWING_CHANGED | HierarchyEvent.DISPLAYABILITY_CHANGED)) != 0) {
                 update();
             }

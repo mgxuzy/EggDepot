@@ -7,7 +7,6 @@ import nu.eats.gui.plaf.component.ComponentPreset;
 import javax.swing.text.JTextComponent;
 
 import static nu.eats.gui.plaf.Theme.*;
-import static nu.eats.gui.plaf.Theme.RADIUS_MD;
 
 public enum TextFieldPreset implements ComponentPreset<JTextComponent> {
     MD {
@@ -36,5 +35,5 @@ public enum TextFieldPreset implements ComponentPreset<JTextComponent> {
 
             component.setFont(Theme.FONT_REGULAR_LG);
         }
-    };
+    }
 }

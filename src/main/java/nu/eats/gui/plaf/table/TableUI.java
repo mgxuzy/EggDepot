@@ -1,13 +1,13 @@
 package nu.eats.gui.plaf.table;
 
-import java.awt.Component;
-import java.awt.Dimension;
+import nu.eats.gui.plaf.Theme;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicTableUI;
 import javax.swing.table.DefaultTableCellRenderer;
-import nu.eats.gui.plaf.Theme;
+import java.awt.*;
 
 /**
  * A flat, modern TableUI implementation.

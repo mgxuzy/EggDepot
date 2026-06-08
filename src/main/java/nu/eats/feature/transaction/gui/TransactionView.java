@@ -7,7 +7,6 @@ import nu.eats.feature.transaction.state.TransactionState;
 import nu.eats.gui.components.H2;
 import nu.eats.gui.components.Section;
 import nu.eats.gui.plaf.Theme;
-import nu.eats.gui.plaf.border.framed.FramedBorder;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -43,18 +42,21 @@ public class TransactionView extends Section {
     }
 
     private static class TransactionTableModel extends AbstractTableModel {
-        private final String[] columnNames = {"ID", "Product", "Quantity", "Price", "Total", "Date"};
+        private final String[] columnNames = {"ID", "Product", "Quantity", "Unit Price", "Total", "Date"};
         private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-        @Override public int getRowCount() {
+        @Override
+        public int getRowCount() {
             return TransactionManager.getInstance().getTransactions().size();
         }
 
-        @Override public int getColumnCount() {
+        @Override
+        public int getColumnCount() {
             return columnNames.length;
         }
 
-        @Override public String getColumnName(int column) {
+        @Override
+        public String getColumnName(int column) {
             return columnNames[column];
         }
 

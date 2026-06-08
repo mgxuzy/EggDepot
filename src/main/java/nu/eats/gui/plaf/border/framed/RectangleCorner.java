@@ -44,13 +44,13 @@ public final class RectangleCorner {
         }
 
         public Builder radiusX(Measure radiusX) {
-            this.radiusX = radiusX.withValue(Math.max(radiusX.value, 0.0));
+            this.radiusX = radiusX.withValue(Math.max(radiusX.value(), 0.0));
 
             return this;
         }
 
         public Builder radiusY(Measure radiusY) {
-            this.radiusY = radiusY.withValue(Math.max(radiusY.value, 0.0));
+            this.radiusY = radiusY.withValue(Math.max(radiusY.value(), 0.0));
 
             return this;
         }

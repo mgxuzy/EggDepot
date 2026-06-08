@@ -15,18 +15,20 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.util.Map;
 
+import static nu.eats.gui.plaf.Theme.SPACING_4XL;
+
 public class InventoryItemRow extends JButton {
-    private static final int CARD_WIDTH = 160;
-    private static final int CARD_HEIGHT = 210;
+    private static final int CARD_WIDTH = 180;
+    private static final int CARD_HEIGHT = 230;
 
     public InventoryItemRow(Product product) {
-        this.setPreferredSize(new Dimension(CARD_WIDTH, CARD_HEIGHT));
-        this.setLayout(new BorderLayout(0, 0));
+        setPreferredSize(new Dimension(CARD_WIDTH, CARD_HEIGHT));
+        setLayout(new BorderLayout(0, 0));
 
         ButtonVariant.SECONDARY.install(this, ButtonState.NEUTRAL);
 
-        this.setBorder(new FramedBorder.Builder()
-                .sides(side -> side.padding(Theme.SPACING_2XL))
+
+        setBorder(new FramedBorder.Builder()
                 .corners(corner -> corner.radius(Theme.RADIUS_LG))
                 .edges(edge -> edge.color(Theme.COLOR_BORDER))
                 .build()
@@ -38,9 +40,9 @@ public class InventoryItemRow extends JButton {
         Icon image;
 
         try {
-            image = scaleIcon(new ImageIcon(URI.create(imageUri).toURL()), 110, 110);
+            image = scaleIcon(new ImageIcon(URI.create(imageUri).toURL()), 130, 130);
         } catch (MalformedURLException | NullPointerException | IllegalArgumentException _) {
-            image = new PlaceholderIcon(110, 110);
+            image = new PlaceholderIcon(130, 130);
         }
 
         var itemImageDisplay = new JLabel();
@@ -50,27 +52,27 @@ public class InventoryItemRow extends JButton {
 
         add(itemImageDisplay, BorderLayout.CENTER);
 
-        // --- Item Summary ---
-        var itemSummary = new JPanel();
+        var itemSummary = new JPanel(new GridLayout(2, 1, 0, Theme.SPACING_3XL));
 
-        itemSummary.setLayout(new BoxLayout(itemSummary, BoxLayout.Y_AXIS));
-        itemSummary.setOpaque(false);
+        itemSummary.setBackground(getBackground());
+
+        itemSummary.setBorder(new FramedBorder.Builder()
+                .sides(side -> side.padding(SPACING_4XL))
+                .build()
+        );
 
         var itemNameLabel = new JLabel(product.name());
 
         itemNameLabel.setForeground(Theme.COLOR_FG_INVERSE);
-        itemNameLabel.setFont(Theme.FONT_MEDIUM_SM);
-        itemNameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        itemNameLabel.setHorizontalAlignment(SwingConstants.LEFT);
 
         var itemPriceLabel = new JLabel(priceText);
 
         itemPriceLabel.setForeground(Theme.COLOR_FG_SECONDARY);
-        itemPriceLabel.setFont(Theme.FONT_REGULAR_SM);
-        itemPriceLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        itemPriceLabel.setFont(Theme.FONT_REGULAR_MD);
+        itemPriceLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 
-        itemSummary.add(Box.createVerticalStrut(12));
         itemSummary.add(itemNameLabel);
-        itemSummary.add(Box.createVerticalStrut(4));
         itemSummary.add(itemPriceLabel);
 
         add(itemSummary, BorderLayout.SOUTH);
@@ -89,10 +91,6 @@ public class InventoryItemRow extends JButton {
                 case NEUTRAL -> {
                     itemNameLabel.setFont(itemNameLabelFont);
                     itemNameLabel.setForeground(Theme.COLOR_FG_INVERSE);
-                }
-
-                case ACTIVATED -> {
-                    itemNameLabel.setForeground(Color.white);
                 }
             }
         });

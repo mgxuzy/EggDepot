@@ -6,7 +6,7 @@ import nu.eats.gui.plaf.border.framed.FramedBorder;
 import javax.swing.*;
 import java.awt.*;
 
-import static nu.eats.gui.plaf.Theme.*;
+import static nu.eats.gui.plaf.Theme.SPACING_4XL;
 
 
 public class ShoppingCartItemList extends JPanel {

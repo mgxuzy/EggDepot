@@ -68,12 +68,12 @@ public class RectangleEdges {
             return this.parent;
         }
 
-            public FramedBorder.Builder vertical(Consumer<RectangleEdge.Builder> edge) {
-                edge.accept(this.left);
-                edge.accept(this.right);
+        public FramedBorder.Builder vertical(Consumer<RectangleEdge.Builder> edge) {
+            edge.accept(this.left);
+            edge.accept(this.right);
 
-                return this.parent;
-            }
+            return this.parent;
+        }
 
         public RectangleEdges build() {
             return new RectangleEdges(this);

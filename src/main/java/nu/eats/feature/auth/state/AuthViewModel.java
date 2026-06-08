@@ -1,8 +1,8 @@
 package nu.eats.feature.auth.state;
 
 import nu.eats.common.messaging.EventBus;
-import nu.eats.model.User;
 import nu.eats.feature.auth.model.Credentials;
+import nu.eats.model.User;
 
 public class AuthViewModel {
     private final EventBus eventBus = EventBus.mainBus();

@@ -55,7 +55,6 @@ public class DatePickerDialog extends JDialog {
         var grid = new JPanel(new GridLayout(7, 7, 0, 0));
 
 
-
         String[] days = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
 
         for (var dayName : days) {
@@ -105,6 +104,33 @@ public class DatePickerDialog extends JDialog {
         setLocationRelativeTo(owner);
     }
 
+    static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            try {
+                UIManager.setLookAndFeel(new LookAndFeel());
+            } catch (UnsupportedLookAndFeelException cause) {
+                throw new RuntimeException(cause);
+            }
+
+            var frame = new JFrame();
+
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
+
+            var btn = new JButton("Select Date");
+            btn.addActionListener(e -> {
+                var picker = new DatePickerDialog(frame, LocalDate.now());
+                picker.setVisible(true);
+                picker.getSelectedDate().ifPresent(System.out::println);
+            });
+
+            frame.add(btn);
+            frame.pack();
+            frame.setLocationRelativeTo(null);
+            frame.setVisible(true);
+        });
+    }
+
     /**
      * Calculates a cell size matching the runtime font height.
      */
@@ -145,32 +171,5 @@ public class DatePickerDialog extends JDialog {
 
     public Optional<LocalDate> getSelectedDate() {
         return Optional.ofNullable(selected);
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            try {
-                UIManager.setLookAndFeel(new LookAndFeel());
-            } catch (UnsupportedLookAndFeelException cause) {
-                throw new RuntimeException(cause);
-            }
-
-            var frame = new JFrame();
-
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
-
-            var btn = new JButton("Select Date");
-            btn.addActionListener(e -> {
-                var picker = new DatePickerDialog(frame, LocalDate.now());
-                picker.setVisible(true);
-                picker.getSelectedDate().ifPresent(System.out::println);
-            });
-
-            frame.add(btn);
-            frame.pack();
-            frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
-        });
     }
 }

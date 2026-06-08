@@ -18,7 +18,7 @@ public class AuthCard extends Card {
 
         var toolBar = createToolBar();
 
-        var contentPanel = new JPanel();;
+        var contentPanel = new JPanel();
 
         contentPanel.setOpaque(false);
 

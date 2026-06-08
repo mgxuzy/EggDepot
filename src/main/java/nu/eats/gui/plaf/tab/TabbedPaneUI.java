@@ -35,11 +35,30 @@ public class TabbedPaneUI extends BasicTabbedPaneUI {
 
     // --- Layout ---
 
-    @Override protected Insets getTabAreaInsets(int p)          { return ZERO; }
-    @Override protected Insets getContentBorderInsets(int p)    { return ZERO; }
-    @Override protected Insets getSelectedTabPadInsets(int p)   { return ZERO; }
-    @Override protected int    getTabRunIndent(int p, int run)  { return 0; }
-    @Override protected int    getTabRunOverlay(int p)          { return 0; }
+    @Override
+    protected Insets getTabAreaInsets(int p) {
+        return ZERO;
+    }
+
+    @Override
+    protected Insets getContentBorderInsets(int p) {
+        return ZERO;
+    }
+
+    @Override
+    protected Insets getSelectedTabPadInsets(int p) {
+        return ZERO;
+    }
+
+    @Override
+    protected int getTabRunIndent(int p, int run) {
+        return 0;
+    }
+
+    @Override
+    protected int getTabRunOverlay(int p) {
+        return 0;
+    }
 
     @Override
     protected int calculateTabWidth(int tabPlacement, int tabIndex, FontMetrics metrics) {
@@ -71,7 +90,7 @@ public class TabbedPaneUI extends BasicTabbedPaneUI {
 
     @Override
     protected void paintTabBorder(Graphics g, int tabPlacement, int tabIndex,
-                                   int x, int y, int w, int h, boolean isSelected) {
+                                  int x, int y, int w, int h, boolean isSelected) {
         if (!isSelected) return;
 
         var g2 = (Graphics2D) g;
@@ -82,7 +101,7 @@ public class TabbedPaneUI extends BasicTabbedPaneUI {
 
     @Override
     protected void paintText(Graphics g, int tabPlacement, Font font, FontMetrics metrics,
-                              int tabIndex, String title, Rectangle textRect, boolean isSelected) {
+                             int tabIndex, String title, Rectangle textRect, boolean isSelected) {
         var g2 = (Graphics2D) g;
         g2.setRenderingHints(DEFAULT_RENDERING_HINTS);
         g2.setFont(isSelected ? FONT_MEDIUM_MD : FONT_REGULAR_MD);
@@ -94,7 +113,15 @@ public class TabbedPaneUI extends BasicTabbedPaneUI {
                 textRect.y + fm.getAscent());
     }
 
-    @Override protected void paintTabBackground(Graphics g, int p, int i, int x, int y, int w, int h, boolean s) {}
-    @Override protected void paintContentBorder(Graphics g, int p, int i) {}
-    @Override protected void paintFocusIndicator(Graphics g, int p, Rectangle[] r, int i, Rectangle ir, Rectangle tr, boolean s) {}
+    @Override
+    protected void paintTabBackground(Graphics g, int p, int i, int x, int y, int w, int h, boolean s) {
+    }
+
+    @Override
+    protected void paintContentBorder(Graphics g, int p, int i) {
+    }
+
+    @Override
+    protected void paintFocusIndicator(Graphics g, int p, Rectangle[] r, int i, Rectangle ir, Rectangle tr, boolean s) {
+    }
 }

@@ -13,11 +13,11 @@ public final class Fonts {
     private static final String DIR = "fonts";
     private static final GraphicsEnvironment ENV = GraphicsEnvironment.getLocalGraphicsEnvironment();
 
-    private Fonts() {
-    }
-
     static {
         ResourceScanner.scan(DIR, Fonts::register);
+    }
+
+    private Fonts() {
     }
 
     public static Font load(String name, float size) {

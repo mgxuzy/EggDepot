@@ -9,4 +9,5 @@ public record Transaction(
         double price,
         double total,
         LocalDateTime date
-) {}
+) {
+}

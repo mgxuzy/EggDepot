@@ -2,8 +2,8 @@ package nu.eats.feature.cart.gui.components;
 
 import nu.eats.common.messaging.EventBus;
 import nu.eats.feature.cart.model.ShoppingCartItem;
-import nu.eats.gui.plaf.Theme;
 import nu.eats.feature.cart.state.CartState;
+import nu.eats.gui.plaf.Theme;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,7 +1,7 @@
 package nu.eats.feature.cart.state;
 
-import nu.eats.feature.cart.model.ShoppingCartItem;
 import nu.eats.common.messaging.Topic;
+import nu.eats.feature.cart.model.ShoppingCartItem;
 
 import java.math.BigDecimal;
 
