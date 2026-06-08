@@ -1,11 +1,11 @@
-package nu.eats.gui.plaf.border;
+package nu.eats.gui.plaf.border.framed;
 
 import java.util.function.Consumer;
 
-public class FrameEdges {
-    public final FrameEdge top, right, bottom, left;
+public class RectangleEdges {
+    public final RectangleEdge top, right, bottom, left;
 
-    public FrameEdges(SubBuilder builder) {
+    public RectangleEdges(SubBuilder builder) {
         this.top = builder.top.build();
         this.right = builder.right.build();
         this.bottom = builder.bottom.build();
@@ -17,19 +17,19 @@ public class FrameEdges {
     }
 
     public static final class SubBuilder {
-        public final FrameEdge.Builder top, right, bottom, left;
+        public final RectangleEdge.Builder top, right, bottom, left;
 
         private final FramedBorder.Builder parent;
 
         public SubBuilder(FramedBorder.Builder parent) {
             this.parent = parent;
-            this.top = new FrameEdge.Builder();
-            this.right = new FrameEdge.Builder();
-            this.bottom = new FrameEdge.Builder();
-            this.left = new FrameEdge.Builder();
+            this.top = new RectangleEdge.Builder();
+            this.right = new RectangleEdge.Builder();
+            this.bottom = new RectangleEdge.Builder();
+            this.left = new RectangleEdge.Builder();
         }
 
-        public SubBuilder(FramedBorder.Builder parent, FrameEdges edges) {
+        public SubBuilder(FramedBorder.Builder parent, RectangleEdges edges) {
             this.parent = parent;
             this.top = edges.top.toBuilder();
             this.right = edges.right.toBuilder();
@@ -37,46 +37,46 @@ public class FrameEdges {
             this.left = edges.left.toBuilder();
         }
 
-        public FramedBorder.Builder top(Consumer<FrameEdge.Builder> edge) {
+        public FramedBorder.Builder top(Consumer<RectangleEdge.Builder> edge) {
             edge.accept(this.top);
 
             return this.parent;
         }
 
-        public FramedBorder.Builder right(Consumer<FrameEdge.Builder> edge) {
+        public FramedBorder.Builder right(Consumer<RectangleEdge.Builder> edge) {
             edge.accept(this.right);
 
             return this.parent;
         }
 
-        public FramedBorder.Builder bottom(Consumer<FrameEdge.Builder> edge) {
+        public FramedBorder.Builder bottom(Consumer<RectangleEdge.Builder> edge) {
             edge.accept(this.bottom);
 
             return this.parent;
         }
 
-        public FramedBorder.Builder left(Consumer<FrameEdge.Builder> edge) {
+        public FramedBorder.Builder left(Consumer<RectangleEdge.Builder> edge) {
             edge.accept(this.left);
 
             return this.parent;
         }
 
-        public FramedBorder.Builder horizontal(Consumer<FrameEdge.Builder> edge) {
+        public FramedBorder.Builder horizontal(Consumer<RectangleEdge.Builder> edge) {
             edge.accept(this.top);
             edge.accept(this.bottom);
 
             return this.parent;
         }
 
-            public FramedBorder.Builder vertical(Consumer<FrameEdge.Builder> edge) {
+            public FramedBorder.Builder vertical(Consumer<RectangleEdge.Builder> edge) {
                 edge.accept(this.left);
                 edge.accept(this.right);
 
                 return this.parent;
             }
 
-        public FrameEdges build() {
-            return new FrameEdges(this);
+        public RectangleEdges build() {
+            return new RectangleEdges(this);
         }
     }
 }

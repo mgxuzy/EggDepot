@@ -2,7 +2,7 @@ package nu.eats.feature.inventory.gui.components;
 
 import nu.eats.feature.inventory.model.Product;
 import nu.eats.gui.plaf.Theme;
-import nu.eats.gui.plaf.border.FramedBorder;
+import nu.eats.gui.plaf.border.framed.FramedBorder;
 import nu.eats.gui.plaf.button.ButtonState;
 import nu.eats.gui.plaf.button.ButtonVariant;
 import nu.eats.gui.plaf.icons.PlaceholderIcon;

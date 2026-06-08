@@ -45,17 +45,19 @@ public interface StatefulComponentVariant<T extends JComponent, S extends Compon
 
         if (eventState instanceof ComponentState) {
             this.apply(component, (S) eventState);
+
         }
     }
 
     default void install(T component, S initialState) {
+        component.removePropertyChangeListener(this);
+
+        component.addPropertyChangeListener(KEY_COMPONENT_VARIANT, this);
+        component.addPropertyChangeListener(KEY_COMPONENT_STATE, this);
+
         StatefulComponentVariant.set(component, this);
         initialState.install(component);
 
         this.apply(component, initialState);
-
-        component.removePropertyChangeListener(this);
-        component.addPropertyChangeListener(KEY_COMPONENT_VARIANT, this);
-        component.addPropertyChangeListener(KEY_COMPONENT_STATE, this);
     }
 }

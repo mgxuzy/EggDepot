@@ -1,7 +1,7 @@
 package nu.eats.gui.plaf.button;
 
 import nu.eats.gui.plaf.Theme;
-import nu.eats.gui.plaf.border.FramedBorder;
+import nu.eats.gui.plaf.border.framed.FramedBorder;
 import nu.eats.gui.plaf.component.ComponentState;
 
 import javax.swing.*;

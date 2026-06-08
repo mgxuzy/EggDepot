@@ -1,11 +1,11 @@
-package nu.eats.gui.plaf.border;
+package nu.eats.gui.plaf.border.framed;
 
 import java.util.function.Consumer;
 
-public class FrameCorners {
-    public final FrameCorner topLeft, topRight, bottomRight, bottomLeft;
+public class RectangleCorners {
+    public final RectangleCorner topLeft, topRight, bottomRight, bottomLeft;
 
-    public FrameCorners(SubBuilder builder) {
+    public RectangleCorners(SubBuilder builder) {
         this.topLeft = builder.topLeft.build();
         this.topRight = builder.topRight.build();
         this.bottomRight = builder.bottomRight.build();
@@ -17,19 +17,19 @@ public class FrameCorners {
     }
 
     public static class SubBuilder {
-        public final FrameCorner.Builder topLeft, topRight, bottomRight, bottomLeft;
+        public final RectangleCorner.Builder topLeft, topRight, bottomRight, bottomLeft;
 
         private final FramedBorder.Builder parent;
 
         public SubBuilder(FramedBorder.Builder parent) {
             this.parent = parent;
-            this.topLeft = new FrameCorner.Builder();
-            this.topRight = new FrameCorner.Builder();
-            this.bottomRight = new FrameCorner.Builder();
-            this.bottomLeft = new FrameCorner.Builder();
+            this.topLeft = new RectangleCorner.Builder();
+            this.topRight = new RectangleCorner.Builder();
+            this.bottomRight = new RectangleCorner.Builder();
+            this.bottomLeft = new RectangleCorner.Builder();
         }
 
-        public SubBuilder(FramedBorder.Builder parent, FrameCorners corners) {
+        public SubBuilder(FramedBorder.Builder parent, RectangleCorners corners) {
             this.parent = parent;
             this.topLeft = corners.topLeft.toBuilder();
             this.topRight = corners.topRight.toBuilder();
@@ -37,32 +37,32 @@ public class FrameCorners {
             this.bottomLeft = corners.bottomLeft.toBuilder();
         }
 
-        public FramedBorder.Builder topLeft(Consumer<FrameCorner.Builder> corner) {
+        public FramedBorder.Builder topLeft(Consumer<RectangleCorner.Builder> corner) {
             corner.accept(this.topLeft);
 
             return this.parent;
         }
 
-        public FramedBorder.Builder topRight(Consumer<FrameCorner.Builder> corner) {
+        public FramedBorder.Builder topRight(Consumer<RectangleCorner.Builder> corner) {
             corner.accept(this.topRight);
 
             return this.parent;
         }
 
-        public FramedBorder.Builder bottomRight(Consumer<FrameCorner.Builder> corner) {
+        public FramedBorder.Builder bottomRight(Consumer<RectangleCorner.Builder> corner) {
             corner.accept(this.bottomRight);
 
             return this.parent;
         }
 
-        public FramedBorder.Builder bottomLeft(Consumer<FrameCorner.Builder> corner) {
+        public FramedBorder.Builder bottomLeft(Consumer<RectangleCorner.Builder> corner) {
             corner.accept(this.bottomLeft);
 
             return this.parent;
         }
 
-        public FrameCorners build() {
-            return new FrameCorners(this);
+        public RectangleCorners build() {
+            return new RectangleCorners(this);
         }
     }
 }

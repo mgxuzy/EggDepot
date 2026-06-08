@@ -2,7 +2,7 @@ package nu.eats.gui.components.picker;
 
 import nu.eats.gui.plaf.LookAndFeel;
 import nu.eats.gui.plaf.Theme;
-import nu.eats.gui.plaf.border.FramedBorder;
+import nu.eats.gui.plaf.border.framed.FramedBorder;
 
 import javax.swing.*;
 import java.awt.*;

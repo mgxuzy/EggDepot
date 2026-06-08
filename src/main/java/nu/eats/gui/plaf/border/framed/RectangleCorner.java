@@ -1,11 +1,11 @@
-package nu.eats.gui.plaf.border;
+package nu.eats.gui.plaf.border.framed;
 
 import nu.eats.gui.plaf.measure.Measure;
 
-public final class FrameCorner {
+public final class RectangleCorner {
     public final Measure radiusX, radiusY;
 
-    private FrameCorner(Builder builder) {
+    private RectangleCorner(Builder builder) {
         this.radiusX = builder.radiusX;
         this.radiusY = builder.radiusY;
     }
@@ -21,7 +21,7 @@ public final class FrameCorner {
         public Builder() {
         }
 
-        public Builder(FrameCorner corner) {
+        public Builder(RectangleCorner corner) {
             this.radiusX = corner.radiusX;
             this.radiusY = corner.radiusY;
         }
@@ -60,8 +60,8 @@ public final class FrameCorner {
                     .radiusY(radius);
         }
 
-        public FrameCorner build() {
-            return new FrameCorner(this);
+        public RectangleCorner build() {
+            return new RectangleCorner(this);
         }
     }
 }

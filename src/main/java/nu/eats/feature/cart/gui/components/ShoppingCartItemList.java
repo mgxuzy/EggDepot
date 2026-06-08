@@ -1,7 +1,7 @@
 package nu.eats.feature.cart.gui.components;
 
 import nu.eats.gui.components.FitPanel;
-import nu.eats.gui.plaf.border.FramedBorder;
+import nu.eats.gui.plaf.border.framed.FramedBorder;
 
 import javax.swing.*;
 import java.awt.*;

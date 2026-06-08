@@ -1,17 +1,15 @@
-package nu.eats.gui.plaf.border;
+package nu.eats.gui.plaf.border.framed;
 
-import java.awt.*;
-
-public final class FrameSide {
+public final class RectangleSide {
     public final double padding, margin;
 
-    private FrameSide(Builder builder) {
+    private RectangleSide(Builder builder) {
         this.padding = builder.padding;
         this.margin = builder.margin;
     }
 
-    public FrameSide.Builder toBuilder() {
-        return new FrameSide.Builder(this);
+    public RectangleSide.Builder toBuilder() {
+        return new RectangleSide.Builder(this);
     }
 
     public static final class Builder {
@@ -20,7 +18,7 @@ public final class FrameSide {
         public Builder() {
         }
 
-        public Builder(FrameSide side) {
+        public Builder(RectangleSide side) {
             this.padding = side.padding;
             this.margin = side.margin;
         }
@@ -37,8 +35,8 @@ public final class FrameSide {
             return this;
         }
 
-        public FrameSide build() {
-            return new FrameSide(this);
+        public RectangleSide build() {
+            return new RectangleSide(this);
         }
     }
 }

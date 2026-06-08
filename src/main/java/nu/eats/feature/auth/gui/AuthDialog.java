@@ -6,7 +6,7 @@ import nu.eats.model.User;
 import nu.eats.feature.auth.model.Credentials;
 import nu.eats.gui.components.Section;
 import nu.eats.gui.plaf.Theme;
-import nu.eats.gui.plaf.border.FramedBorder;
+import nu.eats.gui.plaf.border.framed.FramedBorder;
 import nu.eats.feature.auth.state.AuthState;
 import nu.eats.feature.auth.state.AuthViewModel;
 

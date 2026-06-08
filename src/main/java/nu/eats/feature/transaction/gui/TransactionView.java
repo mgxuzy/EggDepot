@@ -7,7 +7,7 @@ import nu.eats.feature.transaction.state.TransactionState;
 import nu.eats.gui.components.H2;
 import nu.eats.gui.components.Section;
 import nu.eats.gui.plaf.Theme;
-import nu.eats.gui.plaf.border.FramedBorder;
+import nu.eats.gui.plaf.border.framed.FramedBorder;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -21,13 +21,8 @@ public class TransactionView extends Section {
     public TransactionView() {
         setLayout(new BorderLayout(Theme.SPACING_MD, Theme.SPACING_MD));
 
-        setBorder(new FramedBorder.Builder()
-                .sides(side -> side.padding(Theme.SPACING_4XL))
-                .build()
-        );
+        var title = new H2("History");
 
-        var title = new H2("Transaction Log");
-        title.setBorder(BorderFactory.createEmptyBorder(0, 0, Theme.SPACING_MD, 0));
         add(title, BorderLayout.NORTH);
 
         tableModel = new TransactionTableModel();

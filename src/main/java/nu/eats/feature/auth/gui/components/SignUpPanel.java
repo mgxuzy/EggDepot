@@ -1,6 +1,6 @@
 package nu.eats.feature.auth.gui.components;
 
-import nu.eats.gui.plaf.border.FramedBorder;
+import nu.eats.gui.plaf.border.framed.FramedBorder;
 import nu.eats.model.Password;
 import nu.eats.model.User;
 import nu.eats.model.UserHandle;

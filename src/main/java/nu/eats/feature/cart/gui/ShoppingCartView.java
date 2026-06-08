@@ -10,7 +10,7 @@ import nu.eats.feature.cart.gui.components.ShoppingCartSummary;
 import nu.eats.gui.components.H2;
 import nu.eats.gui.components.Section;
 import nu.eats.gui.plaf.Theme;
-import nu.eats.gui.plaf.border.FramedBorder;
+import nu.eats.gui.plaf.border.framed.FramedBorder;
 
 import javax.swing.*;
 import java.awt.*;
@@ -61,7 +61,7 @@ public class ShoppingCartView extends Section {
         var contentPanel = new JPanel(new BorderLayout());
 
         contentPanel.setOpaque(false);
-        contentPanel.add(new H2("Cart"), BorderLayout.NORTH);
+        contentPanel.add(new H2("Current Order"), BorderLayout.NORTH);
         contentPanel.add(itemList, BorderLayout.CENTER);
         contentPanel.add(cartBottomBar, BorderLayout.SOUTH);
 

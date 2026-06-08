@@ -1,13 +1,13 @@
-package nu.eats.gui.plaf.border;
+package nu.eats.gui.plaf.border.framed;
 
 import java.awt.*;
 
-public final class FrameEdge {
+public final class RectangleEdge {
     public final Color color;
     public final double thickness;
     public final boolean isVisible;
 
-    private FrameEdge(Builder builder) {
+    private RectangleEdge(Builder builder) {
         var color = builder.color;
         var thickness = builder.thickness;
 
@@ -28,7 +28,7 @@ public final class FrameEdge {
         public Builder() {
         }
 
-        public Builder(FrameEdge edge) {
+        public Builder(RectangleEdge edge) {
             this.color = edge.color;
             this.thickness = edge.thickness;
         }
@@ -45,8 +45,8 @@ public final class FrameEdge {
             return this;
         }
 
-        public FrameEdge build() {
-            return new FrameEdge(this);
+        public RectangleEdge build() {
+            return new RectangleEdge(this);
         }
     }
 }

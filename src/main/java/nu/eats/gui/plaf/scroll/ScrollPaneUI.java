@@ -1,6 +1,6 @@
 package nu.eats.gui.plaf.scroll;
 
-import nu.eats.gui.plaf.border.FramedBorder;
+import nu.eats.gui.plaf.border.framed.FramedBorder;
 
 import javax.swing.*;
 import javax.swing.plaf.ComponentUI;

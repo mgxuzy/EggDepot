@@ -1,14 +1,9 @@
 package nu.eats.gui.components;
 
 import nu.eats.gui.plaf.Theme;
-import nu.eats.gui.plaf.border.BoxDecoration;
-import nu.eats.gui.plaf.border.FramedBorder;
+import nu.eats.gui.plaf.border.framed.FramedBorder;
 
 import javax.swing.*;
-import java.awt.*;
-
-import static nu.eats.gui.plaf.Constants.DEFAULT_RENDERING_HINTS;
-import static nu.eats.gui.plaf.Constants.KEY_BOX_DECORATION;
 
 public class Section extends JPanel {
     public Section() {

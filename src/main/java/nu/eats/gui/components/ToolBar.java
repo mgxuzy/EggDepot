@@ -1,7 +1,7 @@
 package nu.eats.gui.components;
 
 import nu.eats.gui.plaf.Theme;
-import nu.eats.gui.plaf.border.FramedBorder;
+import nu.eats.gui.plaf.border.framed.FramedBorder;
 import nu.eats.gui.plaf.button.ButtonPreset;
 import nu.eats.gui.plaf.button.ButtonState;
 import nu.eats.gui.plaf.button.ButtonVariant;

@@ -1,7 +1,7 @@
 package nu.eats.gui.plaf.root;
 
 import nu.eats.gui.plaf.WindowResizeHandler;
-import nu.eats.gui.plaf.border.FramedBorder;
+import nu.eats.gui.plaf.border.framed.FramedBorder;
 import nu.eats.gui.plaf.outline.FocusOutline;
 import nu.eats.gui.plaf.root.components.TitlePane;
 import nu.eats.gui.plaf.root.components.WindowBorder;

@@ -1,7 +1,7 @@
 package nu.eats.gui.components.panel;
 
 import nu.eats.gui.plaf.Theme;
-import nu.eats.gui.plaf.border.FramedBorder;
+import nu.eats.gui.plaf.border.framed.FramedBorder;
 import nu.eats.gui.plaf.button.ButtonPreset;
 import nu.eats.gui.plaf.button.ButtonVariant;
 import nu.eats.gui.plaf.icons.PlaceholderIcon;
@@ -16,7 +16,7 @@ import java.awt.*;
  */
 public class SidePanelRow extends JToggleButton {
 
-    private static final int ICON_SIZE = 24;
+    private static final int ICON_SIZE = 32;
 
     public SidePanelRow(String text) {
         super(text);
@@ -33,10 +33,9 @@ public class SidePanelRow extends JToggleButton {
         this.setHorizontalAlignment(SwingConstants.LEFT);
         this.setVerticalAlignment(SwingConstants.CENTER);
 
-        ButtonPreset.SM.apply(this);
         ButtonVariant.FLAT.install(this);
 
-        this.setIconTextGap(Theme.SPACING_2XL);
+        this.setIconTextGap(Theme.SPACING_3XL);
 
         if (this.getBorder() instanceof FramedBorder framedBorder) {
             this.setBorder(framedBorder.toBuilder()

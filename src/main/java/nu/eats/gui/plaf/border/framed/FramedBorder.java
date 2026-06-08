@@ -1,4 +1,4 @@
-package nu.eats.gui.plaf.border;
+package nu.eats.gui.plaf.border.framed;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -34,9 +34,9 @@ public class FramedBorder extends AbstractBorder {
             bottomRightCornerRadiusX, bottomRightCornerRadiusY,
             bottomLeftCornerRadiusX, bottomLeftCornerRadiusY;
 
-    public final FrameSides sides;
-    public final FrameEdges edges;
-    public final FrameCorners corners;
+    public final RectangleSides sides;
+    public final RectangleEdges edges;
+    public final RectangleCorners corners;
 
     private final transient Path2D.Double frameRegion = new Path2D.Double(Path2D.WIND_EVEN_ODD);
     private final transient Path2D.Double clientRegion = new Path2D.Double();
@@ -59,7 +59,7 @@ public class FramedBorder extends AbstractBorder {
 
         this.sides = sides;
 
-        FrameSide topSide = sides.top,
+        RectangleSide topSide = sides.top,
                 rightSide = sides.right,
                 bottomSide = sides.bottom,
                 leftSide = sides.left;
@@ -78,7 +78,7 @@ public class FramedBorder extends AbstractBorder {
 
         this.edges = edges;
 
-        FrameEdge topEdge = edges.top,
+        RectangleEdge topEdge = edges.top,
                 rightEdge = edges.right,
                 bottomEdge = edges.bottom,
                 leftEdge = edges.left;
@@ -102,7 +102,7 @@ public class FramedBorder extends AbstractBorder {
 
         this.corners = corners;
 
-        FrameCorner topLeftCorner = corners.topLeft,
+        RectangleCorner topLeftCorner = corners.topLeft,
                 topRightCorner = corners.topRight,
                 bottomRightCorner = corners.bottomRight,
                 bottomLeftCorner = corners.bottomLeft;
@@ -508,14 +508,14 @@ public class FramedBorder extends AbstractBorder {
     }
 
     public static class Builder {
-        public final FrameSides.SubBuilder sides;
-        public final FrameEdges.SubBuilder edges;
-        public final FrameCorners.SubBuilder corners;
+        public final RectangleSides.SubBuilder sides;
+        public final RectangleEdges.SubBuilder edges;
+        public final RectangleCorners.SubBuilder corners;
 
         public Builder() {
-            this.sides = new FrameSides.SubBuilder(this);
-            this.edges = new FrameEdges.SubBuilder(this);
-            this.corners = new FrameCorners.SubBuilder(this);
+            this.sides = new RectangleSides.SubBuilder(this);
+            this.edges = new RectangleEdges.SubBuilder(this);
+            this.corners = new RectangleCorners.SubBuilder(this);
         }
 
         public Builder(FramedBorder border) {
@@ -524,7 +524,7 @@ public class FramedBorder extends AbstractBorder {
             this.corners = border.corners.toBuilder(this);
         }
 
-        public Builder sides(Consumer<FrameSide.Builder> side) {
+        public Builder sides(Consumer<RectangleSide.Builder> side) {
             var sides = this.sides;
 
             side.accept(sides.top);
@@ -535,7 +535,7 @@ public class FramedBorder extends AbstractBorder {
             return this;
         }
 
-        public Builder edges(Consumer<FrameEdge.Builder> edge) {
+        public Builder edges(Consumer<RectangleEdge.Builder> edge) {
             var edges = this.edges;
 
             edge.accept(edges.top);
@@ -546,7 +546,7 @@ public class FramedBorder extends AbstractBorder {
             return this;
         }
 
-        public Builder corners(Consumer<FrameCorner.Builder> corner) {
+        public Builder corners(Consumer<RectangleCorner.Builder> corner) {
             var corners = this.corners;
 
             corner.accept(corners.topLeft);

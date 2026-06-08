@@ -2,7 +2,7 @@ package nu.eats.gui;
 
 import nu.eats.common.messaging.EventBus;
 import nu.eats.common.resources.Images;
-import nu.eats.gui.plaf.border.FramedBorder;
+import nu.eats.gui.plaf.border.framed.FramedBorder;
 import nu.eats.feature.cart.model.ShoppingCart;
 import nu.eats.feature.cart.model.ShoppingCartItem;
 import nu.eats.feature.inventory.model.Inventory;
@@ -54,7 +54,7 @@ public class MainView extends JPanel {
 
         leftSidePane.setLayout(new BorderLayout());
 
-        var logoDisplay = new JLabel(Images.loadIcon("icon.png", 96));
+        var logoDisplay = new JLabel(Images.loadIcon("icon.png", 128));
 
         logoDisplay.setBorder(new EmptyBorder(Theme.SPACING_4XL, Theme.SPACING_4XL, Theme.SPACING_4XL, Theme.SPACING_4XL));
 

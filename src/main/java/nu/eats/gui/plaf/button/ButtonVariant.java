@@ -118,6 +118,7 @@ public enum ButtonVariant implements StatefulComponentVariant<AbstractButton, Bu
 
                 case ACTIVATED -> {
                     button.setBackground(COLOR_BG_PRESSED);
+                    button.setForeground(COLOR_FG_PRIMARY);
                 }
 
                 case SELECTED -> {
