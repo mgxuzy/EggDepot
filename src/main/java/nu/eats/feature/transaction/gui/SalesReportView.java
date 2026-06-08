@@ -26,7 +26,6 @@ public class SalesReportView extends Section {
     private final ProductSalesTableModel tableModel;
     private final JButton dateEndedButton;
     private final JButton dateStartedButton;
-    private final JButton resetButton;
     private final JComboBox<String> typeFilter;
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private LocalDate startDate = null;
@@ -34,7 +33,8 @@ public class SalesReportView extends Section {
     private String currentType = "All";
 
     public SalesReportView() {
-        setLayout(new BorderLayout(Theme.SPACING_MD, Theme.SPACING_XL));
+        // 1. MAIN CONTAINER SETUP (Vertical BoxLayout)
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         setBorder(new FramedBorder.Builder()
                 .corners(corner -> corner.radius(Theme.RADIUS_MD))
@@ -42,22 +42,21 @@ public class SalesReportView extends Section {
                 .build()
         );
 
-        // --- 1. HEADER PANEL (Filters & Controls) ---
-        var headerPanel = new JPanel(new BorderLayout());
-
+        // --- 2. HEADER PANEL (Filters Control Wrapper) ---
+        var headerPanel = new JPanel();
+        headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.X_AXIS));
         headerPanel.setOpaque(false);
+        headerPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
+        // Push filters completely to the right edge
+        headerPanel.add(Box.createHorizontalGlue());
 
-        var filterPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, Theme.SPACING_LG, 0));
-
-        filterPanel.setOpaque(false);
-
+        // Sequential Filter Group Builder
         var fromLabel = new JLabel("Date:");
         fromLabel.setFont(Theme.FONT_MEDIUM_MD);
         fromLabel.setForeground(Theme.COLOR_FG_SECONDARY);
 
         dateEndedButton = new JButton("0001-01-01");
-
         dateEndedButton.setFont(Theme.FONT_MEDIUM_MD);
         ButtonVariant.SECONDARY.install(dateEndedButton);
 
@@ -66,12 +65,10 @@ public class SalesReportView extends Section {
         toLabel.setForeground(Theme.COLOR_FG_SECONDARY);
 
         dateStartedButton = new JButton(LocalDate.now().format(dateFormatter));
-
         dateStartedButton.setFont(Theme.FONT_MEDIUM_MD);
         ButtonVariant.SECONDARY.install(dateStartedButton);
 
         var typeLabel = new JLabel("Type:");
-
         typeLabel.setFont(Theme.FONT_MEDIUM_MD);
         typeLabel.setForeground(Theme.COLOR_FG_SECONDARY);
 
@@ -80,10 +77,69 @@ public class SalesReportView extends Section {
         typeFilter.setBackground(Theme.COLOR_SURFACE_ELEVATION_LOWEST);
         typeFilter.setForeground(Theme.COLOR_FG_INVERSE);
 
-        resetButton = new JButton("Reset");
-        resetButton.setFont(Theme.FONT_MEDIUM_MD);
+        // Lock JComboBox maximum size to prevent BoxLayout stretching distortions
+        typeFilter.setMaximumSize(typeFilter.getPreferredSize());
 
-        // Action Listeners
+        // Assemble filter items with explicit pacing spacing
+        headerPanel.add(fromLabel);
+        headerPanel.add(Box.createHorizontalStrut(Theme.SPACING_MD));
+        headerPanel.add(dateEndedButton);
+        headerPanel.add(Box.createHorizontalStrut(Theme.SPACING_SM));
+        headerPanel.add(toLabel);
+        headerPanel.add(Box.createHorizontalStrut(Theme.SPACING_SM));
+        headerPanel.add(dateStartedButton);
+        headerPanel.add(Box.createHorizontalStrut(Theme.SPACING_XL));
+        headerPanel.add(typeLabel);
+        headerPanel.add(Box.createHorizontalStrut(Theme.SPACING_MD));
+        headerPanel.add(typeFilter);
+
+        add(headerPanel);
+
+        // Gap between Header and Metrics Section
+        add(Box.createVerticalStrut(Theme.SPACING_3XL));
+
+        // --- 3. METRICS SECTION ---
+        var metricsPanel = new JPanel(new GridLayout(1, 3, Theme.SPACING_2XL, 0));
+        metricsPanel.setOpaque(false);
+        metricsPanel.add(revenueCard);
+        metricsPanel.add(transactionsCard);
+        metricsPanel.add(itemsSoldCard);
+
+        // Wrapper package to prevent BoxLayout from distorting the metrics card height
+        var metricsWrapper = new JPanel(new BorderLayout());
+        metricsWrapper.setOpaque(false);
+        metricsWrapper.setAlignmentX(Component.LEFT_ALIGNMENT);
+        metricsWrapper.add(metricsPanel, BorderLayout.CENTER);
+        metricsWrapper.setMaximumSize(new Dimension(Integer.MAX_VALUE, 110));
+        metricsWrapper.setPreferredSize(new Dimension(Integer.MAX_VALUE, 110));
+
+        add(metricsWrapper);
+
+        // Gap between Metrics and Table Section
+        add(Box.createVerticalStrut(Theme.SPACING_4XL));
+
+        // --- 4. TABLE SECTION ---
+        var tableContainer = new JPanel();
+        tableContainer.setLayout(new BoxLayout(tableContainer, BoxLayout.Y_AXIS));
+        tableContainer.setOpaque(false);
+        tableContainer.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        var breakdownTitle = new H2("Product Performance");
+        breakdownTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
+        tableContainer.add(breakdownTitle);
+
+        // Gap between Table Title and the JScrollPane viewport
+        tableContainer.add(Box.createVerticalStrut(Theme.SPACING_MD));
+
+        tableModel = new ProductSalesTableModel();
+        JTable table = new JTable(tableModel);
+        JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        tableContainer.add(scrollPane);
+        add(tableContainer);
+
+        // --- 5. ACTION LISTENERS & LOGIC ---
         dateEndedButton.addActionListener(e -> {
             Window owner = SwingUtilities.getWindowAncestor(this);
             DatePickerDialog picker = new DatePickerDialog(owner, startDate != null ? startDate : LocalDate.now());
@@ -111,56 +167,7 @@ public class SalesReportView extends Section {
             updateMetrics();
         });
 
-        resetButton.addActionListener(e -> {
-            startDate = null;
-            endDate = null;
-            typeFilter.setSelectedItem("All");
-            currentType = "All";
-            updateFilterButtons();
-            updateMetrics();
-        });
-
-        filterPanel.add(fromLabel);
-        filterPanel.add(dateEndedButton);
-        filterPanel.add(toLabel);
-        filterPanel.add(dateStartedButton);
-        filterPanel.add(typeLabel);
-        filterPanel.add(typeFilter);
-        filterPanel.add(resetButton);
-        headerPanel.add(filterPanel, BorderLayout.EAST);
-        add(headerPanel, BorderLayout.NORTH);
-
-        // --- 2. BODY PANEL (Metrics & Table Layout) ---
-        var bodyPanel = new JPanel(new BorderLayout(0, Theme.SPACING_3XL));
-        bodyPanel.setOpaque(false);
-
-        // Metrics Grid
-        var metricsPanel = new JPanel(new GridLayout(1, 3, Theme.SPACING_2XL, 0));
-
-        metricsPanel.setOpaque(false);
-        metricsPanel.setPreferredSize(new Dimension(Integer.MAX_VALUE, 110));
-        metricsPanel.add(revenueCard);
-        metricsPanel.add(transactionsCard);
-        metricsPanel.add(itemsSoldCard);
-
-        bodyPanel.add(metricsPanel, BorderLayout.NORTH);
-
-        // --- 3. TABLE SETUP (Plain & Standard) ---
-        var tableContainer = new JPanel(new BorderLayout(0, Theme.SPACING_MD));
-        tableContainer.setOpaque(false);
-
-        var breakdownTitle = new H2("Product Performance");
-        tableContainer.add(breakdownTitle, BorderLayout.NORTH);
-
-        tableModel = new ProductSalesTableModel();
-        JTable table = new JTable(tableModel);
-        JScrollPane scrollPane = new JScrollPane(table);
-
-        tableContainer.add(scrollPane, BorderLayout.CENTER);
-        bodyPanel.add(tableContainer, BorderLayout.CENTER);
-        add(bodyPanel, BorderLayout.CENTER);
-
-        // Initial data pull and event sub
+        // Initial data pull and event subscription
         updateMetrics();
         EventBus.mainBus().subscribe(TransactionState.TRANSACTIONS_UPDATED, _ -> updateMetrics());
     }
@@ -183,7 +190,6 @@ public class SalesReportView extends Section {
 
         public void setSummaries(List<TransactionManager.ProductSalesSummary> summaries) {
             this.summaries = summaries;
-
             fireTableDataChanged();
         }
 

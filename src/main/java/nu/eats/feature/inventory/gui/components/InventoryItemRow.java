@@ -51,7 +51,7 @@ public class InventoryItemRow extends JButton {
 
         add(itemImageDisplay, BorderLayout.CENTER);
 
-        var itemSummary = new JPanel(new GridLayout(2, 1, 0, Theme.SPACING_3XL));
+        var itemSummary = new JPanel(new GridLayout(2, 1, 0, Theme.SPACING_2XL));
 
         itemSummary.setBackground(COLOR_SURFACE_ELEVATION_LOW);
 
@@ -63,12 +63,12 @@ public class InventoryItemRow extends JButton {
 
         var itemNameLabel = new JLabel(product.name());
 
+        itemNameLabel.setFont(FONT_REGULAR_SM);
         itemNameLabel.setForeground(Theme.COLOR_FG_INVERSE);
-        itemNameLabel.setHorizontalAlignment(SwingConstants.LEFT);
 
         var itemPriceLabel = new JLabel(priceText);
 
-        itemPriceLabel.setForeground(Theme.COLOR_FG_SECONDARY);
+        itemPriceLabel.setForeground(COLOR_PRIMARY);
         itemPriceLabel.setFont(Theme.FONT_REGULAR_MD);
        // itemPriceLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 
