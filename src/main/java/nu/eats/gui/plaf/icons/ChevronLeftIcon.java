@@ -28,7 +28,7 @@ public class ChevronLeftIcon implements Icon {
     public void paintIcon(Component c, Graphics g, int x, int y) {
         Graphics2D g2 = (Graphics2D) g.create();
         g2.setRenderingHints(Constants.DEFAULT_RENDERING_HINTS);
-        g2.setColor(c != null ? c.getForeground() : Theme.COLOR_FG_PRIMARY);
+        g2.setColor(c != null ? c.getForeground() : Theme.COLOR_FG_INVERSE);
         g2.setStroke(new BasicStroke(1.5f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 
         g2.translate(x, y);

@@ -1,5 +1,7 @@
 package nu.eats.gui.plaf.scroll;
 
+import nu.eats.gui.plaf.border.FramedBorder;
+
 import javax.swing.*;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicScrollPaneUI;
@@ -17,9 +19,11 @@ public class ScrollPaneUI extends BasicScrollPaneUI {
         super.installDefaults(scrollPane);
 
         scrollPane.setOpaque(false);
-        scrollPane.setBorder(null);
+        scrollPane.setBorder(FramedBorder.NONE);
         scrollPane.setLayout(new ScrollPaneLayout());
         scrollPane.getViewport().setOpaque(false);
+        scrollPane.setViewportBorder(FramedBorder.NONE);
+
         scrollPane.getVerticalScrollBar().setUnitIncrement(FONT_SIZE_BASE);
         scrollPane.getHorizontalScrollBar().setUnitIncrement(FONT_SIZE_BASE);
     }

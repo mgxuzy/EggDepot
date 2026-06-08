@@ -1,5 +1,6 @@
 package nu.eats.gui.plaf.button;
 
+import nu.eats.gui.plaf.Theme;
 import nu.eats.gui.plaf.component.StatefulComponentVariant;
 
 import javax.swing.*;
@@ -15,17 +16,17 @@ public enum ButtonVariant implements StatefulComponentVariant<AbstractButton, Bu
             switch (state) {
                 case NEUTRAL -> {
                     button.setBackground(COLOR_PRIMARY);
-                    button.setForeground(COLOR_FG_INVERSE);
-                }
-
-                case HOVERED -> {
-                    button.setBackground(COLOR_BG_PRIMARY_HOVER);
                     button.setForeground(COLOR_FG_PRIMARY);
                 }
 
-                case ACTIVATED -> {
-                    button.setBackground(COLOR_BG_PRIMARY_PRESSED);
+                case HOVERED -> {
+                    button.setBackground(Theme.COLOR_BG_HOVER);
                     button.setForeground(COLOR_FG_INVERSE);
+                }
+
+                case ACTIVATED -> {
+                    button.setBackground(Theme.COLOR_BG_PRESSED);
+                    button.setForeground(COLOR_FG_PRIMARY);
                 }
 
                 case DISABLED -> {
@@ -42,17 +43,17 @@ public enum ButtonVariant implements StatefulComponentVariant<AbstractButton, Bu
             switch (state) {
                 case NEUTRAL -> {
                     button.setBackground(COLOR_SURFACE_ELEVATION_HIGHEST);
-                    button.setForeground(COLOR_FG_PRIMARY);
+                    button.setForeground(COLOR_FG_INVERSE);
                 }
 
                 case HOVERED -> {
-                    button.setBackground(COLOR_BG_PRIMARY_HOVER);
+                    button.setBackground(Theme.COLOR_BG_HOVER);
                     button.setForeground(COLOR_FG_SECONDARY);
                 }
 
                 case ACTIVATED -> {
-                    button.setBackground(COLOR_BG_PRIMARY_PRESSED);
-                    button.setForeground(COLOR_FG_INVERSE);
+                    button.setBackground(Theme.COLOR_BG_PRESSED);
+                    button.setForeground(COLOR_FG_PRIMARY);
                 }
 
                 case SELECTED -> {
@@ -88,7 +89,7 @@ public enum ButtonVariant implements StatefulComponentVariant<AbstractButton, Bu
                 }
 
                 case ACTIVATED -> {
-                    button.setForeground(COLOR_BG_PRIMARY_PRESSED);
+                    button.setForeground(Theme.COLOR_BG_PRESSED);
                 }
 
                 case DISABLED -> {
@@ -107,12 +108,12 @@ public enum ButtonVariant implements StatefulComponentVariant<AbstractButton, Bu
             switch (state) {
                 case NEUTRAL -> {
                     button.setBackground(COLOR_TRANSPARENT);
-                    button.setForeground(COLOR_FG_PRIMARY);
+                    button.setForeground(COLOR_FG_INVERSE);
                 }
 
                 case HOVERED -> {
-                    button.setBackground(COLOR_BG_PRIMARY_HOVER);
-                    button.setForeground(COLOR_FG_PRIMARY);
+                    button.setBackground(Theme.COLOR_BG_HOVER);
+                    button.setForeground(COLOR_FG_INVERSE);
                 }
 
                 case ACTIVATED -> {
@@ -139,17 +140,17 @@ public enum ButtonVariant implements StatefulComponentVariant<AbstractButton, Bu
             switch (state) {
                 case NEUTRAL -> {
                     button.setBackground(COLOR_TRANSPARENT);
-                    button.setForeground(COLOR_FG_INVERSE);
+                    button.setForeground(COLOR_FG_PRIMARY);
                 }
 
                 case HOVERED -> {
-                    button.setBackground(COLOR_BG_PRIMARY_HOVER);
-                    button.setForeground(COLOR_FG_INVERSE);
+                    button.setBackground(Theme.COLOR_BG_HOVER);
+                    button.setForeground(COLOR_FG_PRIMARY);
                 }
 
                 case ACTIVATED -> {
-                    button.setBackground(COLOR_BG_PRIMARY_PRESSED);
-                    button.setForeground(COLOR_FG_INVERSE);
+                    button.setBackground(Theme.COLOR_BG_PRESSED);
+                    button.setForeground(COLOR_FG_PRIMARY);
                 }
 
                 case SELECTED -> {

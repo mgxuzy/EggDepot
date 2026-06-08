@@ -13,6 +13,6 @@ public class H2 extends JLabel {
         setBorder(new EmptyBorder(Theme.SPACING_4XL, Theme.SPACING_4XL, Theme.SPACING_4XL, Theme.SPACING_4XL));
 
         setFont(Theme.FONT_BOLD_LG);
-        setForeground(Theme.COLOR_FG_PRIMARY);
+        setForeground(Theme.COLOR_FG_INVERSE);
     }
 }

@@ -8,6 +8,7 @@ import nu.eats.gui.components.Section;
 import nu.eats.gui.components.picker.DatePickerDialog;
 import nu.eats.gui.plaf.Theme;
 import nu.eats.gui.plaf.border.FramedBorder;
+import nu.eats.gui.plaf.button.ButtonVariant;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -57,6 +58,7 @@ public class SalesReportView extends Section {
 
         startDateButton = new JButton("All Time");
         startDateButton.setFont(Theme.FONT_MEDIUM_MD);
+        ButtonVariant.SECONDARY.install(startDateButton);
 
         var toLabel = new JLabel("To:");
         toLabel.setFont(Theme.FONT_MEDIUM_MD);
@@ -72,7 +74,7 @@ public class SalesReportView extends Section {
         typeFilter = new JComboBox<>(new String[]{"All", "Piece", "Tray"});
         typeFilter.setFont(Theme.FONT_MEDIUM_MD);
         typeFilter.setBackground(Theme.COLOR_SURFACE_ELEVATION_HIGHEST);
-        typeFilter.setForeground(Theme.COLOR_FG_PRIMARY);
+        typeFilter.setForeground(Theme.COLOR_FG_INVERSE);
 
         resetButton = new JButton("Reset");
         resetButton.setFont(Theme.FONT_MEDIUM_MD);
@@ -130,11 +132,13 @@ public class SalesReportView extends Section {
 
         // Metrics Grid
         var metricsPanel = new JPanel(new GridLayout(1, 3, Theme.SPACING_2XL, 0));
+
         metricsPanel.setOpaque(false);
         metricsPanel.setPreferredSize(new Dimension(Integer.MAX_VALUE, 110));
-        metricsPanel.add(createMetricCard("TOTAL REVENUE", revenueLabel));
-        metricsPanel.add(createMetricCard("TOTAL TRANSACTIONS", transactionsLabel));
-        metricsPanel.add(createMetricCard("TOTAL ITEMS SOLD", itemsSoldLabel));
+        metricsPanel.add(createMetricCard("Revenue", revenueLabel));
+        metricsPanel.add(createMetricCard("Transactions", transactionsLabel));
+        metricsPanel.add(createMetricCard("Items Sold", itemsSoldLabel));
+
         bodyPanel.add(metricsPanel, BorderLayout.NORTH);
 
         // --- 3. TABLE SETUP (Plain & Standard) ---
@@ -143,7 +147,7 @@ public class SalesReportView extends Section {
 
         var breakdownTitle = new JLabel("Product Performance");
         breakdownTitle.setFont(Theme.FONT_BOLD_LG);
-        breakdownTitle.setForeground(Theme.COLOR_FG_PRIMARY);
+        breakdownTitle.setForeground(Theme.COLOR_FG_INVERSE);
         tableContainer.add(breakdownTitle, BorderLayout.NORTH);
 
         tableModel = new ProductSalesTableModel();
@@ -168,12 +172,20 @@ public class SalesReportView extends Section {
 
     private JPanel createMetricCard(String title, JLabel valueLabel) {
         var card = new JPanel();
+
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
         card.setBackground(Theme.COLOR_SURFACE_ELEVATION_HIGHEST);
+
         card.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(Theme.COLOR_BORDER, 1),
                 BorderFactory.createEmptyBorder(Theme.SPACING_3XL, Theme.SPACING_4XL, Theme.SPACING_3XL, Theme.SPACING_4XL)
         ));
+
+        card.setBorder(new FramedBorder.Builder()
+                .corners(corner -> corner.radius(Theme.RADIUS_MD))
+                .sides(side -> side.padding(Theme.SPACING_3XL))
+                .build()
+        );
 
         var titleLabel = new JLabel(title);
         titleLabel.setFont(Theme.FONT_BOLD_SM);

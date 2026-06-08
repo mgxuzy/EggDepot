@@ -20,8 +20,8 @@ public class TransactionView extends Section {
 
     public TransactionView() {
         setLayout(new BorderLayout(Theme.SPACING_MD, Theme.SPACING_MD));
+
         setBorder(new FramedBorder.Builder()
-                .corners(corner -> corner.radius(Theme.RADIUS_MD))
                 .sides(side -> side.padding(Theme.SPACING_4XL))
                 .build()
         );

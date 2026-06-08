@@ -86,7 +86,7 @@ public class TabbedPaneUI extends BasicTabbedPaneUI {
         var g2 = (Graphics2D) g;
         g2.setRenderingHints(DEFAULT_RENDERING_HINTS);
         g2.setFont(isSelected ? FONT_MEDIUM_MD : FONT_REGULAR_MD);
-        g2.setColor(isSelected ? COLOR_FG_PRIMARY : COLOR_FG_SECONDARY);
+        g2.setColor(isSelected ? COLOR_FG_INVERSE : COLOR_FG_SECONDARY);
 
         var fm = g2.getFontMetrics();
         g2.drawString(title,

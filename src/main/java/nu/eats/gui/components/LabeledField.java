@@ -18,7 +18,7 @@ public class LabeledField extends JPanel {
         var label = new JLabel(labelText);
 
         label.setFont(Theme.FONT_MEDIUM_MD);
-        label.setForeground(Theme.COLOR_FG_PRIMARY);
+        label.setForeground(Theme.COLOR_FG_INVERSE);
         label.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         field.setAlignmentX(Component.LEFT_ALIGNMENT);

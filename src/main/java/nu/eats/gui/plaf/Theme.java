@@ -21,28 +21,25 @@ public final class Theme {
 
     public static final Color COLOR_TRANSPARENT = new Color(0, 0, 0, 0);
     public static final Color COLOR_PRIMARY = new Color(0xFF48672E);
-    public static final Color COLOR_BG_PRIMARY_PRESSED = new Color(0xFF314E19);
-    public static final Color COLOR_BG_PRIMARY_HOVER = new Color(0xFFC9EEA7);
 
     public static final Color COLOR_SURFACE_ELEVATION_HIGHEST = new Color(0xFFFFFFFF);
-    public static final Color COLOR_SURFACE_ELEVATION_LOWEST = new Color(0xFFE2E3D9);
-
+    public static final Color COLOR_SURFACE_ELEVATION_LOW = new Color(0xFFF3F5EA);
 
     public static final Color COLOR_BG = new Color(0xFFF9FAEF);
-    public static final Color COLOR_BG_HOVER = ZINC_100;
-    public static final Color COLOR_BG_PRESSED = ZINC_200;
+    public static final Color COLOR_BG_PRESSED = new Color(0xFF314E19);
+    public static final Color COLOR_BG_HOVER = new Color(0xFFC9EEA7);
     public static final Color COLOR_BG_SELECTED = ZINC_900;
 
-    public static final Color COLOR_BORDER = new Color((0xFFC4C8BA));
+    public static final Color COLOR_BORDER = new Color(0xFFC4C8BA);
     public static final Color COLOR_BORDER_HOVER = ZINC_400;
     public static final Color COLOR_BORDER_SELECTED = ZINC_900;
 
-    public static final Color COLOR_FG_PRIMARY = new Color(0xFF1A1D16);
+    public static final Color COLOR_FG_PRIMARY = new Color(0xFFFFFF);
+    public static final Color COLOR_FG_INVERSE = new Color(0xFF1A1D16);
     public static final Color COLOR_FG_SECONDARY = new Color(0xFF44483E);
-    public static final Color COLOR_FG_INVERSE = new Color(0xFFFFFF);
 
     public static final Color COLOR_RING = ZINC_900;
-    public static final Color COLOR_THUMB = ZINC_300;
+    public static final Color COLOR_THUMB = new Color(0x33000000, true);
 
     public static final Color COLOR_PLACEHOLDER_BG = ZINC_200;
     public static final Color COLOR_PLACEHOLDER_FG = ZINC_400;

@@ -124,7 +124,7 @@ public class TitlePane extends JComponent {
         this.titleBarColor = color;
         this.isPrimaryStyle = Theme.COLOR_PRIMARY.equals(color);
 
-        Color fg = isPrimaryStyle ? Theme.COLOR_FG_INVERSE : Theme.COLOR_FG_PRIMARY;
+        Color fg = isPrimaryStyle ? Theme.COLOR_FG_PRIMARY : Theme.COLOR_FG_INVERSE;
         ButtonVariant variant = isPrimaryStyle ? ButtonVariant.GHOST : ButtonVariant.FLAT;
 
         for (JButton button : windowButtons) {
@@ -228,10 +228,10 @@ public class TitlePane extends JComponent {
         boolean active = window != null && window.isActive();
 
         if (isPrimaryStyle) {
-            return active ? Theme.COLOR_FG_INVERSE : Theme.ZINC_400;
+            return active ? Theme.COLOR_FG_PRIMARY : Theme.ZINC_400;
         }
 
-        return active ? Theme.COLOR_FG_PRIMARY : Theme.COLOR_FG_SECONDARY;
+        return active ? Theme.COLOR_FG_INVERSE : Theme.COLOR_FG_SECONDARY;
     }
 
     @Override

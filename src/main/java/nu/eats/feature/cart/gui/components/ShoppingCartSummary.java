@@ -67,7 +67,7 @@ public class ShoppingCartSummary extends JPanel {
 
         // Header
         sb.append(divider.get());
-        sb.append(center.apply("NU Cafeteria")).append("\n");
+        sb.append(center.apply("Egg Depot")).append("\n");
         sb.append(divider.get());
 
         // Timestamp (centered)
@@ -106,9 +106,7 @@ public class ShoppingCartSummary extends JPanel {
         sb.append(divider.get()).append("\n");
 
         // Footer
-        sb.append(center.apply("Thank you for ordering!")).append("\n");
-        sb.append(center.apply("Enjoy your meal!")).append("\n\n");
-        sb.append(center.apply("-- NU Eats --")).append("\n");
+        sb.append(center.apply("-- Mang Boy --")).append("\n");
         sb.append(divider.get());
 
         // Display

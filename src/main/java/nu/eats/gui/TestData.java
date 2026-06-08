@@ -16,17 +16,17 @@ public class TestData {
 
         var hustlersCup = new InventoryItemCategory("Chicken Egg", true);
 
-        items.add(createItem("Chicken Egg (Small)", "89", vendor, hustlersCup));
-        items.add(createItem("Chicken Egg (Medium)", "109", vendor, hustlersCup));
-        items.add(createItem("Chicken Egg (Large)", "89", vendor, hustlersCup));
-        items.add(createItem("Chicken Egg (Extra Large)", "99", vendor, hustlersCup));
+        items.add(createItem("Chicken Egg (Small)", "7", vendor, hustlersCup));
+        items.add(createItem("Chicken Egg (Medium)", "8", vendor, hustlersCup));
+        items.add(createItem("Chicken Egg (Large)", "9", vendor, hustlersCup));
+        items.add(createItem("Chicken Egg (Extra Large)", "10", vendor, hustlersCup));
 
         var classics = new InventoryItemCategory("Chicken Egg Tray", false);
 
-        items.add(createItem("Chicken Egg (Small) Tray", "59", vendor, classics));
-        items.add(createItem("Chicken Egg (Medium) Tray", "69", vendor, classics));
-        items.add(createItem("Chicken Egg (Large) Tray", "79", vendor, classics));
-        items.add(createItem("Chicken Egg (Extra Large) Tray", "89", vendor, classics));
+        items.add(createItem("Chicken Egg (Small) Tray", "170", vendor, classics));
+        items.add(createItem("Chicken Egg (Medium) Tray", "180", vendor, classics));
+        items.add(createItem("Chicken Egg (Large) Tray", "190", vendor, classics));
+        items.add(createItem("Chicken Egg (Extra Large) Tray", "200", vendor, classics));
 
         return items;
     }

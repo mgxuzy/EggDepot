@@ -14,14 +14,14 @@ public enum TextFieldVariant implements StatefulComponentVariant<JTextComponent,
             switch (state) {
                 case NEUTRAL -> {
                     component.setBackground(COLOR_BG);
-                    component.setForeground(COLOR_FG_PRIMARY);
+                    component.setForeground(COLOR_FG_INVERSE);
                     component.setCaretColor(COLOR_PRIMARY);
                     component.setFont(FONT_REGULAR_MD);
                 }
 
                 case FOCUSED -> {
                     component.setBackground(COLOR_BG);
-                    component.setForeground(COLOR_FG_PRIMARY);
+                    component.setForeground(COLOR_FG_INVERSE);
                 }
 
                 case DISABLED -> {
@@ -37,7 +37,7 @@ public enum TextFieldVariant implements StatefulComponentVariant<JTextComponent,
             switch (state) {
                 case NEUTRAL -> {
                     component.setBackground(COLOR_BG);
-                    component.setForeground(COLOR_FG_PRIMARY);
+                    component.setForeground(COLOR_FG_INVERSE);
                     component.setCaretColor(COLOR_PRIMARY);
                     component.setFont(FONT_MEDIUM_MD);
 
@@ -50,7 +50,7 @@ public enum TextFieldVariant implements StatefulComponentVariant<JTextComponent,
 
                 case FOCUSED -> {
                     component.setBackground(COLOR_BG);
-                    component.setForeground(COLOR_FG_PRIMARY);
+                    component.setForeground(COLOR_FG_INVERSE);
                 }
             }
         }

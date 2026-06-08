@@ -58,7 +58,7 @@ public class InventoryItemRow extends JButton {
 
         var itemNameLabel = new JLabel(product.name());
 
-        itemNameLabel.setForeground(Theme.COLOR_FG_PRIMARY);
+        itemNameLabel.setForeground(Theme.COLOR_FG_INVERSE);
         itemNameLabel.setFont(Theme.FONT_MEDIUM_SM);
         itemNameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -88,7 +88,7 @@ public class InventoryItemRow extends JButton {
 
                 case NEUTRAL -> {
                     itemNameLabel.setFont(itemNameLabelFont);
-                    itemNameLabel.setForeground(Theme.COLOR_FG_PRIMARY);
+                    itemNameLabel.setForeground(Theme.COLOR_FG_INVERSE);
                 }
 
                 case ACTIVATED -> {

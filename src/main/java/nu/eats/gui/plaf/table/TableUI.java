@@ -17,10 +17,6 @@ public class TableUI extends BasicTableUI {
 
     private static final DefaultTableCellRenderer SYSTEM_RENDERER = new DefaultTableCellRenderer() {
         private final Border normalPadding = BorderFactory.createEmptyBorder(0, Theme.SPACING_LG, 0, Theme.SPACING_LG);
-        private final Border selectedPadding = BorderFactory.createCompoundBorder(
-                BorderFactory.createMatteBorder(0, 4, 0, 0, Theme.COLOR_PRIMARY),
-                BorderFactory.createEmptyBorder(0, Theme.SPACING_LG - 4, 0, Theme.SPACING_LG)
-        );
 
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value,
@@ -28,19 +24,15 @@ public class TableUI extends BasicTableUI {
 
             super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-            // Zebra striping and selection mapping
             if (!isSelected) {
-                setBackground(row % 2 == 1 ? Theme.COLOR_SURFACE_ELEVATION_LOWEST : Theme.COLOR_BG);
-                setForeground(Theme.COLOR_FG_PRIMARY);
-                setBorder(normalPadding);
+                setBackground(row % 2 == 1 ? Theme.COLOR_SURFACE_ELEVATION_LOW : Theme.COLOR_SURFACE_ELEVATION_HIGHEST);
+                setForeground(Theme.COLOR_FG_INVERSE);
             } else {
-                setBackground(Theme.COLOR_BG_PRIMARY_HOVER);
-                setForeground(Theme.COLOR_FG_PRIMARY);
-                setBorder(selectedPadding);
+                setBackground(Theme.COLOR_BG_HOVER);
+                setForeground(Theme.COLOR_FG_INVERSE);
             }
 
-            // Numeric content right alignment tracking
-            setHorizontalAlignment(value instanceof Number ? SwingConstants.RIGHT : SwingConstants.LEFT);
+            setBorder(normalPadding);
 
             return this;
         }
@@ -54,24 +46,23 @@ public class TableUI extends BasicTableUI {
     protected void installDefaults() {
         super.installDefaults();
 
-        // 1. Structure Config
         table.setOpaque(true);
         table.setFillsViewportHeight(true);
         table.setShowHorizontalLines(false);
-        table.setShowVerticalLines(false);
         table.setRowHeight(44);
         table.setIntercellSpacing(new Dimension(0, 0));
         table.setFont(Theme.FONT_REGULAR_MD);
+        table.setBorder(null);
 
         // 2. Color Application
         table.setBackground(Theme.COLOR_BG);
-        table.setForeground(Theme.COLOR_FG_PRIMARY);
+        table.setForeground(Theme.COLOR_FG_INVERSE);
 
         // 3. Header Hook Setup
         var header = table.getTableHeader();
+
         if (header != null) {
             header.setDefaultRenderer(new TableHeaderRenderer());
-            header.setOpaque(true);
             header.setBackground(Theme.COLOR_SURFACE_ELEVATION_HIGHEST);
             header.setForeground(Theme.COLOR_FG_SECONDARY);
             header.setReorderingAllowed(false);

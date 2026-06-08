@@ -32,7 +32,7 @@ public class ToolBar extends JPanel {
             var label = new JLabel(title);
 
             label.setFont(Theme.FONT_BOLD_LG);
-            label.setForeground(Theme.COLOR_FG_PRIMARY);
+            label.setForeground(Theme.COLOR_FG_INVERSE);
             add(label, CENTER);
         }
     }
