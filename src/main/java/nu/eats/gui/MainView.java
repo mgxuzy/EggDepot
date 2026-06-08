@@ -111,18 +111,17 @@ public class MainView extends JPanel {
         var chatView = new ChatView();
 
         GroqChatClient client = new GroqChatClient();
-        ChatView chatUI = new ChatView();
 
-        chatUI.setMessageSentListener(userMessage -> {
-            CompletableFuture.supplyAsync(() -> client.chat(userMessage))
+        chatView.setMessageSentListener(message -> {
+            CompletableFuture.supplyAsync(() -> client.chat(message))
                     .thenAccept(response -> {
-                        SwingUtilities.invokeLater(() -> chatUI.addMessage(response, false));
+                        SwingUtilities.invokeLater(() -> chatView.addMessage(response, false));
                     });
         });
 
         CompletableFuture.supplyAsync(() -> client.chat("Hi!"))
                 .thenAccept(assistantResponse -> {
-                    SwingUtilities.invokeLater(() -> chatUI.addMessage(assistantResponse, false));
+                    SwingUtilities.invokeLater(() -> chatView.addMessage(assistantResponse, false));
                 });
 
         return chatView;
