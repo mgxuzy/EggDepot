@@ -55,7 +55,8 @@ public class SalesReportView extends Section {
         fromLabel.setFont(Theme.FONT_MEDIUM_MD);
         fromLabel.setForeground(Theme.COLOR_FG_SECONDARY);
 
-        dateEndedButton = new JButton("0001-01-01");
+        dateEndedButton = new JButton(LocalDate.of(1, 1, 1).format(dateFormatter));
+
         dateEndedButton.setFont(Theme.FONT_MEDIUM_MD);
         ButtonVariant.SECONDARY.install(dateEndedButton);
 
@@ -106,6 +107,7 @@ public class SalesReportView extends Section {
 
         // Wrapper package to prevent BoxLayout from distorting the metrics card height
         var metricsWrapper = new JPanel(new BorderLayout());
+
         metricsWrapper.setOpaque(false);
         metricsWrapper.setAlignmentX(Component.LEFT_ALIGNMENT);
         metricsWrapper.add(metricsPanel, BorderLayout.CENTER);
@@ -172,8 +174,8 @@ public class SalesReportView extends Section {
     }
 
     private void updateFilterButtons() {
-        dateEndedButton.setText(startDate != null ? startDate.format(dateFormatter) : "All Time");
-        dateStartedButton.setText(endDate != null ? endDate.format(dateFormatter) : "All Time");
+        dateEndedButton.setText(startDate != null ? startDate.format(dateFormatter) : LocalDate.of(1, 1, 1).format(dateFormatter));
+        dateStartedButton.setText(endDate != null ? endDate.format(dateFormatter) : LocalDate.now().format(dateFormatter));
     }
 
     private void updateMetrics() {

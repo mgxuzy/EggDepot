@@ -2,7 +2,7 @@ plugins {
     application
 }
 
-group = "nu.eats"
+group = "eggdepot"
 version = "0.0.1"
 
 repositories {

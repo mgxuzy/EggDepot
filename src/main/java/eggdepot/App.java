@@ -7,7 +7,7 @@ import eggdepot.gui.plaf.LookAndFeel;
 import javax.swing.*;
 
 public class App {
-    private static final String NAME = "Mang Boy";
+    private static final String NAME = "Egg Depot";
 
     private static final int WINDOW_WIDTH = 1200;
     private static final int WINDOW_HEIGHT = 800;

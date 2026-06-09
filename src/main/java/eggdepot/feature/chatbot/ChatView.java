@@ -1,6 +1,7 @@
 package eggdepot.feature.chatbot;
 
 import eggdepot.gui.plaf.Theme;
+import eggdepot.gui.plaf.border.framed.FramedBorder;
 
 import javax.swing.*;
 import java.awt.*;
@@ -83,10 +84,11 @@ public class ChatView extends JPanel {
         bubble.setBackground(isUser ? new Color(220, 248, 198) : new Color(240, 240, 240));
         bubble.setForeground(Color.BLACK);
 
-        bubble.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(isUser ? new Color(190, 230, 170) : Color.LIGHT_GRAY, 1, true),
-                BorderFactory.createEmptyBorder(6, 10, 6, 10)
-        ));
+        bubble.setBorder(new FramedBorder.Builder()
+                .corners(corner -> corner.radius(Double.POSITIVE_INFINITY))
+                .sides(side -> side.padding(Theme.SPACING_4XL))
+                .build()
+        );
 
         // GridBag layout constraints for positioning the bubble
         var gbc = new GridBagConstraints();
