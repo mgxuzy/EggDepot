@@ -1,0 +1,57 @@
+package eggdepot.gui.plaf.icon;
+
+import eggdepot.gui.plaf.Constants;
+import eggdepot.gui.plaf.Theme;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.geom.Path2D;
+
+public class ChevronUpIcon implements Icon {
+    private final int width;
+    private final int height;
+
+    public ChevronUpIcon() {
+        this(12);
+    }
+
+    public ChevronUpIcon(int size) {
+        this(size, size);
+    }
+
+    public ChevronUpIcon(int width, int height) {
+        this.width = width;
+        this.height = height;
+    }
+
+    @Override
+    public void paintIcon(Component c, Graphics g, int x, int y) {
+        Graphics2D g2 = (Graphics2D) g.create();
+        g2.setRenderingHints(Constants.DEFAULT_RENDERING_HINTS);
+        g2.setColor(c != null ? c.getForeground() : Theme.COLOR_FG_INVERSE);
+        g2.setStroke(new BasicStroke(1.5f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+
+        g2.translate(x, y);
+
+        Path2D p = new Path2D.Float();
+        float pad = width * 0.15f;
+
+        // Inverted V shape
+        p.moveTo(pad, height * 0.675f);
+        p.lineTo(width / 2f, height * 0.325f);
+        p.lineTo(width - pad, height * 0.675f);
+
+        g2.draw(p);
+        g2.dispose();
+    }
+
+    @Override
+    public int getIconWidth() {
+        return width;
+    }
+
+    @Override
+    public int getIconHeight() {
+        return height;
+    }
+}
