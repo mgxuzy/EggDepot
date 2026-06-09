@@ -1,6 +1,7 @@
 package nu.eats.feature.chatbot;
 
 import nu.eats.gui.components.Section;
+import nu.eats.gui.plaf.Theme;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +12,7 @@ import java.util.function.Consumer;
  * A lightweight, unstyled chat UI component for Swing.
  * Uses JTextArea to simulate wrapped chat bubbles.
  */
-public class ChatView extends Section {
+public class ChatView extends JPanel {
 
     private final JPanel messageContainer;
     private final JScrollPane scrollPane;
@@ -24,10 +25,12 @@ public class ChatView extends Section {
 
         // Container that holds all chat bubbles
         messageContainer = new JPanel(new GridBagLayout());
-        messageContainer.setBackground(Color.WHITE);
+
+        setOpaque(false);
 
         // Wrap container in a BorderLayout panel so bubbles align to the top
         var viewportView = new JPanel(new BorderLayout());
+
         viewportView.setBackground(Color.WHITE);
         viewportView.add(messageContainer, BorderLayout.NORTH);
 
@@ -37,6 +40,7 @@ public class ChatView extends Section {
 
         // Input section
         var inputPanel = new JPanel(new BorderLayout(5, 0));
+
         inputPanel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
 
         inputField = new JTextField();
@@ -74,6 +78,7 @@ public class ChatView extends Section {
         bubble.setWrapStyleWord(true);
         bubble.setOpaque(true);
 
+        bubble.setFont(Theme.FONT_REGULAR_MD);
         bubble.setColumns(Math.min(text.length(), 30));
 
         bubble.setBackground(isUser ? new Color(220, 248, 198) : new Color(240, 240, 240));

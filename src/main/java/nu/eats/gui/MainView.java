@@ -15,6 +15,7 @@ import nu.eats.feature.inventory.state.InventoryViewModel;
 import nu.eats.feature.inventory.state.StoreState;
 import nu.eats.feature.transaction.gui.SalesReportView;
 import nu.eats.feature.transaction.gui.TransactionView;
+import nu.eats.gui.components.H2;
 import nu.eats.gui.components.Section;
 import nu.eats.gui.components.panel.SidePanel;
 import nu.eats.gui.components.panel.SidePanelRow;
@@ -108,6 +109,7 @@ public class MainView extends JPanel {
     }
 
     private JComponent createChatView() {
+        var chatPanel = new Section();
         var chatView = new ChatView();
 
         GroqChatClient client = new GroqChatClient();
@@ -124,7 +126,12 @@ public class MainView extends JPanel {
                     SwingUtilities.invokeLater(() -> chatView.addMessage(assistantResponse, false));
                 });
 
-        return chatView;
+        chatPanel.setLayout(new BorderLayout());
+
+        chatPanel.add(new H2("Jarvis"), BorderLayout.NORTH);
+        chatPanel.add(chatView);
+
+        return chatPanel;
     }
 
     private void addPage(String id, String name, JComponent view) {
